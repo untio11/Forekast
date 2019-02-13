@@ -9,6 +9,8 @@ PImage homescreen2;
 PImage homescreen3;
 PImage homescreen4;
 PImage wardrobe1;
+PImage tshirt;
+PImage jeans;
 PFont f;
 int pageNumber;
 
@@ -26,48 +28,66 @@ void setup() {
   homescreen3 = loadImage("Homescreen3.jpg");
   homescreen4 = loadImage("Homescreen4.jpg");
   wardrobe1 = loadImage("Wardrobe_1.jpg");
+  //tshirt = loadImage("TShirt_Category2.jpg");
+  //jeans = loadImage("");
   // Setup
   gui = new ControlP5(this);
 
   // Tabs      
   gui.addTab("Homescreen1")
-    .setColorBackground(color(255, 210, 0)) // Colour tab in top left
+    .setColorBackground(color(0)) // Colour tab in top left
     .setColorLabel(color(255)) // Colour of the text in the tab
-    .setColorActive(color(255, 128, 0)) // Activates the tab colour?
+    .setColorActive(color(0)) // Activates the tab colour?
     .setId(1) // 1 is taken by default
     .activateEvent(true)
-    .setActive(true);
+    .setActive(true)
   ;
 
   gui.addTab("Homescreen2")
-    .setColorBackground(color(255, 210, 0)) // Colour tab in top left
+    .setColorBackground(color(0)) // Colour tab in top left
     .setColorLabel(color(255)) // Colour of the text in the tab
-    .setColorActive(color(255, 128, 0)) // Activates the tab colour?
+    .setColorActive(color(0)) // Activates the tab colour?
     .setId(2) // 1 is taken by default
     .activateEvent(true)
     ;
 
   gui.addTab("Homescreen3")
-    .setColorBackground(color(255, 210, 0)) // Colour tab in top left
+    .setColorBackground(color(0)) // Colour tab in top left
     .setColorLabel(color(255)) // Colour of the text in the tab
-    .setColorActive(color(255, 128, 0)) // Activates the tab colour?
+    .setColorActive(color(0)) // Activates the tab colour?
     .setId(3) // 1 is taken by default
     .activateEvent(true)
     ;
 
   gui.addTab("Homescreen4")
-    .setColorBackground(color(255, 210, 0)) // Colour tab in top left
+    .setColorBackground(color(0)) // Colour tab in top left
     .setColorLabel(color(255)) // Colour of the text in the tab
-    .setColorActive(color(255, 128, 0)) // Activates the tab colour?
+    .setColorActive(color(0)) // Activates the tab colour?
     .setId(4) // 1 is taken by default
     .activateEvent(true)
     ;
     
   gui.addTab("Wardrobe1")
-    .setColorBackground(color(255, 210, 0)) // Colour tab in top left
+    .setColorBackground(color(0)) // Colour tab in top left
     .setColorLabel(color(255)) // Colour of the text in the tab
-    .setColorActive(color(255, 128, 0)) // Activates the tab colour?
+    .setColorActive(color(0)) // Activates the tab colour?
     .setId(5) // 1 is taken by default
+    .activateEvent(true)
+    ;
+    
+  gui.addTab("Tshirt")
+    .setColorBackground(color(0)) // Colour tab in top left
+    .setColorLabel(color(255)) // Colour of the text in the tab
+    .setColorActive(color(0)) // Activates the tab colour?
+    .setId(6) // 1 is taken by default
+    .activateEvent(true)
+    ;
+    
+  gui.addTab("Jeans")
+    .setColorBackground(color(0)) // Colour tab in top left
+    .setColorLabel(color(255)) // Colour of the text in the tab
+    .setColorActive(color(0)) // Activates the tab colour?
+    .setId(7) // 1 is taken by default
     .activateEvent(true)
     ;
 
@@ -283,10 +303,31 @@ void setup() {
   
   // Buttons for wardrobe 1 
   gui.addButton("shirts")
-      .setPosition(245, 435) // Position of the button
-      .setSize(40, 40) // Size of the button
+      .setPosition(8, 135) // Position of the button
+      .setSize(100, 130) // Size of the button
       .setLabelVisible(false)
-      //.setColorBackground(color(255, 255, 255, 1)) // Button colour
+      .setColorBackground(color(255, 255, 255, 1)) // Button colour
+      //.setColorLabel(color(0, 0, 0)) // Hover button colour
+      .setValue(1) // Num of values, more used in sliders so buttons only have 1 possible value
+      .addCallback( // Listener & ActionPerformed in one
+      new CallbackListener() {
+      public void controlEvent(CallbackEvent theEvent) {
+        switch(theEvent.getAction()) {
+          case(ControlP5.ACTION_PRESSED):
+          pageNumber = 6;
+          gui.getTab("Tshirt").bringToFront();
+        }
+      }
+    }
+
+    )
+    ;
+    
+      gui.addButton("jeans")
+      .setPosition(235, 420) // Position of the button
+      .setSize(100, 130) // Size of the button
+      .setLabelVisible(false)
+      .setColorBackground(color(255, 255, 255, 1)) // Button colour
       //.setColorForeground(color(255, 255, 255, 1)) // Hover button colour
       .setValue(1) // Num of values, more used in sliders so buttons only have 1 possible value
       .addCallback( // Listener & ActionPerformed in one
@@ -295,7 +336,7 @@ void setup() {
         switch(theEvent.getAction()) {
           case(ControlP5.ACTION_PRESSED):
           pageNumber = 6;
-          gui.getTab("Homescreen" + pageNumber).bringToFront();
+          gui.getTab("jeans").bringToFront();
         }
       }
     }
@@ -312,6 +353,8 @@ void setup() {
     gui.getController("bottomRefreshLeft" + i).moveTo("Homescreen" + i);
     gui.getController("bottomRefreshRight" + i).moveTo("Homescreen" + i);
   }
+    gui.getController("shirts").moveTo("Wardrobe1");
+    gui.getController("jeans").moveTo("Wardrobe1");
 }
 
 void controlEvent(ControlEvent theControlEvent) { // For debugging
@@ -336,6 +379,12 @@ void draw() {
     break;
   case 5:
     image(wardrobe1, 0, 0);
+    break;
+  case 6:
+    //image(tshirt, 0, 0);
+    break;
+  case 7:
+    //image(jeans, 0, 0);
     break;
   }
 }
