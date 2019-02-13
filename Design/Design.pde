@@ -30,7 +30,7 @@ void setup() {
   gui = new ControlP5(this);
 
   // Tabs      
-  gui.getTab("Homescreen1")
+  gui.addTab("Homescreen1")
     .setColorBackground(color(255, 210, 0)) // Colour tab in top left
     .setColorLabel(color(255)) // Colour of the text in the tab
     .setColorActive(color(255, 128, 0)) // Activates the tab colour?
@@ -280,8 +280,28 @@ void setup() {
     )
     ;
   }
+  
+  // Buttons for wardrobe 1 
+  gui.addButton("shirts")
+      .setPosition(245, 435) // Position of the button
+      .setSize(40, 40) // Size of the button
+      .setLabelVisible(false)
+      //.setColorBackground(color(255, 255, 255, 1)) // Button colour
+      //.setColorForeground(color(255, 255, 255, 1)) // Hover button colour
+      .setValue(1) // Num of values, more used in sliders so buttons only have 1 possible value
+      .addCallback( // Listener & ActionPerformed in one
+      new CallbackListener() {
+      public void controlEvent(CallbackEvent theEvent) {
+        switch(theEvent.getAction()) {
+          case(ControlP5.ACTION_PRESSED):
+          pageNumber = 6;
+          gui.getTab("Homescreen" + pageNumber).bringToFront();
+        }
+      }
+    }
 
-
+    )
+    ;
 
   // Locations of the buttons - the "start" button is in the "default"
   for (int i = 1; i <= 4; i++) {
