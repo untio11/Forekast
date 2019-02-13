@@ -8,6 +8,7 @@ PImage homescreen1;
 PImage homescreen2;
 PImage homescreen3;
 PImage homescreen4;
+PImage wardrobe1;
 PFont f;
 int pageNumber;
 
@@ -24,7 +25,7 @@ void setup() {
   homescreen2 = loadImage("Homescreen2.jpg");
   homescreen3 = loadImage("Homescreen3.jpg");
   homescreen4 = loadImage("Homescreen4.jpg");
-
+  wardrobe1 = loadImage("Wardrobe_1.jpg");
   // Setup
   gui = new ControlP5(this);
 
@@ -61,6 +62,14 @@ void setup() {
     .setId(4) // 1 is taken by default
     .activateEvent(true)
     ;
+    
+  gui.addTab("Wardrobe1")
+    .setColorBackground(color(255, 210, 0)) // Colour tab in top left
+    .setColorLabel(color(255)) // Colour of the text in the tab
+    .setColorActive(color(255, 128, 0)) // Activates the tab colour?
+    .setId(5) // 1 is taken by default
+    .activateEvent(true)
+    ;
 
   // Setup Tabs
   gui.getTab("default").remove();
@@ -79,7 +88,8 @@ void setup() {
       public void controlEvent(CallbackEvent theEvent) {
         switch(theEvent.getAction()) {
           case(ControlP5.ACTION_PRESSED):
-          gui.getTab("home").bringToFront();
+          gui.getTab("Wardrobe1").bringToFront();
+          pageNumber = 5;
         }
       }
     }
@@ -303,6 +313,9 @@ void draw() {
     break;
   case 4: 
     image(homescreen4, 0, 0);
+    break;
+  case 5:
+    image(wardrobe1, 0, 0);
     break;
   }
 }
