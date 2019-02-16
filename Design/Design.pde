@@ -1,6 +1,7 @@
 import controlP5.*;
 
 ControlP5 gui;
+ControlP5 gui2;
 
 //Interface
 //PImage background;
@@ -18,6 +19,9 @@ PImage settings;
 PImage camera;
 PFont f;
 int pageNumber;
+int myColor = color(255, 0, 0);
+int sliderValue = 100;
+int sliderTicks1 = 100;
 
 void setup() {
   size(360, 740); // Window Size
@@ -35,14 +39,16 @@ void setup() {
   home = loadImage("Burger_Menu.jpg");
   wardrobe1 = loadImage("Wardrobe_1.jpg");
   tshirt = loadImage("TShirts.jpg");
-  jeans = loadImage("Jeans.jpg");
+  jeans = loadImage("Jeans.png");
   editshirt = loadImage("EditShirt.png");
-  editjeans = loadImage("EditJeans.jpg");
-  settings = loadImage("Settings.jpg");
-  camera = loadImage("Camera.jpg");
+  editjeans = loadImage("EditJeans.png");
+  settings = loadImage("Settings.png");
+  camera = loadImage("Camera2.jpg");
   
   // Setup
   gui = new ControlP5(this);
+  gui2 = new ControlP5(this);
+  gui2.setAutoDraw(false);
 
   // Tabs    
   
@@ -151,7 +157,22 @@ void setup() {
     .setId(13) // 1 is taken by default
     .activateEvent(true)
     ;
-
+    
+  gui2.addTab("heart")
+    .setColorBackground(color(0)) // Colour tab in top left
+    .setColorLabel(color(255)) // Colour of the text in the tab
+    .setColorActive(color(0)) // Activates the tab colour?
+    .setId(14) // 1 is taken by default
+    .activateEvent(true)
+    ;
+    
+   gui2.addTab("heart2")
+    .setColorBackground(color(0)) // Colour tab in top left
+    .setColorLabel(color(255)) // Colour of the text in the tab
+    .setColorActive(color(0)) // Activates the tab colour?
+    .setId(15) // 1 is taken by default
+    .activateEvent(true)
+    ;
   // Setup Tabs
   gui.getTab("default").remove();
 
@@ -199,8 +220,6 @@ void setup() {
   ;
 
   // Buttons screen 2
-
-
   gui.addButton("refreshAll2")
     .setPosition(5, 70) // Position of the button
     .setSize(40, 40) // Size of the button
@@ -243,7 +262,6 @@ void setup() {
   ;
 
   // Buttons screen 4
-
   gui.addButton("refreshAll4")
     .setPosition(5, 70) // Position of the button
     .setSize(40, 40) // Size of the button
@@ -384,7 +402,7 @@ void setup() {
     )
     ;
     
-      gui.addButton("jeans")
+   gui.addButton("jeans")
       .setPosition(235, 420) // Position of the button
       .setSize(100, 130) // Size of the button
       .setLabelVisible(false)
@@ -521,7 +539,7 @@ void setup() {
       public void controlEvent(CallbackEvent theEvent) {
         switch(theEvent.getAction()) {
           case(ControlP5.ACTION_PRESSED):
-          pageNumber = 13;
+          pageNumber = 15;
           gui.getTab("CameraShirt").bringToFront();
         }
       }
@@ -534,8 +552,8 @@ void setup() {
       .setPosition(28, 147) // Position of the button
       .setSize(89, 137) // Size of the button
       .setLabelVisible(false)
-      //.setColorBackground(color(255, 255, 255, 1)) // Button colour
-      //.setColorForeground(color(255, 255, 255, 1)) // Hover button colour
+      .setColorBackground(color(255, 255, 255, 1)) // Button colour
+      .setColorForeground(color(255, 255, 255, 1)) // Hover button colour
       .setValue(1) // Num of values, more used in sliders so buttons only have 1 possible value
       .addCallback( // Listener & ActionPerformed in one
       new CallbackListener() {
@@ -550,6 +568,69 @@ void setup() {
 
     )
     ;
+    
+    gui.addButton("editShirt")
+      .setPosition(width/4 - 6, height/2 + 58) // Position of the button
+      .setSize(20, 20) // Size of the button
+      .setLabelVisible(false)
+      .setColorBackground(color(255, 255, 255, 1)) // Button colour
+      .setColorForeground(color(255, 255, 255, 1)) // Hover button colour
+      .setValue(1) // Num of values, more used in sliders so buttons only have 1 possible value
+      .addCallback( // Listener & ActionPerformed in one
+      new CallbackListener() {
+      public void controlEvent(CallbackEvent theEvent) {
+        switch(theEvent.getAction()) {
+          case(ControlP5.ACTION_PRESSED):
+          pageNumber = 16;
+          gui.getTab("EditShirt").bringToFront();
+        }
+      }
+    }
+
+    )
+    ;
+    
+    gui.addButton("editJeans")
+      .setPosition(width/2, 270) // Position of the button
+      .setSize(20, 20) // Size of the button
+      .setLabelVisible(false)
+      .setColorBackground(color(255, 255, 255, 1)) // Button colour
+      .setColorForeground(color(255, 255, 255, 1)) // Hover button colour
+      .setValue(1) // Num of values, more used in sliders so buttons only have 1 possible value
+      .addCallback( // Listener & ActionPerformed in one
+      new CallbackListener() {
+        public void controlEvent(CallbackEvent theEvent) {
+          switch(theEvent.getAction()) {
+            case(ControlP5.ACTION_PRESSED):
+            pageNumber = 14;
+            gui.getTab("EditJeans").bringToFront();
+          }
+        }
+      }
+      );
+    
+  // Add Sliders
+  gui2.addSlider("HeartJeans")
+           .setRange(0, 255)
+           .setValue(128)
+           .setLabelVisible(false)
+           .setColorBackground(color(0))
+           .setColorForeground(color(255, 0, 0)) 
+           .setColorActive(color(255, 0, 0))
+           .setPosition(width - 70, 300)
+           .setSize(40, 40)
+           ;
+           
+  gui2.addSlider("HeartTshirt")
+           .setRange(0, 255)
+           .setValue(128)
+           .setLabelVisible(false)
+           .setColorBackground(color(0))
+           .setColorForeground(color(255, 0, 0)) 
+           .setColorActive(color(255, 0, 0))
+           .setPosition(width - 70, 300)
+           .setSize(40, 40)
+           ;
 
   // Locations of the buttons - the "start" button is in the "default"
   for (int i = 1; i <= 4; i++) {
@@ -575,6 +656,10 @@ void setup() {
     gui.getController("continueShirt").moveTo("CameraShirt");
     gui.getController("addShirt").moveTo("Tshirt");
     gui.getController("addJeans").moveTo("Jeans");
+    gui.getController("editShirt").moveTo("Tshirt");
+    gui.getController("editJeans").moveTo("Jeans");
+    gui2.getController("HeartTshirt").moveTo("heart2");
+    gui2.getController("HeartJeans").moveTo("heart"); 
 }
 
 void controlEvent(ControlEvent theControlEvent) { // For debugging
@@ -584,6 +669,8 @@ void controlEvent(ControlEvent theControlEvent) { // For debugging
 }
 
 void draw() {
+  background(0);
+
   switch (pageNumber) {
   case 1: 
     image(homescreen1, 0, 0);
@@ -605,24 +692,50 @@ void draw() {
     break;
   case 7:
     image(jeans, 0, 0);
+    jeans.resize(width, height);
     break;
   case 8:
+    gui2.getTab("heart2").bringToFront();
+    gui2.draw();
     image(editshirt, 0, 0);
+    editshirt.resize(width, height);
     break;
   case 9:
+    gui2.getTab("heart").bringToFront();
+    gui2.draw();
     image(editjeans, 0, 0);
+    editjeans.resize(width, height);
     break;
   case 10:
     image(settings, 0, 0);
+    settings.resize(width, height);
     break;
   case 11:
     image(home, 0, 0);
     break;
   case 12:
     image(camera, 0, 0);
+    camera.resize(width, height);
     break;
   case 13:
     image(camera, 0, 0);
+    camera.resize(width, height);
+  case 14:
+    gui2.getTab("heart").bringToFront();
+    gui2.draw();
+    image(editjeans, 0, 0);
+    editjeans.resize(width, height);
+    break;
+  case 15:
+    image(camera, 0, 0);
+    camera.resize(width, height);
+    break;
+  case 16:
+    gui2.getTab("heart2").bringToFront();
+    gui2.draw();
+    image(editshirt, 0, 0);
+    editshirt.resize(width, height);
+    break;
   }
 }
 
