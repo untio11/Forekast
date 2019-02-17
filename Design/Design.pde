@@ -608,6 +608,38 @@ void setup() {
         }
       }
       );
+      
+      // Back Buttons: 
+   for (int i = 1; i <= 5; i++) {
+      gui.addButton("back" + i)
+        .setPosition(10, 80) // Position of the button
+        .setSize(25, 25) // Size of the button
+        .setLabelVisible(false)
+        //.setColorBackground(color(255, 255, 255, 1)) // Button colour
+        //.setColorForeground(color(255, 255, 255, 1)) // Hover button colour
+        .setValue(1) // Num of values, more used in sliders so buttons only have 1 possible value
+        .addCallback( // Listener & ActionPerformed in one
+        new CallbackListener() {
+        public void controlEvent(CallbackEvent theEvent) {
+          switch(theEvent.getAction()) {
+            case(ControlP5.ACTION_PRESSED):
+            if (pageNumber == 16 || pageNumber == 8) { //Edit Jeans --> back to Jeans
+              pageNumber = 6;
+              gui.getTab("Jeans").bringToFront();
+            }
+            else if (pageNumber == 6 || pageNumber == 7  ) { // Jeans/Tshirts to Wardrobe
+              pageNumber = 5;
+              gui.getTab("Wardrobe1").bringToFront();
+            }
+            else if (pageNumber == 14 || pageNumber == 9) { // Edit Tshirt --> back to Tshirts
+              pageNumber = 7;
+              gui.getTab("Tshirts").bringToFront();
+            }
+          }
+        }
+      }
+      );
+    }
     
   // Add Sliders
   gui2.addSlider("HeartJeans")
@@ -652,12 +684,20 @@ void setup() {
     gui.getController("home" + 8).moveTo("EditShirt");
     gui.getController("home" + 9).moveTo("EditJeans");
     gui.getController("home" + 10).moveTo("Settings");
+    //gui.getController("back" + 5).moveTo("Wardrobe1");
+    gui.getController("back" + 1).moveTo("Tshirt");
+    gui.getController("back" + 2).moveTo("Jeans");
+    gui.getController("back" + 3).moveTo("EditShirt");
+    gui.getController("back" + 4).moveTo("EditJeans");
+    gui.getController("back" + 5).moveTo("EditJeans");
+    //gui.getController("back" + 10).moveTo("Settings");
     gui.getController("continueJeans").moveTo("CameraJeans");
     gui.getController("continueShirt").moveTo("CameraShirt");
     gui.getController("addShirt").moveTo("Tshirt");
     gui.getController("addJeans").moveTo("Jeans");
     gui.getController("editShirt").moveTo("Tshirt");
     gui.getController("editJeans").moveTo("Jeans");
+     
     gui2.getController("HeartTshirt").moveTo("heart2");
     gui2.getController("HeartJeans").moveTo("heart"); 
 }
