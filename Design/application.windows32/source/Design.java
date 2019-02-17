@@ -1,4 +1,22 @@
-import controlP5.*;
+import processing.core.*; 
+import processing.data.*; 
+import processing.event.*; 
+import processing.opengl.*; 
+
+import controlP5.*; 
+
+import java.util.HashMap; 
+import java.util.ArrayList; 
+import java.io.File; 
+import java.io.BufferedReader; 
+import java.io.PrintWriter; 
+import java.io.InputStream; 
+import java.io.OutputStream; 
+import java.io.IOException; 
+
+public class Design extends PApplet {
+
+
 
 ControlP5 gui;
 ControlP5 gui2;
@@ -23,8 +41,8 @@ int myColor = color(255, 0, 0);
 int sliderValue = 100;
 int sliderTicks1 = 100;
 
-void setup() {
-  size(360, 740); // Window Size
+public void setup() {
+   // Window Size
   background(0, 0, 0); // Background Colour
 
   pageNumber = 1;
@@ -679,13 +697,13 @@ void setup() {
   gui2.getController("HeartJeans").moveTo("heart"); 
 }
 
-void controlEvent(ControlEvent theControlEvent) { // For debugging
+public void controlEvent(ControlEvent theControlEvent) { // For debugging
   if (theControlEvent.isTab()) {
     println("got an event from tab : "+theControlEvent.getTab().getName()+" with id "+theControlEvent.getTab().getId());
   }
 }
 
-void draw() {
+public void draw() {
   background(0);
   switch (pageNumber) {
     case 1: // Homescreen1
@@ -738,4 +756,14 @@ void draw() {
       image(camera, 0, 0);
       camera.resize(width, height);
    }
+}
+  public void settings() {  size(360, 740); }
+  static public void main(String[] passedArgs) {
+    String[] appletArgs = new String[] { "Design" };
+    if (passedArgs != null) {
+      PApplet.main(concat(appletArgs, passedArgs));
+    } else {
+      PApplet.main(appletArgs);
+    }
+  }
 }
