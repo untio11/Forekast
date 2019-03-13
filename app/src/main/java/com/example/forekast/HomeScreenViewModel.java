@@ -4,6 +4,8 @@ import android.arch.lifecycle.LiveData;
 
 class HomeScreenViewModel extends HomeScreenViewModelInterface {
 
+    WeatherAPIInterface weatherAPI = new WeatherAPI();
+
     @Override
     LiveData<Outfit> getLiveOutfit() {
         return null;
@@ -51,6 +53,6 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
 
     @Override
     Weather getWeather() {
-        return null;
+        return weatherAPI.getWeather();
     }
 }
