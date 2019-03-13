@@ -12,17 +12,17 @@ class Repository extends RepositoryInterface {
     }
 
     @Override
-    List<ClothingInterface> getClothing(ClothingType type, ClothingCriteria criteria) {
+    List<Clothing> getClothing(ClothingType type, ClothingCriteria criteria) {
         return null;
     }
 
     @Override
-    void addClothing(ClothingInterface clothing) {
+    void addClothing(Clothing clothing) {
 
     }
 
     @Override
-    void removeClothing(ClothingInterface clothing) {
+    void removeClothing(Clothing clothing) {
 
     }
 }

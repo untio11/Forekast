@@ -16,5 +16,5 @@ abstract class SuggestionModuleInterface {
 
     abstract ClothingCriteria generateCriteria(Weather weather);
 
-    abstract List<ClothingInterface> getClothing(ClothingType type, ClothingCriteria criteria);
+    abstract List<Clothing> getClothing(ClothingType type, ClothingCriteria criteria);
 }
