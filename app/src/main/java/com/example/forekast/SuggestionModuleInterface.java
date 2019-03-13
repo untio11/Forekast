@@ -1,5 +1,7 @@
 package com.example.forekast;
 
+import java.util.List;
+
 abstract class SuggestionModuleInterface {
 
     abstract void generateOutfit(ClothingCriteriaInterface criteria);
