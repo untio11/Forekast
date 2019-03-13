@@ -4,9 +4,9 @@ import java.util.List;
 
 abstract class RepositoryInterface {
 
-    abstract WeatherInterface getWeather();
+    abstract Weather getWeather();
     abstract List<ClothingInterface> getClothing(ClothingType type,
-                                                 ClothingCriteriaInterface criteria);
+                                                 ClothingCriteria criteria);
     abstract void addClothing(ClothingInterface clothing);
     abstract void removeClothing(ClothingInterface clothing);
 }
