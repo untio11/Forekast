@@ -4,6 +4,10 @@ import java.util.List;
 
 abstract class SuggestionModuleInterface {
 
+    ClothingCriteria currentCriteria;
+
+    Weather currentWeather;
+
     abstract void generateOutfit(ClothingCriteria criteria);
 
     abstract Outfit getRandomOutfit();
