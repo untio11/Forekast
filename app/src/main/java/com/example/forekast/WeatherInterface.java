@@ -1,6 +1,7 @@
 package com.example.forekast;
 
 abstract class WeatherInterface {
+
     int temp;
     int uv_index;
     int precipitation;

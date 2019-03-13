@@ -1,5 +1,7 @@
 package com.example.forekast;
 
+import java.util.List;
+
 abstract class RepositoryInterface {
 
     abstract WeatherInterface getWeather();
