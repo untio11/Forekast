@@ -15,7 +15,7 @@ public class Clothing {
     public String owner;
 
     @ColumnInfo(name = "type")
-    public ClothingType type;
+    public String type;
 
     @ColumnInfo(name = "comfort")
     public int comfort;
@@ -30,7 +30,7 @@ public class Clothing {
     public int preference;
 
     @ColumnInfo(name = "color")
-    public int[] color;
+    public String color;
 
     @ColumnInfo(name = "washing_machine")
     public boolean washing_machine;
@@ -40,8 +40,4 @@ public class Clothing {
 
     @ColumnInfo(name = "washing_time")
     public int washing_time;
-
-    @ColumnInfo(name = "picture")
-    public Image picture;
-
 }
