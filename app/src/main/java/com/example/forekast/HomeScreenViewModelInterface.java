@@ -5,6 +5,12 @@ import android.arch.lifecycle.LiveData;
 
 abstract class HomeScreenViewModelInterface {
 
+    LiveData<Outfit> currentOutfit;
+
+    LiveData<Weather> currentWeather;
+
+    ClothingCriteria clothingCriteria;
+
     abstract LiveData<Outfit> getLiveOutfit();
 
     abstract LiveData<Weather> getLiveWeather();
