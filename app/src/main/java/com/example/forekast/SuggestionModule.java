@@ -34,7 +34,7 @@ class SuggestionModule extends SuggestionModuleInterface {
     }
 
     @Override
-    List<ClothingInterface> getClothing(ClothingType type, ClothingCriteria criteria) {
+    List<Clothing> getClothing(ClothingType type, ClothingCriteria criteria) {
         return null;
     }
 }
