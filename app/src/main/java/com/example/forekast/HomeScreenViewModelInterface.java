@@ -1,25 +1,34 @@
 package com.example.forekast;
 
- abstract class HomeScreenViewModelInterface {
+import android.arch.lifecycle.LiveData;
 
-    abstract void  getLiveOutfit();
 
-    abstract void getLiveWeather();
+abstract class HomeScreenViewModelInterface {
 
-    abstract void getClothingCriteria();
+    LiveData<Outfit> currentOutfit;
 
-    abstract void setClothingCriteria();
+    LiveData<Weather> currentWeather;
 
-    abstract void nextClothing();
+    ClothingCriteria clothingCriteria;
 
-    abstract void previousClothing();
+    abstract LiveData<Outfit> getLiveOutfit();
+
+    abstract LiveData<Weather> getLiveWeather();
+
+    abstract ClothingCriteria getClothingCriteria();
+
+    abstract ClothingCriteria setClothingCriteria(ClothingCriteria criteria);
+
+    abstract void nextClothing(ClothingType clothing_type);
+
+    abstract void previousClothing(ClothingType clothing_type );
 
     abstract void updateWeather();
 
     abstract void newOutfit();
 
-    abstract void setCurrentOutfit();
+    abstract void setCurrentOutfit(Outfit new_outfit);
 
-    abstract void getWeather();
+    abstract Weather getWeather();
 
 }
