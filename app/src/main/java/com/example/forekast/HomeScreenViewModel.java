@@ -1,6 +1,6 @@
 package com.example.forekast;
 
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.LiveData;
 
 class HomeScreenViewModel extends HomeScreenViewModelInterface {
 
