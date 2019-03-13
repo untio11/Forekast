@@ -2,24 +2,24 @@ package com.example.forekast;
 
  abstract class HomeScreenViewModelInterface {
 
-    abstract void  getLiveOutfit();
+    abstract LiveData<Outfit>  getLiveOutfit();
 
-    abstract void getLiveWeather();
+    abstract LiveData<Weather> getLiveWeather();
 
-    abstract void getClothingCriteria();
+    abstract ClothingCriteriaInterface getClothingCriteria();
 
-    abstract void setClothingCriteria();
+    abstract ClothingCriteriaInterface setClothingCriteria(ClothingCriteriaInterface criteria);
 
-    abstract void nextClothing();
+    abstract void nextClothing(ClothingType clothing_type);
 
-    abstract void previousClothing();
+    abstract void previousClothing(ClothingType clothing_type );
 
     abstract void updateWeather();
 
     abstract void newOutfit();
 
-    abstract void setCurrentOutfit();
+    abstract void setCurrentOutfit(OutfitInterface new_outfit);
 
-    abstract void getWeather();
+    abstract WeatherInterface getWeather();
 
 }
