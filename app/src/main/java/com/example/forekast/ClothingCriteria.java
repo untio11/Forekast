@@ -2,7 +2,7 @@ package com.example.forekast;
 
 import android.util.Pair;
 
-abstract class ClothingCriteriaInterface {
+abstract class ClothingCriteria {
 
     Pair<Integer, Integer> warmth;
     Pair<Integer, Integer> formality;

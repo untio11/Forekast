@@ -2,7 +2,7 @@ package com.example.forekast;
 
  abstract class HomeScreenViewModelInterface {
 
-    abstract void  getLiveOutfit();
+    abstract void getLiveOutfit();
 
     abstract void getLiveWeather();
 

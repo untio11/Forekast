@@ -2,7 +2,7 @@ package com.example.forekast;
 
 import android.media.Image;
 
-abstract class ClothingProperties {
+class ClothingProperties {
     long ID;
     String owner;
     ClothingType type;
