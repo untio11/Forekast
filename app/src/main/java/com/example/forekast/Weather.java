@@ -2,13 +2,13 @@ package com.example.forekast;
 
 class Weather {
 
-    int temp;
-    int uv_index;
-    int precipitation;
-    int weather_icon;
-    int feels_like;
-    int wind;
-    String city;
+    private int temp;
+    private int uv_index;
+    private int precipitation;
+    private int weather_icon;
+    private int feels_like;
+    private int wind;
+    private String city;
 
     Weather(int temp, int uv_index, int precipitation, int weather_icon, int feels_like, int wind,
             String city){
