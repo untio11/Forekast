@@ -82,7 +82,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 // simple string representation.
                 preference.setSummary(stringValue);
             }
-            return true;
+            return true; // Helpful comment
         }
     };
 
