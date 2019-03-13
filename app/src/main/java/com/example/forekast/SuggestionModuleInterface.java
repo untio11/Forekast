@@ -4,17 +4,21 @@ import java.util.List;
 
 abstract class SuggestionModuleInterface {
 
-    abstract void generateOutfit(ClothingCriteriaInterface criteria);
+    ClothingCriteria currentCriteria;
 
-    abstract OutfitInterface getRandomOutfit();
+    Weather currentWeather;
 
-    abstract OutfitInterface next(ClothingType type);
+    abstract void generateOutfit(ClothingCriteria criteria);
 
-    abstract OutfitInterface previous(ClothingType type);
+    abstract Outfit getRandomOutfit();
 
-    abstract void setCurrentCriteria(ClothingCriteriaInterface criteria);
+    abstract Outfit next(ClothingType type);
 
-    abstract ClothingCriteriaInterface generateCriteria(WeatherInterface weather);
+    abstract Outfit previous(ClothingType type);
 
-    abstract List<ClothingInterface> getClothing(ClothingType type, ClothingCriteriaInterface criteria);
+    abstract void setCurrentCriteria(ClothingCriteria criteria);
+
+    abstract ClothingCriteria generateCriteria(Weather weather);
+
+    abstract List<ClothingInterface> getClothing(ClothingType type, ClothingCriteria criteria);
 }
