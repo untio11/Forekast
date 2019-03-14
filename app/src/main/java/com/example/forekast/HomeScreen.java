@@ -80,18 +80,18 @@ public class HomeScreen extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         if (id == R.id.nav_home) {
-            startActivity(new Intent(getApplicationContext(), HomeScreen.class));
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_wardrobe) {
             startActivity(new Intent(getApplicationContext(), Wardrobe.class));
         } else if (id == R.id.nav_settings) {
-
+            startActivity(new Intent(getApplicationContext(), Settings.class));
         } else if (id == R.id.nav_switchwardrobe) {
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

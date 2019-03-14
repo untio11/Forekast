@@ -3,8 +3,9 @@ package com.example.forekast;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.view.View;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,14 +13,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-public class Wardrobe extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Settings extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wardrobe);
+        setContentView(R.layout.activity_settings);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -84,9 +85,9 @@ public class Wardrobe extends AppCompatActivity implements NavigationView.OnNavi
         if (id == R.id.nav_home) {
             startActivity(new Intent(getApplicationContext(), HomeScreen.class));
         } else if (id == R.id.nav_wardrobe) {
-            drawer.closeDrawer(GravityCompat.START);
+            startActivity(new Intent(getApplicationContext(), Wardrobe.class));
         } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(getApplicationContext(), Settings.class));
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_switchwardrobe) {
 
         }
