@@ -109,7 +109,7 @@ public class Wardrobe extends AppCompatActivity
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(getApplicationContext(), Settings.class));
         } else if (id == R.id.nav_switchwardrobe) {
-
+            startActivity(new Intent(getApplicationContext(), SwitchWardrobe.class));
         }
 
         drawer.closeDrawer(GravityCompat.START);

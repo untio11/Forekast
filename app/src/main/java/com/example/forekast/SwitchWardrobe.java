@@ -14,13 +14,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class HomeScreen extends AppCompatActivity
+public class SwitchWardrobe extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_screen);
+        setContentView(R.layout.activity_switch_wardrobe);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -56,7 +56,7 @@ public class HomeScreen extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home_screen, menu);
+        getMenuInflater().inflate(R.menu.switch_wardrobe, menu);
         return true;
     }
 
@@ -83,13 +83,13 @@ public class HomeScreen extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         if (id == R.id.nav_home) {
-            drawer.closeDrawer(GravityCompat.START);
+            startActivity(new Intent(getApplicationContext(), HomeScreen.class));
         } else if (id == R.id.nav_wardrobe) {
             startActivity(new Intent(getApplicationContext(), Wardrobe.class));
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(getApplicationContext(), Settings.class));
         } else if (id == R.id.nav_switchwardrobe) {
-            startActivity(new Intent(getApplicationContext(), SwitchWardrobe.class));
+            drawer.closeDrawer(GravityCompat.START);
         }
 
         drawer.closeDrawer(GravityCompat.START);
