@@ -105,4 +105,5 @@
     <string name="editbutton">editbutton</string>
     <string name="button">Button</string>
     <string name="title_activity_switch_wardrobe">SwitchWardrobe</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
 </resources>
