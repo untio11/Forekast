@@ -1,13 +1,14 @@
 package com.example.forekast;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 
 abstract class HomeScreenViewModelInterface {
 
-    LiveData<Outfit> currentOutfit;
+    MutableLiveData<Outfit> currentOutfit;
 
-    LiveData<Weather> currentWeather;
+    MutableLiveData<Weather> currentWeather;
 
     ClothingCriteria clothingCriteria;
 
@@ -28,7 +29,4 @@ abstract class HomeScreenViewModelInterface {
     abstract void newOutfit();
 
     abstract void setCurrentOutfit(Outfit new_outfit);
-
-    abstract Weather getWeather();
-
 }

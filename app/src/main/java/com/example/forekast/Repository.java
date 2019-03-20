@@ -2,25 +2,23 @@ package com.example.forekast;
 
 import java.util.List;
 
-class Repository extends RepositoryInterface {
+import androidx.lifecycle.MutableLiveData;
 
-    @Override
-    Weather getWeather() {
+class Repository {
+
+    static void getWeather(MutableLiveData<Weather> weather) {
+        new WeatherAPI().execute(weather);
+    }
+
+    static List<Clothing> getClothing(ClothingType type, ClothingCriteria criteria) {
         return null;
     }
 
-    @Override
-    List<Clothing> getClothing(ClothingType type, ClothingCriteria criteria) {
-        return null;
-    }
-
-    @Override
-    void addClothing(Clothing clothing) {
+    static void addClothing(Clothing clothing) {
 
     }
 
-    @Override
-    void removeClothing(Clothing clothing) {
+    static void removeClothing(Clothing clothing) {
 
     }
 }

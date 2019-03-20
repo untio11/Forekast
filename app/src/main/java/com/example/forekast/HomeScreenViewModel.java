@@ -5,12 +5,12 @@ import androidx.lifecycle.LiveData;
 class HomeScreenViewModel extends HomeScreenViewModelInterface {
     @Override
     LiveData<Outfit> getLiveOutfit() {
-        return null;
+        return currentOutfit;
     }
 
     @Override
     LiveData<Weather> getLiveWeather() {
-        return null;
+        return currentWeather;
     }
 
     @Override
@@ -35,7 +35,7 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
 
     @Override
     void updateWeather() {
-
+        Repository.getWeather(currentWeather);
     }
 
     @Override
@@ -46,10 +46,5 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
     @Override
     void setCurrentOutfit(Outfit new_outfit) {
 
-    }
-
-    @Override
-    Weather getWeather() {
-        return null;
     }
 }
