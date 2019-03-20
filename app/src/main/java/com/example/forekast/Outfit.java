@@ -1,7 +1,6 @@
 package com.example.forekast;
 
-abstract class Outfit {
-
+class Outfit {
     Clothing inner_torso;
     Clothing outer_torso;
     Clothing pants;

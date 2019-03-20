@@ -8,6 +8,8 @@ abstract class SuggestionModuleInterface {
 
     Weather currentWeather;
 
+    OutfitPowersetInterface outfits;
+
     abstract void generateOutfit(ClothingCriteria criteria);
 
     abstract Outfit getRandomOutfit();
