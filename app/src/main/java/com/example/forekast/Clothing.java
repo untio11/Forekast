@@ -4,6 +4,7 @@ import android.media.Image;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
@@ -14,8 +15,9 @@ public class Clothing {
     @ColumnInfo(name = "owner")
     public String owner;
 
+    @Ignore
     @ColumnInfo(name = "type")
-    public String type;
+    public ClothingType type;
 
     @ColumnInfo(name = "comfort")
     public int comfort;
@@ -29,8 +31,9 @@ public class Clothing {
     @ColumnInfo(name = "preference")
     public int preference;
 
+    @Ignore
     @ColumnInfo(name = "color")
-    public String color;
+    public int[] color;
 
     @ColumnInfo(name = "washing_machine")
     public boolean washing_machine;
@@ -40,4 +43,9 @@ public class Clothing {
 
     @ColumnInfo(name = "washing_time")
     public int washing_time;
+
+    @Ignore
+    @ColumnInfo(name = "picture")
+    public Image picture;
+
 }
