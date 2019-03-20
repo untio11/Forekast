@@ -1,7 +1,6 @@
 package com.example.forekast;
 
 import android.os.AsyncTask;
-
 import androidx.lifecycle.MutableLiveData;
 
 class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
@@ -23,7 +22,7 @@ class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
         weather.postValue(last_weather);
         target = weather;
 
-        Weather result = null;
+        Weather result = new Weather(21, 3, 0, 420, 22, 5, "Eindhoven");
         return result;
     }
 
