@@ -1,5 +1,7 @@
 package com.example.forekast;
 
+import com.example.forekast.clothing.Clothing;
+
 class Outfit {
     Clothing inner_torso;
     Clothing outer_torso;

@@ -1,6 +1,8 @@
 package com.example.forekast;
 
-import java.util.Collection;
+import com.example.forekast.clothing.Clothing;
+import com.example.forekast.clothing.ClothingType;
+
 import java.util.Collections;
 import java.util.List;
 

@@ -1,5 +1,7 @@
 package com.example.forekast;
 
+import com.example.forekast.clothing.Clothing;
+
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 

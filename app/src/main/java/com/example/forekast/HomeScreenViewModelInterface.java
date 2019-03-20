@@ -1,5 +1,7 @@
 package com.example.forekast;
 
+import com.example.forekast.clothing.ClothingType;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 

@@ -1,5 +1,7 @@
 package com.example.forekast;
 
+import com.example.forekast.clothing.Clothing;
+
 import java.util.List;
 
 import androidx.room.Dao;

@@ -1,7 +1,6 @@
-package com.example.forekast;
+package com.example.forekast.clothing;
 
 import android.media.Image;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -15,9 +14,11 @@ public class Clothing {
     @ColumnInfo(name = "owner")
     public String owner;
 
-    @Ignore
     @ColumnInfo(name = "type")
-    public ClothingType type;
+    public String type;
+
+    @ColumnInfo(name = "location")
+    public String location;
 
     @ColumnInfo(name = "comfort")
     public int comfort;

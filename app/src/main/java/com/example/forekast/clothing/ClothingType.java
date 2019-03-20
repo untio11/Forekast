@@ -1,6 +1,6 @@
-package com.example.forekast;
+package com.example.forekast.clothing;
 
-enum ClothingType {
+public enum ClothingType {
     T_SHIRT,
     JACKET,
     DRESS,
