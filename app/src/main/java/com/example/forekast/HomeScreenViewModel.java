@@ -3,9 +3,6 @@ package com.example.forekast;
 import androidx.lifecycle.LiveData;
 
 class HomeScreenViewModel extends HomeScreenViewModelInterface {
-
-    WeatherAPIInterface weatherAPI = new WeatherAPI();
-
     @Override
     LiveData<Outfit> getLiveOutfit() {
         return null;
@@ -53,6 +50,6 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
 
     @Override
     Weather getWeather() {
-        return weatherAPI.getWeather();
+        return null;
     }
 }

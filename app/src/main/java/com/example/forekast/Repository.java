@@ -4,11 +4,9 @@ import java.util.List;
 
 class Repository extends RepositoryInterface {
 
-    WeatherAPIInterface weatherAPI = new WeatherAPI();
-
     @Override
     Weather getWeather() {
-        return weatherAPI.getWeather();
+        return null;
     }
 
     @Override
