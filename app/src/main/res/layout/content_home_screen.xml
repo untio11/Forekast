@@ -5,25 +5,23 @@
     android:id="@+id/HomeDivide"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="visible"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".HomeScreen"
     tools:showIn="@layout/app_bar_home_screen">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
-        android:text="TextView"
+        android:text="@string/home"
         android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Home" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -36,7 +34,8 @@
         app:layout_constraintHorizontal_bias="0.009"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/divider"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        android:contentDescription="@string/todo" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -48,8 +47,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toBottomOf="@+id/home"
+        tools:srcCompat="@tools:sample/avatars"
+        android:contentDescription="@string/todo" />
 
     <ImageView
         android:id="@+id/imageView5"
@@ -62,7 +62,8 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="@+id/imageView4"
         app:layout_constraintTop_toBottomOf="@+id/imageView4"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        android:contentDescription="@string/todo" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -71,11 +72,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="44dp"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/todo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.094"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toBottomOf="@+id/home" />
 
     <View
         android:id="@+id/divider"
@@ -87,7 +88,7 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/home" />
 
     <TextView
         android:id="@+id/textView3"
@@ -97,14 +98,14 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="sans-serif-medium"
-        android:text="TextView"
+        android:text="@string/todayRecom"
         android:textAllCaps="false"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         android:textColor="@android:color/darker_gray"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/home"
         tools:text="Today's Recommendation" />
 
     <ImageView
@@ -112,7 +113,8 @@
         android:layout_width="50dp"
         android:layout_height="43dp"
         android:layout_marginTop="2dp"
-        app:layout_constraintEnd_toStartOf="@+id/textView2"
+        android:contentDescription="@string/todo"
+        app:layout_constraintEnd_toStartOf="@+id/home"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_home_icon" />
 
@@ -157,7 +159,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="566dp" />
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <ImageButton
         android:id="@+id/imageButton"
@@ -166,6 +168,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/next"
+        android:contentDescription="@string/todo"
         android:scaleType="centerInside"
         android:tint="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="@+id/imageView6"
@@ -180,6 +183,7 @@
         android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/next_2"
+        android:contentDescription="@string/todo"
         android:scaleType="centerInside"
         android:tint="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="@+id/imageView2"
@@ -194,6 +198,7 @@
         android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/next_2"
+        android:contentDescription="@string/todo"
         android:scaleType="centerInside"
         android:tint="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="@+id/imageView4"
@@ -208,6 +213,7 @@
         android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/next_2"
+        android:contentDescription="@string/todo"
         android:scaleType="centerInside"
         android:tint="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="@+id/imageView5"
@@ -222,6 +228,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/next"
+        android:contentDescription="@string/todo"
         android:scaleType="centerInside"
         android:tint="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="@+id/imageView4"
@@ -236,6 +243,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/next"
+        android:contentDescription="@string/todo"
         android:scaleType="centerInside"
         android:tint="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="@+id/imageView5"
@@ -250,6 +258,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="28dp"
+        android:contentDescription="@string/todo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView13"
         app:layout_constraintHorizontal_bias="1.0"
@@ -262,6 +271,7 @@
         android:layout_height="50dp"
         android:layout_marginEnd="64dp"
         android:layout_marginBottom="28dp"
+        android:contentDescription="@string/todo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/sunglasses" />
@@ -272,6 +282,7 @@
         android:layout_height="50dp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="28dp"
+        android:contentDescription="@string/todo"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView14"
@@ -283,6 +294,7 @@
         android:layout_height="50dp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="28dp"
+        android:contentDescription="@string/todo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView9"
         app:srcCompat="@drawable/umbrella" />
@@ -293,6 +305,7 @@
         android:layout_height="50dp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="28dp"
+        android:contentDescription="@string/todo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView12"
         app:srcCompat="@drawable/umbrella" />
@@ -304,11 +317,12 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="14dp"
         android:background="@android:color/transparent"
+        android:contentDescription="@string/todo"
         android:scaleType="centerInside"
         android:tint="@color/colorPrimaryDark"
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/home"
         app:srcCompat="@drawable/loading" />
 
     <TextView
@@ -317,7 +331,7 @@
         android:layout_height="18dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:text="TextView"
+        android:text="@string/comfort"
         android:textAllCaps="false"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textStyle="italic"
@@ -334,7 +348,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="TextView"
+        android:text="@string/comfort"
         android:textAllCaps="false"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textStyle="italic"
@@ -351,7 +365,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
-        android:text="TextView"
+        android:text="@string/comfort"
         android:textAllCaps="false"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textStyle="italic"

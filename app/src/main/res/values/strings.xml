@@ -106,4 +106,7 @@
     <string name="button">Button</string>
     <string name="title_activity_switch_wardrobe">SwitchWardrobe</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="todayRecom">Today\'s Recommendation</string>
+    <string name="comfort">Comfort</string>
+    <string name="todo">TODO</string>
 </resources>
