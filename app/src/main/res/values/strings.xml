@@ -108,5 +108,11 @@
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="todayRecom">Today\'s Recommendation</string>
     <string name="comfort">Comfort</string>
+    <string name="warmth">Warmth</string>
+    <string name="formality">Formality</string>
+    <string name="clothAvail">Clothing Availability</string>
+    <string name="addWard">Add Wardrobe</string>
+    <string name="location">Location Access</string>
+    <string name="editPhoto">Edit Photo</string>
     <string name="todo">TODO</string>
 </resources>

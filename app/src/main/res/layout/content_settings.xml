@@ -13,9 +13,11 @@
         android:id="@+id/imageView16"
         android:layout_width="42dp"
         android:layout_height="47dp"
-        app:srcCompat="@drawable/ic_home_icon"
-        tools:layout_editor_absoluteX="85dp"
-        tools:layout_editor_absoluteY="4dp" />
+        android:layout_marginEnd="4dp"
+        android:contentDescription="@string/todo"
+        app:layout_constraintBottom_toBottomOf="@+id/textView7"
+        app:layout_constraintEnd_toStartOf="@+id/textView7"
+        app:srcCompat="@drawable/development_512" />
 
     <TextView
         android:id="@+id/textView7"
@@ -24,13 +26,13 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
-        android:text="TextView"
+        android:contentDescription="@string/todo"
+        android:text="@string/Settings"
         android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Settings" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/divider2"
@@ -50,6 +52,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:contentDescription="@string/todo"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="@+id/button2"
         app:layout_constraintStart_toStartOf="@+id/button2"
@@ -59,72 +62,85 @@
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="414dp"
+        android:layout_width="0dp"
         android:layout_height="65dp"
-        android:layout_marginEnd="8dp"
-        android:background="?attr/colorButtonNormal"
+        android:layout_marginTop="24dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/todo"
         android:fontFamily="sans-serif-light"
-        android:text="Button"
+        android:text="@string/addWard"
         android:textAlignment="viewStart"
         android:textAllCaps="false"
         android:textSize="18sp"
+        android:paddingStart="80dp"
+        android:paddingEnd="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.181"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="67dp"
-        tools:text="                    Add Wardrobe" />
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
+        app:layout_constraintVertical_bias="0.266" />
 
     <ImageView
         android:id="@+id/imageView23"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:contentDescription="@string/todo"
         android:scaleType="centerInside"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/button4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2"
-        app:srcCompat="@drawable/p68946" />
+        app:layout_constraintTop_toTopOf="@+id/button4"
+        app:srcCompat="@drawable/locationsymbol" />
 
     <Button
         android:id="@+id/button4"
-        android:layout_width="414dp"
+        android:layout_width="0dp"
         android:layout_height="65dp"
-        android:background="?attr/colorButtonNormal"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/todo"
         android:fontFamily="sans-serif-light"
-        android:text="Button"
+        android:text="@string/location"
         android:textAlignment="viewStart"
         android:textAllCaps="false"
         android:textSize="18sp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="131dp"
-        tools:text="                    Location Access" />
+        android:paddingStart="80dp"
+        android:paddingEnd="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/button5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button2" />
 
     <ImageView
         android:id="@+id/imageView25"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="24dp"
+        android:contentDescription="@string/todo"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="@+id/button5"
         app:layout_constraintStart_toStartOf="@+id/button5"
         app:layout_constraintTop_toTopOf="@+id/button5"
-        app:srcCompat="@drawable/p68946" />
+        app:srcCompat="@drawable/p15282" />
 
     <Button
         android:id="@+id/button5"
-        android:layout_width="414dp"
+        android:layout_width="0dp"
         android:layout_height="65dp"
-        android:background="?attr/colorButtonNormal"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/todo"
         android:fontFamily="sans-serif-light"
-        android:text="Button"
-        android:textAlignment="viewStart"
+        android:paddingStart="80dp"
+        android:paddingEnd="0dp"
+        android:text="@string/clothAvail"
+        android:textAlignment="textStart"
         android:textAllCaps="false"
         android:textSize="18sp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="195dp"
-        tools:text="                    Clothing Availability" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button4" />
 
     <View
         android:id="@+id/divider3"
