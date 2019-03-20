@@ -15,10 +15,10 @@ public class Clothing {
     public String owner;
 
     @ColumnInfo(name = "type")
-    public String type;
+    public String type = "";
 
     @ColumnInfo(name = "location")
-    public String location;
+    public String location = "";
 
     @ColumnInfo(name = "comfort")
     public int comfort;
@@ -49,4 +49,15 @@ public class Clothing {
     @ColumnInfo(name = "picture")
     public Image picture;
 
+    public Clothing() {
+        String us = this.getClass().getSimpleName();
+        String father = this.getClass().getSuperclass().getSimpleName();
+
+        if ("Clothing".equals(father)) {
+            location = us;
+        } else if (!"Object".equals(father)) {
+            location = father;
+            type = us;
+        }
+    }
 }
