@@ -1,6 +1,8 @@
 package com.example.forekast;
 
 import androidx.fragment.app.FragmentTransaction;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -16,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.example.forekast.dummy.DummyContent;
 
@@ -27,6 +30,7 @@ public class Wardrobe extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wardrobe);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Button editbutton = (Button) findViewById(R.id.editbutton);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -50,8 +54,8 @@ public class Wardrobe extends AppCompatActivity
             transaction.replace(R.id.wardrobefragment, fragment).commit();
         }
 
-        Button button = (Button) findViewById(R.id.editbutton);
-        button.setOnClickListener(new View.OnClickListener() {
+        editbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 Fragment fragment = EditScreen.newInstance();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

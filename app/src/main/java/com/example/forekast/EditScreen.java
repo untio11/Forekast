@@ -1,5 +1,6 @@
 package com.example.forekast;
 
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 public class EditScreen extends Fragment {
@@ -22,7 +24,18 @@ public class EditScreen extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.edit_screen_fragment, container, false);
+        View view = inflater.inflate(R.layout.edit_screen_fragment, container, false);
+        ImageButton returnbutton = (ImageButton) view.findViewById(R.id.returnbutton);
+
+        returnbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = WardrobeFragment.newInstance(5);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.wardrobefragment, fragment).commit();
+            }
+        });
+        return view;
     }
 
     @Override

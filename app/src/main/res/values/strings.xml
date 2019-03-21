@@ -115,4 +115,5 @@
     <string name="location">Location Access</string>
     <string name="editPhoto">Edit Photo</string>
     <string name="todo">TODO</string>
+    <string name="todelete">To be deleted</string>
 </resources>
