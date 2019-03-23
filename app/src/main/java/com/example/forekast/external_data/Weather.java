@@ -1,6 +1,6 @@
-package com.example.forekast;
+package com.example.forekast.external_data;
 
-class Weather {
+public class Weather {
 
     private int temp;
     private int uv_index;

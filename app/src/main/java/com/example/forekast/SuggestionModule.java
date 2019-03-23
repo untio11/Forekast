@@ -1,7 +1,9 @@
 package com.example.forekast;
 
 import com.example.forekast.clothing.Clothing;
-import com.example.forekast.clothing.ClothingType;
+import com.example.forekast.clothing.ClothingCriteria;
+import com.example.forekast.external_data.Repository;
+import com.example.forekast.external_data.Weather;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,10 +15,10 @@ class SuggestionModule extends SuggestionModuleInterface {
 
     @Override
     void generateOutfit(ClothingCriteria criteria) {
-        outfits.inner_top = Repository.getClothing(ClothingType.TANKTOP, null);
-        outfits.outer_top = Repository.getClothing(ClothingType.JACKET, null);
-        outfits.pants = Repository.getClothing(ClothingType.SHOES, null);
-        outfits.shoes = Repository.getClothing(ClothingType.BOOTS, null);
+        outfits.inner_top = Repository.getClothing("Torso", null);
+        outfits.outer_top = Repository.getClothing("Torso", null);
+        outfits.pants = Repository.getClothing("Legs", null);
+        outfits.shoes = Repository.getClothing("Feet", null);
     }
 
     @Override
@@ -43,13 +45,13 @@ class SuggestionModule extends SuggestionModuleInterface {
     }
 
     @Override
-    Outfit next(ClothingType type) {
+    Outfit next(String type) {
 
         return null;
     }
 
     @Override
-    Outfit previous(ClothingType type) {
+    Outfit previous(String type) {
 
         return null;
     }
@@ -66,7 +68,7 @@ class SuggestionModule extends SuggestionModuleInterface {
     }
 
     @Override
-    List<Clothing> getClothing(ClothingType type, ClothingCriteria criteria) {
+    List<Clothing> getClothing(String type, ClothingCriteria criteria) {
 
         return null;
     }

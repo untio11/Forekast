@@ -1,8 +1,8 @@
-package com.example.forekast;
+package com.example.forekast.clothing;
 
 import android.util.Pair;
 
-abstract class ClothingCriteria {
+abstract public class ClothingCriteria {
 
     Pair<Integer, Integer> warmth;
     Pair<Integer, Integer> formality;

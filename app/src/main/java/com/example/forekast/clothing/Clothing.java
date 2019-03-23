@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class Clothing {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public long ID;
 
     @ColumnInfo(name = "owner")
@@ -45,11 +45,26 @@ public class Clothing {
     @ColumnInfo(name = "washing_time")
     public int washing_time;
 
+    @ColumnInfo(name = "overwearable")
+    public boolean overwearable;
+
+    @ColumnInfo(name = "underwearable")
+    public boolean underwearable;
+
     @Ignore
     @ColumnInfo(name = "picture")
     public Image picture;
 
     public Clothing() {
+        setLocAndTyp();
+    }
+
+    public Clothing(int testwarmth) {
+        setLocAndTyp();
+        warmth = testwarmth;
+    }
+
+    private void setLocAndTyp() {
         String us = this.getClass().getSimpleName();
         String father = this.getClass().getSuperclass().getSimpleName();
 
@@ -59,5 +74,10 @@ public class Clothing {
             location = father;
             type = us;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "[" + ID + "] " + owner + "::" + location + "::" + type + " - " + "(" + warmth + "," + formality + "," + comfort + ")";
     }
 }

@@ -1,6 +1,8 @@
 package com.example.forekast;
 
-import com.example.forekast.clothing.ClothingType;
+import com.example.forekast.clothing.ClothingCriteria;
+import com.example.forekast.external_data.Repository;
+import com.example.forekast.external_data.Weather;
 
 import androidx.lifecycle.LiveData;
 
@@ -26,12 +28,12 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
     }
 
     @Override
-    void nextClothing(ClothingType clothing_type) {
+    void nextClothing(String clothing_type) {
 
     }
 
     @Override
-    void previousClothing(ClothingType clothing_type) {
+    void previousClothing(String clothing_type) {
 
     }
 

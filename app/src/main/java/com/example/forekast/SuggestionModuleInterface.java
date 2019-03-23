@@ -1,7 +1,8 @@
 package com.example.forekast;
 
 import com.example.forekast.clothing.Clothing;
-import com.example.forekast.clothing.ClothingType;
+import com.example.forekast.clothing.ClothingCriteria;
+import com.example.forekast.external_data.Weather;
 
 import java.util.List;
 
@@ -17,13 +18,13 @@ abstract class SuggestionModuleInterface {
 
     abstract Outfit getRandomOutfit();
 
-    abstract Outfit next(ClothingType type);
+    abstract Outfit next(String type);
 
-    abstract Outfit previous(ClothingType type);
+    abstract Outfit previous(String type);
 
     abstract void setCurrentCriteria(ClothingCriteria criteria);
 
     abstract ClothingCriteria generateCriteria(Weather weather);
 
-    abstract List<Clothing> getClothing(ClothingType type, ClothingCriteria criteria);
+    abstract List<Clothing> getClothing(String type, ClothingCriteria criteria);
 }

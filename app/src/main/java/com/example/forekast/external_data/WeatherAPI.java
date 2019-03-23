@@ -1,6 +1,9 @@
-package com.example.forekast;
+package com.example.forekast.external_data;
 
 import android.os.AsyncTask;
+
+import com.example.forekast.external_data.Weather;
+
 import androidx.lifecycle.MutableLiveData;
 
 class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
