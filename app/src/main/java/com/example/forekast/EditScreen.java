@@ -17,7 +17,8 @@ public class EditScreen extends Fragment {
 
     private EditScreenViewModel mViewModel;
 
-    public static EditScreen newInstance() {
+    public static EditScreen newInstance(Clothing clothing) {
+        // Do what you want with clothing here
         return new EditScreen();
     }
 
@@ -30,7 +31,7 @@ public class EditScreen extends Fragment {
         returnbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = WardrobeFragment.newInstance(5);
+                Fragment fragment = WardrobeFragment.newInstance("", "");
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.wardrobefragment, fragment).commit();
             }
