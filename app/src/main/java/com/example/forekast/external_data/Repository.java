@@ -1,7 +1,8 @@
 package com.example.forekast.external_data;
 
 import com.example.forekast.clothing.Clothing;
-import com.example.forekast.clothing.ClothingCriteria;
+import com.example.forekast.clothing.ClothingCriteriaInterface;
+
 import java.util.List;
 import androidx.lifecycle.MutableLiveData;
 
@@ -16,12 +17,17 @@ public class Repository {
         new WeatherAPI().execute(weather);
     }
 
-    public static <T extends Clothing> List<T> getClothing(String type, ClothingCriteria criteria) throws NullPointerException {
+    public static List<Clothing> getClothing(ClothingCriteriaInterface criteria) throws NullPointerException {
         if (db == null) {
             throw new NullPointerException("The database has not been instantiated yet");
+        } else if (criteria == null) {
+            throw new IllegalArgumentException("Criteria were not set!");
         }
 
-        return null;
+        List<Clothing> result = db.clothingDao().getByLocation(criteria.owner, criteria.location);
+
+
+        return result;
     }
 
     public static void addClothing(Clothing ... clothing) throws NullPointerException {

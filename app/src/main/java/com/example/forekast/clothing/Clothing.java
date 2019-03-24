@@ -65,6 +65,10 @@ public class Clothing {
     }
 
     private void setLocAndTyp() {
+        if (!location.equals("") || !type.equals("")) {
+            return;
+        }
+
         String us = this.getClass().getSimpleName();
         String father = this.getClass().getSuperclass().getSimpleName();
 

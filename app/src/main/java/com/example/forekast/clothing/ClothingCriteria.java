@@ -1,12 +1,5 @@
 package com.example.forekast.clothing;
 
-import android.util.Pair;
+public class ClothingCriteria extends ClothingCriteriaInterface {
 
-abstract public class ClothingCriteria {
-
-    Pair<Integer, Integer> warmth;
-    Pair<Integer, Integer> formality;
-    Pair<Integer, Integer> comfort;
-    Pair<Integer, Integer> preference;
-    String owner;
 }
