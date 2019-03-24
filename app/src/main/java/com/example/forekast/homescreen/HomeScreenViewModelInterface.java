@@ -1,7 +1,8 @@
-package com.example.forekast;
+package com.example.forekast.homescreen;
 
 import com.example.forekast.clothing.ClothingCriteria;
 import com.example.forekast.external_data.Weather;
+import com.example.forekast.outfits.Outfit;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

@@ -1,4 +1,4 @@
-package com.example.forekast;
+package com.example.forekast.outfits;
 
 import com.example.forekast.clothing.Clothing;
 
@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-abstract class OutfitPowersetInterface implements Iterable<List<Clothing>> {
-    List<Clothing> inner_top;
-    List<Clothing> outer_top;
-    List<Clothing> pants;
-    List<Clothing> shoes;
+abstract public class OutfitPowersetInterface implements Iterable<List<Clothing>> {
+    public List<Clothing> inner_top;
+    public List<Clothing> outer_top;
+    public List<Clothing> pants;
+    public List<Clothing> shoes;
 
     private List<List<Clothing>> all = new ArrayList<>();
 
