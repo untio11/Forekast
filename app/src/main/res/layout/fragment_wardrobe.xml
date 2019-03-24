@@ -20,6 +20,6 @@
         android:layout_height="@dimen/app_bar_height"
         android:layout_weight="1"
         android:contentDescription="@string/todo"
-        app:srcCompat="@drawable/development_512" />
+        app:srcCompat="@drawable/p68946" />
 
 </LinearLayout>

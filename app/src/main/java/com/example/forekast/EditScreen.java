@@ -22,6 +22,10 @@ public class EditScreen extends Fragment {
         return new EditScreen();
     }
 
+    public static EditScreen newInstance() {
+        return new EditScreen();
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -31,7 +35,7 @@ public class EditScreen extends Fragment {
         returnbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = WardrobeFragment.newInstance("", "");
+                Fragment fragment = WardrobeFragment.newInstance();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.wardrobefragment, fragment).commit();
             }

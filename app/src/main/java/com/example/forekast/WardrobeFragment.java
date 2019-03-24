@@ -5,12 +5,14 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.GridView;
-import android.widget.ListView;
+import android.widget.ImageButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +29,10 @@ import java.util.List;
 public class WardrobeFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    //private static final String ARG_PARAM1 = "param1";
+    //private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -44,16 +44,12 @@ public class WardrobeFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment WardrobeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WardrobeFragment newInstance(String param1, String param2) {
+    public static WardrobeFragment newInstance() {
         WardrobeFragment fragment = new WardrobeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,8 +58,8 @@ public class WardrobeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            //mParam1 = getArguments().getString(ARG_PARAM1);
+            //mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -72,21 +68,88 @@ public class WardrobeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_wardrobe_list, container, false);
-        GridView myListView = (GridView)view.findViewById(R.id.list);
-        List<Clothing> clothingList = new ArrayList<>();
 
-        Clothing clothing = new Clothing();
-        Clothing clothing2 = new Clothing();
+        ImageButton addTorso = (ImageButton) view.findViewById(R.id.addTorso);
+        ImageButton addBottom = (ImageButton) view.findViewById(R.id.addBottom);
+        ImageButton addShoes = (ImageButton) view.findViewById(R.id.addShoes);
+
+        addTorso.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Clothing torso = new Clothing(ClothingType.SWEATER); // CHANGE TO TORSO
+                Fragment fragment = EditScreen.newInstance(torso);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.wardrobefragment, fragment).commit();
+            }
+        });
+
+        addBottom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Clothing bottom = new Clothing(ClothingType.JEANS); // CHANGE TO BOTTOM
+                Fragment fragment = EditScreen.newInstance(bottom);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.wardrobefragment, fragment).commit();
+            }
+        });
+
+        addShoes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Clothing shoes = new Clothing(ClothingType.SHOES); // CHANGE TO SHOES (SUPER)
+                Fragment fragment = EditScreen.newInstance(shoes);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.wardrobefragment, fragment).commit();
+            }
+        });
+
+        // Torso list
+        CustomGridView torsoListView = (CustomGridView)view.findViewById(R.id.Torso);
+        List<Clothing> torsoList = new ArrayList<>();
+
+        Clothing torso1 = new Clothing();
+        Clothing torso2 = new Clothing();
 
         //clothing.setImageUrl("IMG_20190323_174603.jpg");
         //clothing2.setImageUrl("IMG_20190215_084658.jpg");
-        clothing.setImageUrl("https://www.hekonvalentijn.nl/Portals/0/Entity/109/Images/Wine.jpg");
-        clothing2.setImageUrl("https://www.tipdebruin.nl/media/catalog/product/cache/3eefb03207b57b648a3f7359289ae856/s/t/stone-island-sweater-701562751-wit-00043036-1.jpg.jpg");
-        clothingList.add(clothing);
-        clothingList.add(clothing2);
-        WardrobeAdapter adapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, clothingList);
+        torso1.setImageUrl("https://www.hekonvalentijn.nl/Portals/0/Entity/109/Images/Wine.jpg");
+        torso2.setImageUrl("https://www.tipdebruin.nl/media/catalog/product/cache/3eefb03207b57b648a3f7359289ae856/s/t/stone-island-sweater-701562751-wit-00043036-1.jpg.jpg");
+        torsoList.add(torso1);
+        torsoList.add(torso2);
+        WardrobeAdapter torsoAdapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, torsoList);
 
-        myListView.setAdapter(adapter);
+        torsoListView.setAdapter(torsoAdapter);
+
+        // Bottom list
+        CustomGridView bottomListView = (CustomGridView)view.findViewById(R.id.Bottom);
+        List<Clothing> bottomList = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++){
+            Clothing bottom = new Clothing();
+
+            bottom.setImageUrl("https://purepng.com/public/uploads/large/purepng.com-ladies-jeansgarmentlower-bodydenimjeansladies-1421526363383tdgn0.png");
+
+            bottomList.add(bottom);
+        }
+        WardrobeAdapter bottomAdapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, bottomList);
+
+        bottomListView.setAdapter(bottomAdapter);
+
+        // Shoe list
+        CustomGridView shoeListView = (CustomGridView)view.findViewById(R.id.Shoes);
+        List<Clothing> shoeList = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++){
+            Clothing shoe = new Clothing();
+
+            shoe.setImageUrl("https://images.vans.com/is/image/Vans/D3HBKA-HERO?$583x583$");
+
+            shoeList.add(shoe);
+        }
+
+        WardrobeAdapter shoeAdapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, shoeList);
+
+        shoeListView.setAdapter(shoeAdapter);
 
         // return view
         return view;

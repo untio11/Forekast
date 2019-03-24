@@ -69,4 +69,8 @@ public class Clothing {
     Clothing() {
         // Just for now
     }
+
+    Clothing(ClothingType type) {
+        this.type = type;
+    }
 }
