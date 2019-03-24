@@ -1,6 +1,7 @@
 package com.example.forekast;
 
 import android.media.Image;
+import android.widget.ImageView;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -44,8 +45,32 @@ public class Clothing {
     @ColumnInfo(name = "washing_time")
     public int washing_time;
 
-    @Ignore
     @ColumnInfo(name = "picture")
-    public Image picture;
+    public String picture;
 
+    public void setImageUrl(String url) {
+        this.picture = url;
+    }
+
+    Clothing(String owner, ClothingType type, int comfort, int warmth, int formality, int preference, int[] color, boolean washing_machine, boolean last_washing_state, int washing_time, String picture) {
+        this.owner = owner;
+        this.type = type;
+        this.comfort = comfort;
+        this.warmth = warmth;
+        this.formality = formality;
+        this.preference = preference;
+        this.color = color;
+        this.washing_machine = washing_machine;
+        this.last_washing_state = last_washing_state;
+        this.washing_time = washing_time;
+        this.picture = picture;
+    }
+
+    Clothing() {
+        // Just for now
+    }
+
+    Clothing(ClothingType type) {
+        this.type = type;
+    }
 }

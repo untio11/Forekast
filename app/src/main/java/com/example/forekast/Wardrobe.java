@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -19,26 +20,31 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 
 import com.example.forekast.dummy.DummyContent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Wardrobe extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, WardrobeFragment.OnListFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, WardrobeFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wardrobe);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        Button editbutton = (Button) findViewById(R.id.editbutton);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Fragment fragment = EditScreen.newInstance();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.wardrobefragment, fragment).commit();
+                fab.hide();
             }
         });
 
@@ -48,20 +54,11 @@ public class Wardrobe extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        if(savedInstanceState == null) {
-            Fragment fragment = WardrobeFragment.newInstance(5);
+        if (savedInstanceState == null) {
+            Fragment fragment = WardrobeFragment.newInstance();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.wardrobefragment, fragment).commit();
         }
-
-        editbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = EditScreen.newInstance();
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.wardrobefragment, fragment).commit();
-            }
-        });
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -121,7 +118,7 @@ public class Wardrobe extends AppCompatActivity
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onFragmentInteraction(Uri uri) {
 
     }
 }
