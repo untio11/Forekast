@@ -111,19 +111,7 @@ public class RepoTest {
     }
 
     @Test
-    public void testWeather() throws InterruptedException {
-        MutableLiveData<Weather> weatherdata = new MutableLiveData<>();
-        Repository.getWeather("Eindhoven", weatherdata);
-
-        synchronized (this) {
-            this.wait(2000);
-        }
-
-        assertNotNull(weatherdata.getValue());
-    }
-
-    @Test
-    public void testWeatherAPICity() throws InterruptedException {
+    public void testWeatherAPICityNameSet() throws InterruptedException {
         MutableLiveData<Weather> weather = new MutableLiveData<>();
         Repository.getWeather("Eindhoven", weather);
 
@@ -134,5 +122,151 @@ public class RepoTest {
         assertNotNull(weather.getValue());
         assertEquals("Eindhoven", weather.getValue().getCity());
         assertNotEquals(0.0, weather.getValue().getTemp());
+    }
+
+    @Test
+    public void testWeatherAPICityTempSet() throws InterruptedException {
+        MutableLiveData<Weather> weather = new MutableLiveData<>();
+        Repository.getWeather("Eindhoven", weather);
+
+        synchronized (this) {
+            this.wait(2000);
+        }
+
+        assertNotNull(weather.getValue());
+        assertNotEquals(0.0, weather.getValue().getTemp());
+    }
+
+    @Test
+    public void testWeatherAPICityFeelsLikeSet() throws InterruptedException {
+        MutableLiveData<Weather> weather = new MutableLiveData<>();
+        Repository.getWeather("Eindhoven", weather);
+
+        synchronized (this) {
+            this.wait(2000);
+        }
+
+        assertNotNull(weather.getValue());
+        assertNotEquals(0.0, weather.getValue().getFeels_like());
+    }
+
+    @Test
+    public void testWeatherAPICityPrecipSet() throws InterruptedException {
+        MutableLiveData<Weather> weather = new MutableLiveData<>();
+        Repository.getWeather("Eindhoven", weather);
+
+        synchronized (this) {
+            this.wait(2000);
+        }
+
+        assertNotNull(weather.getValue());
+        assertNotEquals(0.0, weather.getValue().getPrecipitation());
+    }
+
+    @Test
+    public void testWeatherAPICityUVSet() throws InterruptedException {
+        MutableLiveData<Weather> weather = new MutableLiveData<>();
+        Repository.getWeather("Eindhoven", weather);
+
+        synchronized (this) {
+            this.wait(2000);
+        }
+
+        assertNotNull(weather.getValue());
+        assertNotEquals(0.0, weather.getValue().getUv_index());
+    }
+
+
+    @Test
+    public void testWeatherAPICityWindSet() throws InterruptedException {
+        MutableLiveData<Weather> weather = new MutableLiveData<>();
+        Repository.getWeather("Eindhoven", weather);
+
+        synchronized (this) {
+            this.wait(2000);
+        }
+
+        assertNotNull(weather.getValue());
+        assertNotEquals(0.0, weather.getValue().getWind());
+    }
+
+    @Test
+    public void testWeatherAPILatLonNameSet() throws InterruptedException {
+        MutableLiveData<Weather> weather = new MutableLiveData<>();
+        Repository.getWeather("51.4393", "5.4786", weather);
+
+        synchronized (this) {
+            this.wait(2000);
+        }
+
+        assertNotNull(weather.getValue());
+        assertEquals("Eindhoven", weather.getValue().getCity());
+        assertNotEquals(0.0, weather.getValue().getTemp());
+    }
+
+    @Test
+    public void testWeatherAPILatLonTempSet() throws InterruptedException {
+        MutableLiveData<Weather> weather = new MutableLiveData<>();
+        Repository.getWeather("51.4393", "5.4786", weather);
+
+        synchronized (this) {
+            this.wait(2000);
+        }
+
+        assertNotNull(weather.getValue());
+        assertNotEquals(0.0, weather.getValue().getTemp());
+    }
+
+    @Test
+    public void testWeatherAPILatLonFeelsLikeSet() throws InterruptedException {
+        MutableLiveData<Weather> weather = new MutableLiveData<>();
+        Repository.getWeather("51.4393", "5.4786", weather);
+
+        synchronized (this) {
+            this.wait(2000);
+        }
+
+        assertNotNull(weather.getValue());
+        assertNotEquals(0.0, weather.getValue().getFeels_like());
+    }
+
+    @Test
+    public void testWeatherAPILatLonPrecipSet() throws InterruptedException {
+        MutableLiveData<Weather> weather = new MutableLiveData<>();
+        Repository.getWeather("51.4393", "5.4786", weather);
+
+        synchronized (this) {
+            this.wait(2000);
+        }
+
+        assertNotNull(weather.getValue());
+        assertNotEquals(0.0, weather.getValue().getPrecipitation());
+    }
+
+    @Test
+    public void testWeatherAPILatLonUVSet() throws InterruptedException {
+        MutableLiveData<Weather> weather = new MutableLiveData<>();
+        Repository.getWeather("51.4393", "5.4786", weather);
+
+        synchronized (this) {
+            this.wait(2000);
+        }
+
+        assertNotNull(weather.getValue());
+        assertNotEquals(0.0, weather.getValue().getUv_index());
+    }
+
+
+    @Test
+    public void testWeatherAPILatLonWindSet() throws InterruptedException {
+        MutableLiveData<Weather> weather = new MutableLiveData<>();
+        Repository.getWeather("51.4393", "5.4786", weather);
+
+        synchronized (this) {
+            this.wait(2000);
+        }
+
+        assertNotNull(weather.getValue());
+        assertNotEquals(0.0, weather.getValue().getWind());
     }
 }

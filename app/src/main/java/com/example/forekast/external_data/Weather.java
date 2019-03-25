@@ -2,12 +2,12 @@ package com.example.forekast.external_data;
 
 public class Weather {
 
-    float temp; // In degrees celsius
-    float uv_index; // In standard units for this stuff
-    float precipitation; // in mm
-    float feels_like; // In degrees celsius
-    float wind; // In km/h
-    String city;
+    private float temp; // In degrees celsius
+    private float uv_index; // In standard units for this stuff
+    private float precipitation; // in mm
+    private float feels_like; // In degrees celsius
+    private float wind; // In km/h
+    private String city;
 
     /**
      * Set the city where the weather is polled

@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -71,51 +70,99 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
 
         try {
             setWeatherProperties(result);
-        } catch (IOException e) {
+        } catch (IOException e) { // Something probably went wrong with the connection, just use the last valid weather data.
             e.printStackTrace();
+            result = last_weather;
         }
 
         return result;
     }
 
+    /**
+     * Set the properties of the weather object according to the weather data
+     * @param weather The object to be modified
+     * @throws IOException when something goes wrong with the internet connection.
+     */
     private void setWeatherProperties(Weather weather) throws IOException {
-        URL forecast_url = new URL(getForecastURL());
-        HttpURLConnection forecast_con = (HttpURLConnection) forecast_url.openConnection();
-        forecast_con.setRequestMethod("GET");
+        HttpURLConnection forecast_con = openCon(getForecastURL());
+        JsonObject forecast_json = readResponse(forecast_con);
 
-        int status = forecast_con.getResponseCode();
+        JsonObject citydata = forecast_json.getAsJsonObject("city");
+        JsonObject coordinates = citydata.get("coord").getAsJsonObject(); // Needed for the UV api call
 
-        BufferedReader forecast_in = new BufferedReader(new InputStreamReader(forecast_con.getInputStream()));
+        JsonArray weather_data = forecast_json.getAsJsonArray("list"); // For the weather data
+
+        HttpURLConnection uv_con = openCon(getUvURL(coordinates.get("lat").getAsString(), coordinates.get("lon").getAsString()));
+        JsonObject uv_json = readResponse(uv_con);
+
+
+        double temp =       getAvg("main", "temp", weather_data);
+        double wind_speed =  getAvg("wind", "speed", weather_data); // m/s, taken care of later
+        double humidity =   getAvg("main", "humidity", weather_data) / 100.0; // so it's in [0,1]
+        // Slightly tweaked approximation from https://www.abc.net.au/news/2018-08-10/weather-feels-like-temperatures/10050622
+        double feels_like =  temp + 0.33 * humidity - 0.6 * wind_speed - 3.0;
+
+        weather.setCity(citydata.get("name").getAsString());
+        weather.setTemp((float) temp);
+        weather.setPrecipitation((float) getAvg("rain", "3h", weather_data));
+        weather.setWind((float) (wind_speed * 3.6)); // To convert from m/s to km/h
+        weather.setFeels_like((float) feels_like);
+        weather.setUv_index(uv_json.get("value").getAsFloat());
+    }
+
+    /**
+     * Set up an HttpURLConnection from a string url
+     * @param url the url to set up a connection to
+     * @return the connection object
+     * @throws IOException when the connection cannot be opened
+     */
+    private HttpURLConnection openCon(String url) throws IOException {
+        URL url_ = new URL(url);
+        HttpURLConnection result = (HttpURLConnection) url_.openConnection();
+        result.setRequestMethod("GET");
+        return result;
+    }
+
+    /**
+     * Return the response of the given connection as JSON object
+     * @param con The connection where the request is sent to
+     * @return A JSON object containing the response
+     * @throws IOException If the connection is invalid: no inputstream can be generated
+     */
+    private JsonObject readResponse(HttpURLConnection con) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
         String inputLine;
         StringBuilder response = new StringBuilder();
 
-        while ((inputLine = forecast_in.readLine()) != null) {
+        while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);
         }
 
-        forecast_in.close();
-        forecast_con.disconnect();
-
-        JsonObject forecast_json = new JsonParser().parse(response.toString()).getAsJsonObject();
-        JsonObject citydata = forecast_json.getAsJsonObject("city");
-        JsonArray weather_data = forecast_json.getAsJsonArray("list");
-
-        JsonObject coordinates = citydata.get("coord").getAsJsonObject();
-        URL uv_indexurl = new URL(getUvURL(coordinates.get("lat").getAsString(), coordinates.get("lon").getAsString()));
-
-
-        weather.setCity(citydata.get("name").getAsString());
-        weather.setTemp(getAvgTemp(weather_data));
+        con.disconnect();
+        in.close();
+        return new JsonParser().parse(response.toString()).getAsJsonObject();
     }
 
-    private float getAvgTemp(JsonArray data) {
+    /**
+     * Get the average value of an attribute in the weather data
+     * @param cat the category to use
+     * @param element the actual element in the category to take the average from
+     * @param data the array containing the data
+     * @return the average value of the passed element in the category
+     */
+    private double getAvg(String cat, String element, JsonArray data) {
         float result = 0;
-        final int size = 3; // How many datasamples to take
+        final int size = 3; // How many datasamples to take. This looks 3 entries ahead, which comes down to 9 hours
 
         for (int i = 0; i < size; i++) {
-            JsonObject datapoint = data.get(i).getAsJsonObject();
-            result += 1.0/size * datapoint.get("main").getAsJsonObject().get("temp").getAsFloat();
+            JsonObject datapoint = data.get(i).getAsJsonObject().get(cat).getAsJsonObject();
+
+            if (datapoint.get(element) == null) { // No data, so just use 0
+                result += 0;
+            } else {
+                result += datapoint.get(element).getAsFloat() / size;
+            }
         }
 
         return result;
@@ -142,9 +189,13 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
      * @return A string containing the URL to call the uv-index api.
      */
     private String getUvURL(String lat, String lon) {
-        return baseurl + forecast + "lat=" + lat + "&lon=" + lon + "&" + apikey;
+        return baseurl + uv + "lat=" + lat + "&lon=" + lon + "&" + apikey;
     }
 
+    /**
+     * update the last valid weather and post it to the livedata listener.
+     * @param result the new weather object.
+     */
     @Override
     protected void onPostExecute(Weather result) {
         last_weather = result;
