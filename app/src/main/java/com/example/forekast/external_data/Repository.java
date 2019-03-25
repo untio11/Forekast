@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import androidx.lifecycle.MutableLiveData;
 
 public class Repository {
-    static AppDatabase db;
+    private static AppDatabase db;
 
     /**
      * Set the database instance for the repository. Needs to be done externally because of lifecycle awareness
@@ -66,7 +66,7 @@ public class Repository {
     }
 
     /**
-     * Add the pieces of clothing to the database
+     * Add the pieces of clothing to the database and set their ID's accordingly
      * @param clothing Pieces of clothing to be added to the database
      * @throws NullPointerException if the database has not been instantiated yet
      */
@@ -75,19 +75,22 @@ public class Repository {
             throw new NullPointerException("The database has not been instantiated yet");
         }
 
-        db.clothingDao().insertAll(clothing);
+        for (Clothing piece : clothing) {
+            piece.ID = db.clothingDao().insert(piece);
+        }
     }
 
     /**
-     * Remove the parsed piece of clothing from the database
-     * @param clothing Piece of clothing to be removed
+     * Remove the parsed pieces of clothing from the database
+     * @param clothing Pieces of clothing to be removed
      * @throws NullPointerException if the database has not been instantiated yet
      */
-    public static void removeClothing(Clothing clothing) throws NullPointerException {
+    public static void removeClothing(Clothing ... clothing) throws NullPointerException {
         if (db == null) {
             throw new NullPointerException("The database has not been instantiated yet");
         }
-
-        db.clothingDao().delete(clothing);
+        for (Clothing piece : clothing) {
+            db.clothingDao().delete(piece);
+        }
     }
 }

@@ -15,6 +15,7 @@ import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -31,13 +32,12 @@ import static org.junit.Assert.*;
  */
 @RunWith(AndroidJUnit4.class)
 public class DBTest {
-    Context appcontext;
-    AppDatabase db;
+    private static AppDatabase db;
 
-    @Before
-    public void init() {
+    @BeforeClass
+    public static void init() {
         // Context of the app under test.
-        appcontext = InstrumentationRegistry.getTargetContext();
+        Context appcontext = InstrumentationRegistry.getTargetContext();
         db = Room.databaseBuilder(appcontext, AppDatabase.class, "clothing").fallbackToDestructiveMigration().build();
     }
 

@@ -8,15 +8,27 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class Clothing {
+    /**
+     * Do not manually change this variable, it will break the system
+     */
     @PrimaryKey(autoGenerate = true)
     public long ID;
 
+    /**
+     * Do not manually change this variable, it will break the system
+     */
     @ColumnInfo(name = "owner")
     public String owner;
 
+    /**
+     * Do not manually change this variable, it will break the system
+     */
     @ColumnInfo(name = "type")
     public String type = "";
 
+    /**
+     * Do not manually change this variable, it will break the system
+     */
     @ColumnInfo(name = "location")
     public String location = "";
 
@@ -59,27 +71,33 @@ public class Clothing {
         setLocAndTyp();
     }
 
-    public Clothing(int testwarmth) {
-        setLocAndTyp();
-        warmth = testwarmth;
-    }
-
+    /**
+     * Set the location and type of a subclass of clothing based on the parent class.
+     */
     private void setLocAndTyp() {
+        // Only do this if it has not been set yet.
         if (!location.equals("") || !type.equals("")) {
             return;
         }
 
-        String us = this.getClass().getSimpleName();
-        String father = this.getClass().getSuperclass().getSimpleName();
+        String us = this.getClass().getSimpleName(); // Get our own class name
+        String father = this.getClass().getSuperclass().getSimpleName(); // Get our parent class name
 
         if ("Clothing".equals(father)) {
+            // If the parent class is "Clothing", this class is a location (should never happen)
             location = us;
         } else if (!"Object".equals(father)) {
+            // If the parent class is not "Object", that must mean it's a location, so set
+            // the location of this piece to our parents class name and the type to our own name
             location = father;
             type = us;
         }
     }
 
+    /**
+     * It's always a good idea to have a string representation of your class. Basic, quick overview of the piece of clothing
+     * @return [ID] owner::location::type - (warmth,formality,comfort)
+     */
     @Override
     public String toString() {
         return "[" + ID + "] " + owner + "::" + location + "::" + type + " - " + "(" + warmth + "," + formality + "," + comfort + ")";
