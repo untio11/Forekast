@@ -40,7 +40,7 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
 
     @Override
     void updateWeather() {
-        Repository.getWeather(currentWeather);
+        Repository.getWeather("Eindhoven", currentWeather);
     }
 
     @Override

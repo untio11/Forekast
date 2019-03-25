@@ -22,11 +22,22 @@ public class Repository {
     }
 
     /**
-     * Request the weather and update the parsed livedata object
+     * Request the weather at the city parsed and update the parsed livedata object
      * @param weather A mutable livedata object that will be updated with the most recent weather
+     * @param city The name of the city to be looked up
      */
-    public static void getWeather(MutableLiveData<Weather> weather) {
-        new WeatherAPI().execute(weather);
+    public static void getWeather(String city, MutableLiveData<Weather> weather) {
+        new WeatherAPI(city).execute(weather);
+    }
+
+    /**
+     * Request the weather at the lat, lon parsed and update the parsed livedata object
+     * @param weather A mutable livedata object that will be updated with the most recent weather
+     * @param lat The latitude of the location to be looked up
+     * @param lon The longitude of the location to be looked up
+     */
+    public static void getWeather(String lat, String lon, MutableLiveData<Weather> weather) {
+        new WeatherAPI(lat, lon).execute(weather);
     }
 
     /**
@@ -90,6 +101,7 @@ public class Repository {
         if (db == null) {
             throw new NullPointerException("The database has not been instantiated yet");
         }
+
         for (Clothing piece : clothing) {
             db.clothingDao().delete(piece);
         }

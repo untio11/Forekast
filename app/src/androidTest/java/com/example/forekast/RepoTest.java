@@ -6,6 +6,7 @@ import com.example.forekast.clothing.*;
 import com.example.forekast.external_data.AppDatabase;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
+import com.example.forekast.external_data.WeatherAPI;
 
 import org.junit.After;
 import org.junit.BeforeClass;
@@ -112,12 +113,26 @@ public class RepoTest {
     @Test
     public void testWeather() throws InterruptedException {
         MutableLiveData<Weather> weatherdata = new MutableLiveData<>();
-        Repository.getWeather(weatherdata);
+        Repository.getWeather("Eindhoven", weatherdata);
 
         synchronized (this) {
-            this.wait(3000);
+            this.wait(2000);
         }
 
         assertNotNull(weatherdata.getValue());
+    }
+
+    @Test
+    public void testWeatherAPICity() throws InterruptedException {
+        MutableLiveData<Weather> weather = new MutableLiveData<>();
+        Repository.getWeather("Eindhoven", weather);
+
+        synchronized (this) {
+            this.wait(2000);
+        }
+
+        assertNotNull(weather.getValue());
+        assertEquals("Eindhoven", weather.getValue().getCity());
+        assertNotEquals(0.0, weather.getValue().getTemp());
     }
 }
