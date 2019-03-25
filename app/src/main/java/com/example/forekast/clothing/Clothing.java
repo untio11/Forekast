@@ -63,9 +63,8 @@ public class Clothing {
     @ColumnInfo(name = "underwearable")
     public boolean underwearable;
 
-    @Ignore
     @ColumnInfo(name = "picture")
-    public Image picture;
+    public String picture;
 
     public Clothing() {
         setLocAndTyp();
@@ -101,5 +100,27 @@ public class Clothing {
     @Override
     public String toString() {
         return "[" + ID + "] " + owner + "::" + location + "::" + type + " - " + "(" + warmth + "," + formality + "," + comfort + ")";
+    }
+
+    public void setImageUrl(String url) {
+        this.picture = url;
+    }
+
+    public Clothing(String owner, String type, int comfort, int warmth, int formality, int preference, int[] color, boolean washing_machine, boolean last_washing_state, int washing_time, String picture) {
+        this.owner = owner;
+        this.type = type;
+        this.comfort = comfort;
+        this.warmth = warmth;
+        this.formality = formality;
+        this.preference = preference;
+        this.color = color;
+        this.washing_machine = washing_machine;
+        this.last_washing_state = last_washing_state;
+        this.washing_time = washing_time;
+        this.picture = picture;
+    }
+
+    public Clothing(String type) {
+        this.type = type;
     }
 }

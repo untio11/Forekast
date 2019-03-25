@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
+import com.example.forekast.clothing.Clothing;
+
 public class EditScreen extends Fragment {
 
     private EditScreenViewModel mViewModel;

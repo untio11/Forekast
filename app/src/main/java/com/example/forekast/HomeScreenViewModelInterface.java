@@ -1,5 +1,9 @@
 package com.example.forekast;
 
+import com.example.forekast.clothing.ClothingCriteria;
+import com.example.forekast.external_data.Weather;
+import com.example.forekast.outfits.Outfit;
+
 import androidx.lifecycle.LiveData;
 
 
@@ -19,9 +23,9 @@ abstract class HomeScreenViewModelInterface {
 
     abstract ClothingCriteria setClothingCriteria(ClothingCriteria criteria);
 
-    abstract void nextClothing(ClothingType clothing_type);
+    abstract void nextClothing(String clothing_type);
 
-    abstract void previousClothing(ClothingType clothing_type );
+    abstract void previousClothing(String clothing_type );
 
     abstract void updateWeather();
 

@@ -14,6 +14,8 @@ import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageButton;
 
+import com.example.forekast.clothing.Clothing;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +78,7 @@ public class WardrobeFragment extends Fragment {
         addTorso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Clothing torso = new Clothing(ClothingType.SWEATER); // CHANGE TO TORSO
+                Clothing torso = new Clothing("torso"); // CHANGE TO TORSO
                 Fragment fragment = EditScreen.newInstance(torso);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.wardrobefragment, fragment).commit();
@@ -86,7 +88,7 @@ public class WardrobeFragment extends Fragment {
         addBottom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Clothing bottom = new Clothing(ClothingType.JEANS); // CHANGE TO BOTTOM
+                Clothing bottom = new Clothing("bottom"); // CHANGE TO BOTTOM
                 Fragment fragment = EditScreen.newInstance(bottom);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.wardrobefragment, fragment).commit();
@@ -96,7 +98,7 @@ public class WardrobeFragment extends Fragment {
         addShoes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Clothing shoes = new Clothing(ClothingType.SHOES); // CHANGE TO SHOES (SUPER)
+                Clothing shoes = new Clothing("shoes"); // CHANGE TO SHOES (SUPER)
                 Fragment fragment = EditScreen.newInstance(shoes);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.wardrobefragment, fragment).commit();
