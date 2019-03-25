@@ -42,10 +42,11 @@
 
                 <ImageButton
                     android:id="@+id/addTorso"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@android:dimen/app_icon_size"
+                    android:layout_height="@android:dimen/app_icon_size"
                     android:contentDescription="@string/todo"
-                    android:src="@android:drawable/ic_input_add" />
+                    android:scaleType="centerInside"
+                    android:src="@drawable/plus_icon" />
 
             </LinearLayout>
 
@@ -74,10 +75,11 @@
 
                 <ImageButton
                     android:id="@+id/addBottom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@android:dimen/app_icon_size"
+                    android:layout_height="@android:dimen/app_icon_size"
                     android:contentDescription="@string/todo"
-                    android:src="@android:drawable/ic_input_add" />
+                    android:scaleType="centerInside"
+                    android:src="@drawable/plus_icon" />
 
             </LinearLayout>
 
@@ -106,10 +108,11 @@
 
                 <ImageButton
                     android:id="@+id/addShoes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@android:dimen/app_icon_size"
+                    android:layout_height="@android:dimen/app_icon_size"
                     android:contentDescription="@string/todo"
-                    android:src="@android:drawable/ic_input_add" />
+                    android:scaleType="centerInside"
+                    android:src="@drawable/plus_icon" />
             </LinearLayout>
 
             <com.example.forekast.CustomGridView
