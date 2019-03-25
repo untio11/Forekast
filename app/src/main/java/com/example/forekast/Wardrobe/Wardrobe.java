@@ -1,10 +1,18 @@
-package com.example.forekast;
+package com.example.forekast.Wardrobe;
+
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import android.view.View;
+
+import com.example.forekast.homescreen.HomeScreen;
+import com.example.forekast.R;
+import com.example.forekast.Settings.Settings;
+import com.example.forekast.Settings.SwitchWardrobe;
+
+import androidx.fragment.app.Fragment;
+
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -14,30 +22,27 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class Settings extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class Wardrobe extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, WardrobeFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_wardrobe);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        if (savedInstanceState == null) {
+            Fragment fragment = WardrobeFragment.newInstance();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.wardrobefragment, fragment).commit();
+        }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -56,7 +61,7 @@ public class Settings extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.settings, menu);
+        getMenuInflater().inflate(R.menu.wardrobe, menu);
         return true;
     }
 
@@ -85,14 +90,19 @@ public class Settings extends AppCompatActivity
         if (id == R.id.nav_home) {
             startActivity(new Intent(getApplicationContext(), HomeScreen.class));
         } else if (id == R.id.nav_wardrobe) {
-            startActivity(new Intent(getApplicationContext(), Wardrobe.class));
-        } else if (id == R.id.nav_settings) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_settings) {
+            startActivity(new Intent(getApplicationContext(), Settings.class));
         } else if (id == R.id.nav_switchwardrobe) {
             startActivity(new Intent(getApplicationContext(), SwitchWardrobe.class));
         }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

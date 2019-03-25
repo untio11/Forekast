@@ -5,7 +5,7 @@
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="WardrobeFragment"
+    tools:context=".Wardrobe.WardrobeFragment"
     android:orientation="vertical">
 
 
@@ -50,7 +50,7 @@
 
             </LinearLayout>
 
-            <com.example.forekast.CustomGridView
+            <com.example.forekast.Wardrobe.CustomGridView
                 android:id="@+id/Torso"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
 
             </LinearLayout>
 
-            <com.example.forekast.CustomGridView
+            <com.example.forekast.Wardrobe.CustomGridView
                 android:id="@+id/Bottom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
                     android:src="@drawable/plus_icon" />
             </LinearLayout>
 
-            <com.example.forekast.CustomGridView
+            <com.example.forekast.Wardrobe.CustomGridView
                 android:id="@+id/Shoes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

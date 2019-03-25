@@ -107,6 +107,7 @@ public class Clothing {
     }
 
     public Clothing(String owner, String type, int comfort, int warmth, int formality, int preference, int[] color, boolean washing_machine, boolean last_washing_state, int washing_time, String picture) {
+        setLocAndTyp();
         this.owner = owner;
         this.type = type;
         this.comfort = comfort;
@@ -121,6 +122,7 @@ public class Clothing {
     }
 
     public Clothing(String type) {
+        setLocAndTyp();
         this.type = type;
     }
 }

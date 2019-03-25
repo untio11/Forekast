@@ -21,19 +21,19 @@
         android:theme="@style/AppTheme"
         tools:replace="android:appComponentFactory">
         <activity
-            android:name=".SwitchWardrobe"
+            android:name=".Settings.SwitchWardrobe"
             android:label="@string/title_activity_switch_wardrobe"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Wardrobe"
+            android:name=".Wardrobe.Wardrobe"
             android:label="@string/title_activity_wardrobe"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Settings"
+            android:name=".Settings.Settings"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".HomeScreen"
+            android:name=".homescreen.HomeScreen"
             android:label="@string/title_activity_home_screen"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

@@ -1,4 +1,4 @@
-package com.example.forekast;
+package com.example.forekast.EditScreen;
 
 import androidx.lifecycle.ViewModel;
 

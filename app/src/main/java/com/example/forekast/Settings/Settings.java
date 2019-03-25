@@ -1,7 +1,11 @@
-package com.example.forekast;
+package com.example.forekast.Settings;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import com.example.forekast.R;
+import com.example.forekast.Wardrobe.Wardrobe;
+import com.example.forekast.homescreen.HomeScreen;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
@@ -14,13 +18,13 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class SwitchWardrobe extends AppCompatActivity
+public class Settings extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_switch_wardrobe);
+        setContentView(R.layout.activity_settings);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -56,7 +60,7 @@ public class SwitchWardrobe extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.switch_wardrobe, menu);
+        getMenuInflater().inflate(R.menu.settings, menu);
         return true;
     }
 
@@ -87,9 +91,9 @@ public class SwitchWardrobe extends AppCompatActivity
         } else if (id == R.id.nav_wardrobe) {
             startActivity(new Intent(getApplicationContext(), Wardrobe.class));
         } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(getApplicationContext(), Settings.class));
-        } else if (id == R.id.nav_switchwardrobe) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_switchwardrobe) {
+            startActivity(new Intent(getApplicationContext(), SwitchWardrobe.class));
         }
 
         drawer.closeDrawer(GravityCompat.START);

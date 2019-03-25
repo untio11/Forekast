@@ -1,4 +1,4 @@
-package com.example.forekast;
+package com.example.forekast.Wardrobe;
 
 import android.content.Context;
 import android.util.AttributeSet;

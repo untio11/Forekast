@@ -1,4 +1,4 @@
-package com.example.forekast;
+package com.example.forekast.EditScreen;
 
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
@@ -9,10 +9,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 
+import com.example.forekast.R;
+import com.example.forekast.Wardrobe.WardrobeFragment;
 import com.example.forekast.clothing.Clothing;
 
 public class EditScreen extends Fragment {

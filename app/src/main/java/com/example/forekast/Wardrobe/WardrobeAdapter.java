@@ -1,9 +1,7 @@
-package com.example.forekast;
+package com.example.forekast.Wardrobe;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.example.forekast.EditScreen.EditScreen;
+import com.example.forekast.R;
 import com.example.forekast.clothing.Clothing;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.List;
 
 import androidx.fragment.app.Fragment;

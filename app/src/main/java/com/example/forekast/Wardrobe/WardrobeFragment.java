@@ -1,7 +1,8 @@
-package com.example.forekast;
+package com.example.forekast.Wardrobe;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,11 +11,13 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.ImageButton;
 
+import com.example.forekast.EditScreen.EditScreen;
+import com.example.forekast.R;
 import com.example.forekast.clothing.Clothing;
+import com.example.forekast.clothing.ClothingCriteria;
+import com.example.forekast.external_data.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,83 +78,44 @@ public class WardrobeFragment extends Fragment {
         ImageButton addBottom = (ImageButton) view.findViewById(R.id.addBottom);
         ImageButton addShoes = (ImageButton) view.findViewById(R.id.addShoes);
 
+        // The add torso button will add a new clothing of type torso
         addTorso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Clothing torso = new Clothing("torso"); // CHANGE TO TORSO
+                // Navigate to edit screen
                 Fragment fragment = EditScreen.newInstance(torso);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.wardrobefragment, fragment).commit();
             }
         });
 
+        // The add bottom button will add a new clothing of type bottom
         addBottom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Clothing bottom = new Clothing("bottom"); // CHANGE TO BOTTOM
+                // Navigate to edit screen
                 Fragment fragment = EditScreen.newInstance(bottom);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.wardrobefragment, fragment).commit();
             }
         });
 
+        // The add shoes button will add a new clothing of type shoes
         addShoes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Clothing shoes = new Clothing("shoes"); // CHANGE TO SHOES (SUPER)
+                // Navigate to edit screen
                 Fragment fragment = EditScreen.newInstance(shoes);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.wardrobefragment, fragment).commit();
             }
         });
 
-        // Torso list
-        CustomGridView torsoListView = (CustomGridView)view.findViewById(R.id.Torso);
-        List<Clothing> torsoList = new ArrayList<>();
-
-        Clothing torso1 = new Clothing();
-        Clothing torso2 = new Clothing();
-
-        //clothing.setImageUrl("IMG_20190323_174603.jpg");
-        //clothing2.setImageUrl("IMG_20190215_084658.jpg");
-        torso1.setImageUrl("https://www.hekonvalentijn.nl/Portals/0/Entity/109/Images/Wine.jpg");
-        torso2.setImageUrl("https://www.tipdebruin.nl/media/catalog/product/cache/3eefb03207b57b648a3f7359289ae856/s/t/stone-island-sweater-701562751-wit-00043036-1.jpg.jpg");
-        torsoList.add(torso1);
-        torsoList.add(torso2);
-        WardrobeAdapter torsoAdapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, torsoList);
-
-        torsoListView.setAdapter(torsoAdapter);
-
-        // Bottom list
-        CustomGridView bottomListView = (CustomGridView)view.findViewById(R.id.Bottom);
-        List<Clothing> bottomList = new ArrayList<>();
-
-        for (int i = 0; i < 10; i++){
-            Clothing bottom = new Clothing();
-
-            bottom.setImageUrl("https://purepng.com/public/uploads/large/purepng.com-ladies-jeansgarmentlower-bodydenimjeansladies-1421526363383tdgn0.png");
-
-            bottomList.add(bottom);
-        }
-        WardrobeAdapter bottomAdapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, bottomList);
-
-        bottomListView.setAdapter(bottomAdapter);
-
-        // Shoe list
-        CustomGridView shoeListView = (CustomGridView)view.findViewById(R.id.Shoes);
-        List<Clothing> shoeList = new ArrayList<>();
-
-        for (int i = 0; i < 10; i++){
-            Clothing shoe = new Clothing();
-
-            shoe.setImageUrl("https://images.vans.com/is/image/Vans/D3HBKA-HERO?$583x583$");
-
-            shoeList.add(shoe);
-        }
-
-        WardrobeAdapter shoeAdapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, shoeList);
-
-        shoeListView.setAdapter(shoeAdapter);
+        // Execute loading of database in background
+        new AgentAsyncTask(view).execute();
 
         // return view
         return view;
@@ -194,5 +158,50 @@ public class WardrobeFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private static class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
+        View view;
+
+        public AgentAsyncTask(View view) {
+            this.view = view;
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+
+            // Load Torso items from database into wardrobe list
+            CustomGridView torsoListView = (CustomGridView) view.findViewById(R.id.Torso);
+            List<Clothing> torsoList = Repository.getClothing("Torso", new ClothingCriteria());
+
+            // JUST SOME TESTING... DELETE THIS LATER!!!
+            /*Clothing torso1 = new Clothing();
+            Clothing torso2 = new Clothing();
+
+            //clothing.setImageUrl("IMG_20190323_174603.jpg");
+            //clothing2.setImageUrl("IMG_20190215_084658.jpg");
+            torso1.setImageUrl("https://www.hekonvalentijn.nl/Portals/0/Entity/109/Images/Wine.jpg");
+            torso2.setImageUrl("https://www.tipdebruin.nl/media/catalog/product/cache/3eefb03207b57b648a3f7359289ae856/s/t/stone-island-sweater-701562751-wit-00043036-1.jpg.jpg");
+            torsoList.add(torso1);
+            torsoList.add(torso2);
+            */
+
+            WardrobeAdapter torsoAdapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, torsoList);
+            torsoListView.setAdapter(torsoAdapter);
+
+            // Load Legs items from database into wardrobe list
+            CustomGridView legsListView = (CustomGridView) view.findViewById(R.id.Bottom);
+            List<Clothing> legsList = Repository.getClothing("Legs", new ClothingCriteria());
+            WardrobeAdapter legsAdapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, legsList);
+            legsListView.setAdapter(legsAdapter);
+
+            // Load Feet items from database into wardrobe list
+            CustomGridView feetListView = (CustomGridView) view.findViewById(R.id.Shoes);
+            List<Clothing> feetList = Repository.getClothing("Feet", new ClothingCriteria());
+            WardrobeAdapter feetAdapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, feetList);
+            feetListView.setAdapter(feetAdapter);
+
+            return null;
+        }
     }
 }
