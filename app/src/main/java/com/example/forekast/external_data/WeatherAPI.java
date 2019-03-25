@@ -18,15 +18,15 @@ class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
      * @param weathers Please parse exactly one livedata weather object, any more will be ignored
      * @return the current weather.
      */
+    @SafeVarargs
     @Override
-    protected Weather doInBackground(MutableLiveData<Weather> ... weathers) {
+    protected final Weather doInBackground(MutableLiveData<Weather>... weathers) {
         MutableLiveData<Weather> weather = weathers[0];
 
         weather.postValue(last_weather);
         target = weather;
 
-        Weather result = new Weather(21, 3, 0, 420, 22, 5, "Eindhoven");
-        return result;
+        return new Weather(21, 3, 0, 420, 22, 5, "Eindhoven");
     }
 
     @Override

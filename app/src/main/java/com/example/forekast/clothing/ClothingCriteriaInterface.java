@@ -12,11 +12,10 @@ public abstract class ClothingCriteriaInterface implements Iterable<Pair<String,
     public Pair<Integer, Integer> comfort;
     public Pair<Integer, Integer> preference;
     public String owner;
-    public String type;
-    public String location;
 
     private List<Pair<String, Pair<Integer, Integer>>> all;
 
+    // Add all the criteria to a big list for the iteration
     ClothingCriteriaInterface() {
         all = new ArrayList<>();
         all.add(new Pair<>("warmth",     new Pair<>(Integer.MIN_VALUE, Integer.MAX_VALUE)));
