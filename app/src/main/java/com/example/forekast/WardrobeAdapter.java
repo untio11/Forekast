@@ -106,6 +106,7 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
                 Picasso.with(context).load(url).config(Bitmap.Config.RGB_565).into(holder.imageView, new com.squareup.picasso.Callback() {
                     @Override
                     public void onSuccess() {
+                        // When image is loaded, no progressbar
                         if (holder.progressBar != null) {
                             holder.progressBar.setVisibility(View.GONE);
                         }
@@ -113,6 +114,7 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
 
                     @Override
                     public void onError() {
+                        // When an error has occured, print which one
                         System.out.println("Wardrobe: Error displaying picture: " + url);
                     }
                 });
@@ -120,13 +122,14 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
             //    System.out.println("Wardrobe: Error loading file: " + url);
             //}
         } else if (holder.progressBar != null) {
+            // If no image was added to a clothing item, no progressbar (show default picture from XML)
             holder.progressBar.setVisibility(View.GONE);
         }
 
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Clicking on item will navigate to editscreen
+                // Clicking on item will navigate to editscreen with the current clothing item
                 Fragment fragment = EditScreen.newInstance(clothing);
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.wardrobefragment, fragment).commit();
