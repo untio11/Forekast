@@ -5,9 +5,9 @@ import android.content.Context;
 import com.example.forekast.clothing.*;
 import com.example.forekast.external_data.AppDatabase;
 import com.example.forekast.external_data.Repository;
+import com.example.forekast.external_data.Weather;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +16,8 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 import androidx.test.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
@@ -23,12 +25,14 @@ import androidx.test.runner.AndroidJUnit4;
 @RunWith(AndroidJUnit4.class)
 public class RepoTest {
     static private AppDatabase db;
+    static private LifecycleOwner lf;
 
     @BeforeClass
     public static void init() {
         Context appcontext = InstrumentationRegistry.getTargetContext();
         db = Room.databaseBuilder(appcontext, AppDatabase.class, "clothing").fallbackToDestructiveMigration().build();
         Repository.setDB(db);
+        lf = new MockLifeCycleOwner();
     }
 
     @After // Used te re-establish the link with the database after the nullpointer test
@@ -105,5 +109,15 @@ public class RepoTest {
         }
     }
 
+    @Test
+    public void testWeather() throws InterruptedException {
+        MutableLiveData<Weather> weatherdata = new MutableLiveData<>();
+        Repository.getWeather(weatherdata);
 
+        synchronized (this) {
+            this.wait(3000);
+        }
+
+        assertNotNull(weatherdata.getValue());
+    }
 }

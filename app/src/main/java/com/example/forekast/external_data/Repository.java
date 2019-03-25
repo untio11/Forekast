@@ -17,6 +17,7 @@ public class Repository {
      * @param dbinstance The appdatabase instance to be used
      */
     public static void setDB(final AppDatabase dbinstance) {
+
         db = dbinstance;
     }
 
