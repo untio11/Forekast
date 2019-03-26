@@ -1,4 +1,4 @@
-import com.example.forekast.*;
+package com.example.forekast;
 
 import java.util.ArrayList;
 import java.util.Iterator;

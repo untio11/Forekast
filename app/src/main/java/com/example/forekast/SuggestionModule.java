@@ -66,6 +66,7 @@ class SuggestionModule extends SuggestionModuleInterface {
         return currentCriteria;
     }
 
+    // Set the booleans for the accessories based on the critieria assigned
     void setAccessories() {
         coat = false;
         gloves = false;
@@ -99,7 +100,7 @@ class SuggestionModule extends SuggestionModuleInterface {
     }
 
     @Override
-    List<Clothing> getClothing(String location, ClothingCriteria criteria) {
+    public List<Clothing> getClothing(String location, ClothingCriteria criteria) {
         if (location.equals("inner_torso")){
 
         }
@@ -110,7 +111,7 @@ class SuggestionModule extends SuggestionModuleInterface {
     // Create local clothing Powerset from which the other classes derive outfits
     // OutfitPowerset contains lists of appropriate clothing
     @Override
-    void generateOutfit(ClothingCriteria criteria) {
+    public void generateOutfit(ClothingCriteria criteria) {
 
         // Communicate with OutfitPowersetInterface
 
@@ -118,7 +119,7 @@ class SuggestionModule extends SuggestionModuleInterface {
 
     // Create a random outfit based on the local powerset from generate outfit
     @Override
-    Outfit getRandomOutfit() {
+    public Outfit getRandomOutfit() {
         ClothingCriteria criteria;
         Outfit randomOutfit;
         String location;
@@ -134,12 +135,12 @@ class SuggestionModule extends SuggestionModuleInterface {
     }
 
     @Override
-    Outfit next(ClothingType type) {
+    public Outfit next(ClothingType type) {
         return null;
     }
 
     @Override
-    Outfit previous(ClothingType type) {
+    public Outfit previous(ClothingType type) {
         return null;
     }
 }

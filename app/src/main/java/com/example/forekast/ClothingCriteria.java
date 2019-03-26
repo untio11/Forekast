@@ -4,7 +4,7 @@ import android.util.Pair;
 
 public class ClothingCriteria {
 
-    int warmth;
+    MutablePair<Integer, Integer> warmth;
     int formality;
     int comfort;
     int preference;

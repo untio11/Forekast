@@ -20,5 +20,5 @@ abstract class SuggestionModuleInterface {
 
     abstract Outfit previous(ClothingType type);
 
-    abstract List<Clothing> getClothing(ClothingType type, ClothingCriteria criteria);
+    abstract List<Clothing> getClothing(String location, ClothingCriteria criteria);
 }
