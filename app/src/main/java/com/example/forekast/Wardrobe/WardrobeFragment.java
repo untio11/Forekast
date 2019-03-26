@@ -17,6 +17,9 @@ import com.example.forekast.EditScreen.EditScreen;
 import com.example.forekast.R;
 import com.example.forekast.clothing.Clothing;
 import com.example.forekast.clothing.ClothingCriteria;
+import com.example.forekast.clothing.Feet;
+import com.example.forekast.clothing.Legs;
+import com.example.forekast.clothing.Torso;
 import com.example.forekast.external_data.Repository;
 
 import java.util.ArrayList;
@@ -75,14 +78,14 @@ public class WardrobeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_wardrobe_list, container, false);
 
         ImageButton addTorso = (ImageButton) view.findViewById(R.id.addTorso);
-        ImageButton addBottom = (ImageButton) view.findViewById(R.id.addBottom);
-        ImageButton addShoes = (ImageButton) view.findViewById(R.id.addShoes);
+        ImageButton addLegs = (ImageButton) view.findViewById(R.id.addBottom);
+        ImageButton addFeet = (ImageButton) view.findViewById(R.id.addShoes);
 
         // The add torso button will add a new clothing of type torso
         addTorso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Clothing torso = new Clothing("torso"); // CHANGE TO TORSO
+                Clothing torso = new Torso(); // CHANGE TO TORSO
                 // Navigate to edit screen
                 Fragment fragment = EditScreen.newInstance(torso);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -91,10 +94,10 @@ public class WardrobeFragment extends Fragment {
         });
 
         // The add bottom button will add a new clothing of type bottom
-        addBottom.setOnClickListener(new View.OnClickListener() {
+        addLegs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Clothing bottom = new Clothing("bottom"); // CHANGE TO BOTTOM
+                Clothing bottom = new Legs(); // CHANGE TO BOTTOM
                 // Navigate to edit screen
                 Fragment fragment = EditScreen.newInstance(bottom);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -103,10 +106,10 @@ public class WardrobeFragment extends Fragment {
         });
 
         // The add shoes button will add a new clothing of type shoes
-        addShoes.setOnClickListener(new View.OnClickListener() {
+        addFeet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Clothing shoes = new Clothing("shoes"); // CHANGE TO SHOES (SUPER)
+                Clothing shoes = new Feet(); // CHANGE TO SHOES (SUPER)
                 // Navigate to edit screen
                 Fragment fragment = EditScreen.newInstance(shoes);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();

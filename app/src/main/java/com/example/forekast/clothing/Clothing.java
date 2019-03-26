@@ -123,8 +123,8 @@ public class Clothing {
     }
 
     @Ignore
-    public Clothing(String type) {
+    public Clothing(String location) {
         setLocAndTyp();
-        this.type = type;
+        this.location = location;
     }
 }
