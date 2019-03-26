@@ -1,21 +1,26 @@
-package com.example.forekast;
+import com.example.forekast.*;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public class OutfitPowersetInterface {
+abstract public class OutfitPowersetInterface implements Iterable<List<Clothing>> {
+    public List<Clothing> inner_top;
+    public List<Clothing> outer_top;
+    public List<Clothing> pants;
+    public List<Clothing> shoes;
 
-    List<Clothing> inner_top;
-    List<Clothing> outer_top;
-    List<Clothing> bottoms;
-    List<Clothing> shoes;
-
-    ClothingCriteria criteria;
+    private List<List<Clothing>> all = new ArrayList<>();
 
     OutfitPowersetInterface() {
-        inner_top = SuggestionModule.getClothing("inner_top", criteria);
-        outer_top = SuggestionModule.getClothing("outer_top", criteria);
-        bottoms = SuggestionModule.getClothing("bottoms", criteria);
-        shoes = SuggestionModule.getClothing("shoes", criteria);
+        all.add(inner_top);
+        all.add(outer_top);
+        all.add(pants);
+        all.add(shoes);
     }
 
+    @Override
+    public Iterator<List<Clothing>> iterator() {
+        return all.iterator();
+    }
 }
