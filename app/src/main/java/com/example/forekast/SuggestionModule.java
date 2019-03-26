@@ -10,10 +10,10 @@ class SuggestionModule extends SuggestionModuleInterface {
     private Weather weather;
 
     /* Slider Criteria */
-    private int warmth;
-    private int formality;
-    private int comfort;
-    private int preference;
+    private ClothingCriteriaInterface.MutablePair<Integer, Integer> warmth;
+    private ClothingCriteriaInterface.MutablePair<Integer, Integer> formality;
+    private ClothingCriteriaInterface.MutablePair<Integer, Integer> comfort;
+    private ClothingCriteriaInterface.MutablePair<Integer, Integer> preference;
     private String owner;
 
     /* Weather Criteria */
@@ -74,11 +74,13 @@ class SuggestionModule extends SuggestionModuleInterface {
         sunglasses = false;
         leggings = false;
 
+        /* When to suggest sunglasses */
         // If the UV Index is greater than 3 (medium risk) then wear sunglasses
         if (uv_index >= 3){
             sunglasses = true;
         }
 
+        /* When to suggest umbrella vs a coat */
         // If there is more than 50% chance of rain, but
         if (precipitation > 50 && wind < 25) {
             umbrella = true;
@@ -87,13 +89,25 @@ class SuggestionModule extends SuggestionModuleInterface {
             coat = true;
         }
 
+        /* When to suggest coat */
+        // If it's cold outside
+        if (feels_like < 12) {
+            coat = true;
+        }
+        // If it's windy
+        else if (wind > 10 && feels_like < 15){
+            coat = true;
+        }
+
+        /* When to suggest gloves & scarf */
         // if it feels cold
         if (feels_like < 10) {
             gloves = true;
         }
 
-        // If the clothes need to be warmer than 5 and the bottoms are a skirt
-        if (warmth > 5 && randomOutfit.pants == SKIRT){
+        /* When to suggest leggings */
+        // If the clothes need to be warmer than 5 and the bottoms are a skirt or a dress
+        if (warmth.second > 5 && (randomOutfit.pants == SKIRT || randomOutfit.top == DRESS)){
             leggings = true;
         }
 
