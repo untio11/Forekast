@@ -56,6 +56,9 @@ public class Clothing {
     @ColumnInfo(name = "last_washing_state")
     public boolean last_washing_state;
 
+    @ColumnInfo(name = "washing_time")
+    public int washing_time;
+
     @ColumnInfo(name = "overwearable")
     public boolean overwearable;
 
@@ -114,10 +117,11 @@ public class Clothing {
      * @param preference How much this piece is liked
      * @param color RGB array: [Red, Green, Blue]
      * @param washing_machine Whether the piece is in the laundry machine
-     * @param picture URL to the image (?)
+     * @param washing_time How long this piece of clothing is gone for
+     * @param picture URL to the image
      */
     @Ignore
-    public Clothing(String owner, int warmth, int formality, int comfort, int preference, int[] color, boolean washing_machine, String picture) {
+    public Clothing(String owner, int warmth, int formality, int comfort, int preference, int[] color, boolean washing_machine, int washing_time, String picture) {
         setLocAndTyp();
         this.owner = owner;
         this.warmth = warmth;
@@ -126,6 +130,7 @@ public class Clothing {
         this.preference = preference;
         this.color = color;
         this.washing_machine = washing_machine;
+        this.washing_time = washing_time;
         this.picture = picture;
     }
 
