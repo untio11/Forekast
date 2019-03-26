@@ -121,7 +121,8 @@ public class Clothing {
      * @param picture URL to the image
      */
     @Ignore
-    public Clothing(String owner, int warmth, int formality, int comfort, int preference, int[] color, boolean washing_machine, int washing_time, String picture) {
+    public Clothing(String owner, int warmth, int formality, int comfort, int preference,
+                    int[] color, boolean washing_machine, int washing_time, String picture) {
         setLocAndTyp();
         this.owner = owner;
         this.warmth = warmth;

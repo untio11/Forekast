@@ -1,7 +1,5 @@
 package com.example.forekast.homescreen;
 
-import com.example.forekast.clothing.Clothing;
-import com.example.forekast.clothing.ClothingCriteria;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
 import com.example.forekast.outfits.Outfit;

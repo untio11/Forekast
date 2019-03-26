@@ -6,7 +6,6 @@ import com.example.forekast.clothing.*;
 import com.example.forekast.external_data.AppDatabase;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
-import com.example.forekast.external_data.WeatherAPI;
 
 import org.junit.After;
 import org.junit.BeforeClass;

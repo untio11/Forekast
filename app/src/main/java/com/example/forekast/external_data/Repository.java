@@ -1,8 +1,5 @@
 package com.example.forekast.external_data;
 
-import com.example.forekast.clothing.Clothing;
-import com.example.forekast.clothing.ClothingCriteriaInterface;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

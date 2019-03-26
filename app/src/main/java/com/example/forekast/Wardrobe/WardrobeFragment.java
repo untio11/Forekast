@@ -15,14 +15,11 @@ import android.widget.ImageButton;
 
 import com.example.forekast.EditScreen.EditScreen;
 import com.example.forekast.R;
-import com.example.forekast.clothing.Clothing;
-import com.example.forekast.clothing.ClothingCriteria;
 import com.example.forekast.clothing.Feet;
 import com.example.forekast.clothing.Legs;
 import com.example.forekast.clothing.Torso;
 import com.example.forekast.external_data.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

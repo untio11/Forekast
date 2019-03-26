@@ -1,7 +1,5 @@
 package com.example.forekast.external_data;
 
-import com.example.forekast.clothing.Clothing;
-
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
