@@ -78,43 +78,34 @@ public class WardrobeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_wardrobe_list, container, false);
 
         ImageButton addTorso = (ImageButton) view.findViewById(R.id.addTorso);
-        ImageButton addLegs = (ImageButton) view.findViewById(R.id.addBottom);
-        ImageButton addFeet = (ImageButton) view.findViewById(R.id.addShoes);
+        ImageButton addLegs = (ImageButton)  view.findViewById(R.id.addBottom);
+        ImageButton addFeet = (ImageButton)  view.findViewById(R.id.addShoes);
 
         // The add torso button will add a new clothing of type torso
-        addTorso.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Clothing torso = new Torso(); // CHANGE TO TORSO
-                // Navigate to edit screen
-                Fragment fragment = EditScreen.newInstance(torso);
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.wardrobefragment, fragment).commit();
-            }
+        addTorso.setOnClickListener(v -> {
+            Clothing torso = new Torso(); // CHANGE TO TORSO
+            // Navigate to edit screen
+            Fragment fragment = EditScreen.newInstance(torso);
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.wardrobefragment, fragment).commit();
         });
 
         // The add bottom button will add a new clothing of type bottom
-        addLegs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Clothing bottom = new Legs(); // CHANGE TO BOTTOM
-                // Navigate to edit screen
-                Fragment fragment = EditScreen.newInstance(bottom);
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.wardrobefragment, fragment).commit();
-            }
+        addLegs.setOnClickListener(v -> {
+            Clothing legs = new Legs(); // CHANGE TO BOTTOM
+            // Navigate to edit screen
+            Fragment fragment = EditScreen.newInstance(legs);
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.wardrobefragment, fragment).commit();
         });
 
         // The add shoes button will add a new clothing of type shoes
-        addFeet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Clothing shoes = new Feet(); // CHANGE TO SHOES (SUPER)
-                // Navigate to edit screen
-                Fragment fragment = EditScreen.newInstance(shoes);
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.wardrobefragment, fragment).commit();
-            }
+        addFeet.setOnClickListener(v -> {
+            Clothing feet = new Feet(); // CHANGE TO SHOES (SUPER)
+            // Navigate to edit screen
+            Fragment fragment = EditScreen.newInstance(feet);
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.wardrobefragment, fragment).commit();
         });
 
         // Execute loading of database in background
