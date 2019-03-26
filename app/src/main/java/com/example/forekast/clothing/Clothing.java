@@ -1,11 +1,13 @@
 package com.example.forekast.clothing;
 
-import android.media.Image;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+/**
+ * Main data of our app. Never manually set location or type! Just use the proper subclass and it will be set for you!
+ */
 @Entity
 public class Clothing {
     /**
@@ -53,9 +55,6 @@ public class Clothing {
 
     @ColumnInfo(name = "last_washing_state")
     public boolean last_washing_state;
-
-    @ColumnInfo(name = "washing_time")
-    public int washing_time;
 
     @ColumnInfo(name = "overwearable")
     public boolean overwearable;
@@ -106,19 +105,27 @@ public class Clothing {
         this.picture = url;
     }
 
+    /**
+     * No type or location parameter because those are set automatically if you use the correct subclass of clothing!
+     * @param owner Owner of this piece of clothing (warderobe owner)
+     * @param warmth The warmth of this piece
+     * @param formality The formality of this piece
+     * @param comfort The comfort of this piece
+     * @param preference How much this piece is liked
+     * @param color RGB array: [Red, Green, Blue]
+     * @param washing_machine Whether the piece is in the laundry machine
+     * @param picture URL to the image (?)
+     */
     @Ignore
-    public Clothing(String owner, String type, int comfort, int warmth, int formality, int preference, int[] color, boolean washing_machine, boolean last_washing_state, int washing_time, String picture) {
+    public Clothing(String owner, int warmth, int formality, int comfort, int preference, int[] color, boolean washing_machine, String picture) {
         setLocAndTyp();
         this.owner = owner;
-        this.type = type;
-        this.comfort = comfort;
         this.warmth = warmth;
         this.formality = formality;
+        this.comfort = comfort;
         this.preference = preference;
         this.color = color;
         this.washing_machine = washing_machine;
-        this.last_washing_state = last_washing_state;
-        this.washing_time = washing_time;
         this.picture = picture;
     }
 

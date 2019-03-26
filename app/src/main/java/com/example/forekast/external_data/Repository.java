@@ -64,15 +64,21 @@ public class Repository {
      * Filter the given clothing list based on the parsed criteria
      * @param clothing The list containing the clothing.
      * @param criteria The criteria to filter the clothing on
-     * @return A list of clothing containing just the clothing that conforms to the criteria. Possibly empty
+     * @return A list of clothing containing just the clothing that conforms to the criteria: criteria.attribute.first < clothing.attribute < criteria.attribute.second. Possibly empty.
      */
     private static List<Clothing> filter(List<Clothing> clothing, ClothingCriteriaInterface criteria) {
         Stream<Clothing> clothing_stream = clothing.stream();
 
         // Filter the retrieved clothing based on the criteria
-        clothing_stream = clothing_stream.filter(piece -> (piece.warmth > criteria.warmth.first && piece.warmth < criteria.warmth.second));
-        clothing_stream = clothing_stream.filter(piece -> (piece.formality > criteria.formality.first && piece.formality < criteria.formality.second));
-        clothing_stream = clothing_stream.filter(piece -> (piece.comfort > criteria.comfort.first && piece.comfort < criteria.comfort.second));
+        clothing_stream = clothing_stream.filter(piece -> (
+                piece.warmth > criteria.warmth.first && piece.warmth < criteria.warmth.second
+        ));
+        clothing_stream = clothing_stream.filter(piece -> (
+                piece.formality > criteria.formality.first && piece.formality < criteria.formality.second
+        ));
+        clothing_stream = clothing_stream.filter(piece -> (
+                piece.comfort > criteria.comfort.first && piece.comfort < criteria.comfort.second
+        ));
 
         return clothing_stream.collect(Collectors.toList());
     }

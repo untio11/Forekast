@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Object used to store the clothing criteria for filtering in one place. Iterable.
+ * Do not forget to set the owner of the clothing here as well, otherwise you won't get any clothes from the repo.
+ */
 public abstract class ClothingCriteriaInterface implements Iterable<Pair<String, Pair<Integer, Integer>>> {
     public Pair<Integer, Integer> warmth;
     public Pair<Integer, Integer> formality;
@@ -29,6 +33,10 @@ public abstract class ClothingCriteriaInterface implements Iterable<Pair<String,
         all.add(new Pair<>("preference", preference));
     }
 
+    /**
+     * Return the iterator for the criteria
+     * @return A nested pair such that (criterium_name, (lower_bound, upper_bound))
+     */
     @Override
     public Iterator<Pair<String, Pair<Integer, Integer>>> iterator() {
         return all.iterator();

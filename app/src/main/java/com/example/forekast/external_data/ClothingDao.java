@@ -12,9 +12,18 @@ import androidx.room.Update;
 
 @Dao
 public interface ClothingDao {
+    /**
+     * Not to be used, as it does not properly set the ID's of the inserted items.
+     * @param pieces The pieces of clothing to be added
+     */
     @Insert
     void insertAll(Clothing ... pieces);
 
+    /**
+     * Insert a single piece of clothing and return the ID
+     * @param piece The piece of clothing to be added
+     * @return The ID of the added piece
+     */
     @Insert
     long insert(Clothing piece); // Insert just one piece and return the ID
 
