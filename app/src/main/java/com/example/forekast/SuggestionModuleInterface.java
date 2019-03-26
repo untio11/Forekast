@@ -8,6 +8,10 @@ abstract class SuggestionModuleInterface {
 
     Weather currentWeather;
 
+    abstract void setCurrentCriteria(ClothingCriteria criteria, Weather weather);
+
+    abstract ClothingCriteria generateCriteria();
+
     abstract void generateOutfit(ClothingCriteria criteria);
 
     abstract Outfit getRandomOutfit();
@@ -15,10 +19,6 @@ abstract class SuggestionModuleInterface {
     abstract Outfit next(ClothingType type);
 
     abstract Outfit previous(ClothingType type);
-
-    abstract void setCurrentCriteria(ClothingCriteria criteria);
-
-    abstract ClothingCriteria generateCriteria(Weather weather);
 
     abstract List<Clothing> getClothing(ClothingType type, ClothingCriteria criteria);
 }

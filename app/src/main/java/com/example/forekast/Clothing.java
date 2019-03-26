@@ -52,7 +52,8 @@ public class Clothing {
         this.picture = url;
     }
 
-    Clothing(String owner, ClothingType type, int comfort, int warmth, int formality, int preference, int[] color, boolean washing_machine, boolean last_washing_state, int washing_time, String picture) {
+    Clothing(long ID, String owner, ClothingType type, int comfort, int warmth, int formality, int preference, int[] color, boolean washing_machine, boolean last_washing_state, int washing_time, String picture) {
+        this.ID = ID;
         this.owner = owner;
         this.type = type;
         this.comfort = comfort;
