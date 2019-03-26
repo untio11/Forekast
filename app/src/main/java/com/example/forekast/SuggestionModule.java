@@ -99,7 +99,11 @@ class SuggestionModule extends SuggestionModuleInterface {
     }
 
     @Override
-    List<Clothing> getClothing(ClothingType type, ClothingCriteria criteria) {
+    List<Clothing> getClothing(String location, ClothingCriteria criteria) {
+        if (location.equals("inner_torso")){
+
+        }
+
         return null;
     }
 
@@ -117,10 +121,7 @@ class SuggestionModule extends SuggestionModuleInterface {
     Outfit getRandomOutfit() {
         ClothingCriteria criteria;
         Outfit randomOutfit;
-        String inner_top;
-        String outer_top;
-        String bottoms;
-        String shoes;
+        String location;
 
         criteria = new ClothingCriteria(warmth, formality, comfort, preference, owner);
 
