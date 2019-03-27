@@ -1,5 +1,7 @@
 package com.example.forekast.clothing;
 
+import org.jetbrains.annotations.NotNull;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -99,6 +101,7 @@ public class Clothing {
      * It's always a good idea to have a string representation of your class. Basic, quick overview of the piece of clothing
      * @return [ID] owner::location::type - (warmth,formality,comfort)
      */
+    @NotNull
     @Override
     public String toString() {
         return "[" + ID + "] " + owner + "::" + location + "::" + type + " - " + "(" + warmth + "," + formality + "," + comfort + ")";

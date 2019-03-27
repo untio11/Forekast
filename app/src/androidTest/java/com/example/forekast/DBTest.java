@@ -2,10 +2,7 @@ package com.example.forekast;
 
 import android.content.Context;
 
-import com.example.forekast.clothing.Clothing;
-import com.example.forekast.clothing.Shirt;
-import com.example.forekast.clothing.Sweater;
-import com.example.forekast.clothing.Tshirt;
+import com.example.forekast.clothing.*;
 import com.example.forekast.external_data.AppDatabase;
 
 import androidx.room.Room;
