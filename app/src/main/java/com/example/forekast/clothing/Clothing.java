@@ -1,6 +1,7 @@
 package com.example.forekast.clothing;
 
 import android.graphics.Bitmap;
+import org.jetbrains.annotations.NotNull;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -75,6 +76,7 @@ public class Clothing {
         setLocAndTyp();
     }
 
+
     /**
      * Set the location and type of a subclass of clothing based on the parent class.
      */
@@ -95,6 +97,9 @@ public class Clothing {
             // the location of this piece to our parents class name and the type to our own name
             location = father;
             type = us;
+        } else if ("Object".equals(father)) {
+            location = "";
+            type = "";
         }
     }
 
@@ -102,6 +107,7 @@ public class Clothing {
      * It's always a good idea to have a string representation of your class. Basic, quick overview of the piece of clothing
      * @return [ID] owner::location::type - (warmth,formality,comfort)
      */
+    @NotNull
     @Override
     public String toString() {
         return "[" + ID + "] " + owner + "::" + location + "::" + type + " - " + "(" + warmth + "," + formality + "," + comfort + ")";

@@ -1,7 +1,7 @@
 package com.example.forekast.clothing;
 
 public class Jacket extends Torso {
-    Jacket() {
+    public Jacket() {
         super();
         this.overwearable = true;
         this.underwearable = false;

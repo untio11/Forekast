@@ -23,7 +23,6 @@ import com.example.forekast.clothing.Legs;
 import com.example.forekast.clothing.Torso;
 import com.example.forekast.external_data.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

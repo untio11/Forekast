@@ -3,12 +3,9 @@ package com.example.forekast;
 import android.content.Context;
 
 import com.example.forekast.clothing.*;
-import com.example.forekast.external_data.AppDatabase;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
-import com.example.forekast.external_data.WeatherAPI;
 
-import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,34 +14,22 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
-import androidx.room.Room;
 import androidx.test.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
 
 @RunWith(AndroidJUnit4.class)
 public class RepoTest {
-    static private AppDatabase db;
-    static private LifecycleOwner lf;
 
     @BeforeClass
     public static void init() {
         Context appcontext = InstrumentationRegistry.getTargetContext();
-        db = Room.databaseBuilder(appcontext, AppDatabase.class, "clothing").fallbackToDestructiveMigration().build();
-        Repository.setDB(db);
-        lf = new MockLifeCycleOwner();
+        Repository.initDB(appcontext);
     }
 
-    @After // Used te re-establish the link with the database after the nullpointer test
-    public void resetDbLink() {
-        Repository.setDB(db);
-    }
-
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testException() {
-        Repository.setDB(null);
-        Repository.addClothing();
+        Repository.initDB(null);
     }
 
     @Test
@@ -69,7 +54,7 @@ public class RepoTest {
         footglove.formality = 1;
         footglove.owner = "hans";
 
-        // On init, clothing should have ID of -1, as it has not been added to the database yet
+        // On init, clothing should have ID of 0, as it has not been added to the database yet
         assertEquals(0, tshirt.ID);
         assertEquals(0, pant.ID);
         assertEquals(0, footglove.ID);
@@ -107,6 +92,39 @@ public class RepoTest {
         // And all the results should only be torso pieces
         for (Clothing piece : result) {
             assertEquals("Torso", piece.location);
+            assertEquals("hans", piece.owner);
+        }
+    }
+
+    @Test
+    public void testGetClothingWithCriteria() {
+        Clothing tshirt = new Tshirt();
+        tshirt.comfort = 1;
+        tshirt.warmth = 5;
+        tshirt.formality = 23;
+        tshirt.owner = "hans";
+        tshirt.overwearable = false;
+        tshirt.underwearable = true;
+
+        // Dummy criteria: should accept clothing of the appropriate type between warmth bounds, owned by hans
+        ClothingCriteriaInterface criteria = new ClothingCriteria();
+        criteria.owner = "hans";
+        criteria.warmth.second = 10;
+        criteria.warmth.first = 0;
+
+        // To ensure the result will never be empty
+        Repository.addClothing(tshirt);
+
+        List<Clothing> result = Repository.getClothing("Torso", criteria);
+
+        // The t-shirt should at least be found
+        assertTrue(result.size() > 0);
+
+        // And all the results should only be torso pieces
+        for (Clothing piece : result) {
+            assertEquals("Torso", piece.location);
+            assertEquals("hans", piece.owner);
+            assertTrue(piece.warmth < 10 && piece.warmth > 0);
         }
     }
 

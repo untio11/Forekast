@@ -1,27 +1,19 @@
 package com.example.forekast;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.example.forekast.clothing.Boots;
-import com.example.forekast.clothing.Clothing;
-import com.example.forekast.clothing.Torso;
-import com.example.forekast.clothing.Tshirt;
+import com.example.forekast.clothing.*;
 import com.example.forekast.external_data.AppDatabase;
 
 import androidx.room.Room;
 import androidx.test.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 
@@ -49,12 +41,41 @@ public class DBTest {
         tshirt.warmth = 69;
         tshirt.owner = "Hans";
 
+        // This is not needed when adding clothing through the repository
         tshirt.ID = db.clothingDao().insert(tshirt);
+
         Clothing result = db.clothingDao().getByID(tshirt.ID);
 
         assertEquals(tshirt.toString(), result.toString());
 
         db.clothingDao().delete(result);
+    }
+
+    @Test
+    public void testWearableProperties() {
+        Clothing tshirt = new Tshirt();
+        tshirt.ID = db.clothingDao().insert(tshirt);
+        assertTrue(tshirt.underwearable);
+        assertFalse(tshirt.overwearable);
+
+        Clothing sweater = new Sweater();
+        sweater.ID = db.clothingDao().insert(sweater);
+        assertFalse(sweater.underwearable);
+        assertTrue(sweater.overwearable);
+
+        Clothing shirt = new Shirt();
+        shirt.ID = db.clothingDao().insert(shirt);
+        assertTrue(shirt.underwearable);
+        assertTrue(shirt.overwearable);
+
+        assertTrue((db.clothingDao().getByID(tshirt.ID)).underwearable);
+        assertFalse((db.clothingDao().getByID(tshirt.ID)).overwearable);
+
+        assertFalse((db.clothingDao().getByID(sweater.ID)).underwearable);
+        assertTrue((db.clothingDao().getByID(sweater.ID)).overwearable);
+
+        assertTrue((db.clothingDao().getByID(shirt.ID)).underwearable);
+        assertTrue((db.clothingDao().getByID(shirt.ID)).overwearable);
     }
 
     private void clearDB() {

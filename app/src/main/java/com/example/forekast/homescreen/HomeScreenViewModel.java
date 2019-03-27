@@ -7,6 +7,7 @@ import com.example.forekast.outfits.Outfit;
 import androidx.lifecycle.LiveData;
 
 class HomeScreenViewModel extends HomeScreenViewModelInterface {
+
     @Override
     LiveData<Outfit> getLiveOutfit() {
         return currentOutfit;
@@ -19,22 +20,24 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
 
     @Override
     ClothingCriteria getClothingCriteria() {
-        return null;
+        return clothingCriteria;
     }
 
     @Override
-    ClothingCriteria setClothingCriteria(ClothingCriteria criteria) {
-        return null;
+    void setClothingCriteria(ClothingCriteria criteria) {
+        this.clothingCriteria = criteria;
     }
 
     @Override
     void nextClothing(String clothing_type) {
-
+        // sugg.next not implemented yet
+        //this.currentOutfit.postValue(this.sugg.next(clothing_type));
     }
 
     @Override
     void previousClothing(String clothing_type) {
-
+        // sugg.previous not implemented yet
+        //this.currentOutfit.postValue(this.sugg.previous(clothing_type));
     }
 
     @Override
@@ -44,11 +47,6 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
 
     @Override
     void newOutfit() {
-
-    }
-
-    @Override
-    void setCurrentOutfit(Outfit new_outfit) {
 
     }
 }
