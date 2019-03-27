@@ -70,7 +70,7 @@ public class Clothing {
 
     @Ignore
     @ColumnInfo(name = "picture")
-    public String picture;
+    public byte[] picture;
 
     public Clothing() {
         setLocAndTyp();
@@ -113,8 +113,8 @@ public class Clothing {
         return "[" + ID + "] " + owner + "::" + location + "::" + type + " - " + "(" + warmth + "," + formality + "," + comfort + ")";
     }
 
-    public void setImageUrl(Bitmap bitmap) {
-        this.picture = bitmap.toString();
+    public void setImageUrl(byte[] bytes) {
+        this.picture = bytes;
     }
 
     /**
@@ -130,7 +130,7 @@ public class Clothing {
      * @param picture URL to the image
      */
     @Ignore
-    public Clothing(String owner, int warmth, int formality, int comfort, int preference, int[] color, boolean washing_machine, int washing_time, Bitmap picture) {
+    public Clothing(String owner, int warmth, int formality, int comfort, int preference, int[] color, boolean washing_machine, int washing_time, byte[] picture) {
         setLocAndTyp();
         this.owner = owner;
         this.warmth = warmth;
@@ -140,7 +140,7 @@ public class Clothing {
         this.color = color;
         this.washing_machine = washing_machine;
         this.washing_time = washing_time;
-        this.picture = picture.toString();
+        this.picture = picture;
     }
 
     @Ignore

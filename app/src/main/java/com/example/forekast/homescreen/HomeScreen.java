@@ -12,8 +12,6 @@ import com.example.forekast.Settings.SwitchWardrobe;
 import com.example.forekast.Wardrobe.Wardrobe;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -44,7 +42,7 @@ public class HomeScreen extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         setContentView(R.layout.activity_home_screen);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -88,14 +86,6 @@ public class HomeScreen extends AppCompatActivity
             checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-
-        fusedLocationClient.getLastLocation().addOnSuccessListener(
-                this,
-                location -> {
-                    if (location != null) {
-                        vm.updateWeather();
-                    }
-                });
 
 
     }

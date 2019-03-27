@@ -1,7 +1,9 @@
 package com.example.forekast.EditScreen;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -25,11 +27,15 @@ import com.example.forekast.clothing.ClothingCriteria;
 import com.example.forekast.clothing.Jeans;
 import com.example.forekast.external_data.Repository;
 
+import java.io.ByteArrayOutputStream;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
+
+import static androidx.room.RoomMasterTable.TABLE_NAME;
 
 public class EditScreen extends Fragment implements AdapterView.OnItemSelectedListener{
 
@@ -49,8 +55,9 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
     private EditScreenViewModel mViewModel;
 
     Bitmap bitmap;
+    static Boolean addBool;
 
-    public static EditScreen newInstance(Clothing clothing) {
+    public static EditScreen newInstance(Clothing clothing, Boolean add) {
         /*
         owner = clothing.owner;
         warmth = clothing.warmth;
@@ -63,6 +70,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         picture = clothing.picture;
         */
         editClothing = clothing;
+        addBool = add;
         return new EditScreen();
     }
 
@@ -77,6 +85,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.edit_screen_fragment, container, false);
         ImageButton returnbutton = (ImageButton) view.findViewById(R.id.returnbutton);
+        ImageButton delete = (ImageButton) view.findViewById(R.id.delete);
 
         //create the camera button, and take into consideration the clothing image
         Button redoImage = (Button) view.findViewById(R.id.redoImage);
@@ -114,8 +123,20 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
 
         spinner.setSelection(adapter.getPosition(editClothing.type));
 
-        bitmap = editClothing.picture;
+        if (editClothing.picture != null) {
+            bitmap = BitmapFactory.decodeByteArray(editClothing.picture, 0, editClothing.picture.length);
+            System.out.println(bitmap);
+        }
 
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Repository.removeClothing(editClothing);
+                Fragment fragment = WardrobeFragment.newInstance();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.wardrobefragment, fragment).commit();
+            }
+        });
 
         returnbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,9 +148,16 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
                 editClothing.type = (String) spinner.getSelectedItem();
                 editClothing.owner = "General";
                 editClothing.washing_machine = checkBox.isSelected();
-                editClothing.picture = bitmap;
-                System.out.println(bitmap);
-                new AgentAsyncTask(editClothing).execute();
+                //editClothing.picture = bitmap;
+                //System.out.println(bitmap);
+                //ByteArrayOutputStream blob = new ByteArrayOutputStream();
+                //bitmap.compress(Bitmap.CompressFormat.PNG, 0 /* Ignored for PNGs */, blob);
+                //byte[] bitmapdata = blob.toByteArray();
+                //editClothing.picture = bitmapdata;
+
+
+                new AgentAsyncTask().execute();
+
                 Fragment fragment = WardrobeFragment.newInstance();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.wardrobefragment, fragment).commit();
@@ -173,17 +201,16 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
     }
 
     private static class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
-        Clothing clothing;
 
-        public AgentAsyncTask(Clothing clothing) {
-        this.clothing = clothing;
-    }
+        public AgentAsyncTask() {}
 
         @Override
         protected Integer doInBackground(Void... voids) {
-            //Jeans jeans = new Jeans();
-            Repository.addClothing(clothing);
-            System.out.println(Repository.getClothing("Legs", new ClothingCriteria()));
+            if (addBool) {
+                Repository.addClothing(editClothing);
+            } else {
+                Repository.updateClothing(editClothing);
+            }
             return null;
         }
     }

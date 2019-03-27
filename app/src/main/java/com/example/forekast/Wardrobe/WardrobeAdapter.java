@@ -2,6 +2,7 @@ package com.example.forekast.Wardrobe;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,7 +100,9 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
         System.out.println("Hey! I'm " + clothing.picture);
         if (clothing.picture != null) {
             System.out.println("Hey! I'm " + clothing.picture);
-            //holder.imageView.setImageBitmap((Bitmap)clothing.picture);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(clothing.picture, 0, clothing.picture.length);
+            System.out.println(bitmap);
+            holder.imageView.setImageBitmap(bitmap);
             //final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), url);
             //if (file != null) {
                 /*
@@ -132,7 +135,7 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
             @Override
             public void onClick(View v) {
                 // Clicking on item will navigate to editscreen with the current clothing item
-                Fragment fragment = EditScreen.newInstance(clothing);
+                Fragment fragment = EditScreen.newInstance(clothing, false);
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.wardrobefragment, fragment).commit();
             }
