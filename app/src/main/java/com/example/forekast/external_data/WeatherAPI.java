@@ -36,7 +36,7 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
      * Use this constructor if the weather data should be fetched by city name (no gps)
      * @param cityname name of the city, as entered by the user
      */
-    public WeatherAPI(String cityname) {
+    WeatherAPI(String cityname) {
         city_name = cityname;
         using_coordinates = false;
     }
@@ -46,7 +46,7 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
      * @param latitude latitude as string
      * @param longitude longitude as string
      */
-    public WeatherAPI(String latitude, String longitude) {
+    WeatherAPI(String latitude, String longitude) {
         current_latitude = latitude;
         current_longitude = longitude;
         using_coordinates = true;
@@ -66,7 +66,6 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
         // Start of by just sending the last used weather, so something is on the screen.
         target = weather;
         target.postValue(last_weather);
-
 
         try {
             setWeatherProperties(result);
@@ -97,7 +96,7 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
 
 
         double temp =       getAvg("main", "temp", weather_data);
-        double wind_speed =  getAvg("wind", "speed", weather_data); // m/s, taken care of later
+        double wind_speed = getAvg("wind", "speed", weather_data); // m/s, taken care of later
         double humidity =   getAvg("main", "humidity", weather_data) / 100.0; // so it's in [0,1]
         // Slightly tweaked approximation from https://www.abc.net.au/news/2018-08-10/weather-feels-like-temperatures/10050622
         double feels_like =  temp + 0.33 * humidity - 0.6 * wind_speed - 3.0;
@@ -156,12 +155,10 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
         final int size = 3; // How many datasamples to take. This looks 3 entries ahead, which comes down to 9 hours
 
         for (int i = 0; i < size; i++) {
-            JsonObject datapoint = data.get(i).getAsJsonObject().get(cat).getAsJsonObject();
-
-            if (datapoint.get(element) == null) { // No data, so just use 0
+            try { // If the webapi does not have data on some weather attribute, it sets it to null, so we need to check for that
+                result += data.get(i).getAsJsonObject().get(cat).getAsJsonObject().get(element).getAsFloat();
+            } catch (NullPointerException e) {
                 result += 0;
-            } else {
-                result += datapoint.get(element).getAsFloat() / size;
             }
         }
 
@@ -174,11 +171,9 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
      * @return URL to the api
      */
     private String getForecastURL() {
-        if (using_coordinates) {
-            return baseurl + forecast + "lat=" + current_latitude + "&lon=" + current_longitude + "&" + apikey + "&units=metric";
-        } else {
-            return baseurl + forecast + "q=" + city_name + "&" + apikey + "&units=metric";
-        }
+        return baseurl + forecast +
+                (using_coordinates ? "lat=" + current_latitude + "&lon=" + current_longitude : "q=" + city_name)
+                + "&" + apikey + "&units=metric";
     }
 
     /**

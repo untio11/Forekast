@@ -6,7 +6,6 @@ import com.example.forekast.clothing.*;
 import com.example.forekast.external_data.AppDatabase;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
-import com.example.forekast.external_data.WeatherAPI;
 
 import org.junit.After;
 import org.junit.BeforeClass;
@@ -25,26 +24,16 @@ import androidx.test.runner.AndroidJUnit4;
 
 @RunWith(AndroidJUnit4.class)
 public class RepoTest {
-    static private AppDatabase db;
-    static private LifecycleOwner lf;
 
     @BeforeClass
     public static void init() {
         Context appcontext = InstrumentationRegistry.getTargetContext();
-        db = Room.databaseBuilder(appcontext, AppDatabase.class, "clothing").fallbackToDestructiveMigration().build();
-        Repository.setDB(db);
-        lf = new MockLifeCycleOwner();
+        Repository.initDB(appcontext);
     }
 
-    @After // Used te re-establish the link with the database after the nullpointer test
-    public void resetDbLink() {
-        Repository.setDB(db);
-    }
-
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testException() {
-        Repository.setDB(null);
-        Repository.addClothing();
+        Repository.initDB(null);
     }
 
     @Test
