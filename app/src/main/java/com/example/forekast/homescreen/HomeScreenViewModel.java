@@ -7,6 +7,7 @@ import com.example.forekast.outfits.Outfit;
 import androidx.lifecycle.LiveData;
 
 class HomeScreenViewModel extends HomeScreenViewModelInterface {
+
     @Override
     LiveData<Outfit> getLiveOutfit() {
         return currentOutfit;

@@ -1,6 +1,9 @@
 package com.example.forekast.homescreen;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 
 import com.example.forekast.R;
@@ -9,10 +12,16 @@ import com.example.forekast.Settings.SwitchWardrobe;
 import com.example.forekast.Wardrobe.Wardrobe;
 import com.example.forekast.external_data.AppDatabase;
 import com.example.forekast.external_data.Repository;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
 import android.view.View;
+
 import com.google.android.material.navigation.NavigationView;
+
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -26,9 +35,14 @@ import android.view.MenuItem;
 public class HomeScreen extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private FusedLocationProviderClient fusedLocationClient;
+    public Location currentLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         setContentView(R.layout.activity_home_screen);
 
         Repository.setDB(Room.databaseBuilder(getApplicationContext(),
@@ -54,6 +68,26 @@ public class HomeScreen extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        /**
+         * Checks the permissions for location
+         * Then attempts to get the last known location
+         * If successful will set the global variable currentLocation to querried location
+         */
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            //Fml
+                        }
+                        currentLocation = location;
+                    }
+                });
     }
 
     @Override
