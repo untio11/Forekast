@@ -2,12 +2,6 @@ package com.example.forekast.clothing;
 
 public class ClothingCriteria extends ClothingCriteriaInterface{
 
-    public MutablePair<Integer, Integer> warmth;
-    public MutablePair<Integer, Integer> formality;
-    public MutablePair<Integer, Integer> comfort;
-    public MutablePair<Integer, Integer> preference;
-    public String owner;
-
     public ClothingCriteria(MutablePair<Integer, Integer> warmth, MutablePair<Integer, Integer> formality,
                             MutablePair<Integer, Integer> comfort, MutablePair<Integer, Integer> preference,
                             String owner){
@@ -16,5 +10,9 @@ public class ClothingCriteria extends ClothingCriteriaInterface{
         this.comfort = comfort;
         this.preference = preference;
         this.owner = owner;
+    }
+
+    public ClothingCriteria() {
+        super();
     }
 }

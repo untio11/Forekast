@@ -330,6 +330,8 @@
         android:id="@+id/refresh"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/todo"
         android:onClick="refreshClothing"
@@ -337,9 +339,9 @@
         android:tag="refreshbuttontagfortest"
         android:tint="@color/colorPrimaryDark"
         android:visibility="visible"
-        app:srcCompat="@drawable/loading"
-        tools:layout_editor_absoluteX="32dp"
-        tools:layout_editor_absoluteY="64dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home"
+        app:srcCompat="@drawable/loading" />
 
     <TextView
         android:id="@+id/textView4"

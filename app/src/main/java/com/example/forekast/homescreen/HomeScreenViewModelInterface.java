@@ -1,7 +1,10 @@
 package com.example.forekast.homescreen;
 
+import com.example.forekast.Suggestion.Outfit;
+import com.example.forekast.Suggestion.SuggestionModule;
+import com.example.forekast.Suggestion.SuggestionModuleInterface;
+import com.example.forekast.clothing.ClothingCriteria;
 import com.example.forekast.external_data.Weather;
-import com.example.forekast.outfits.Outfit;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -16,7 +19,7 @@ abstract class HomeScreenViewModelInterface extends ViewModel {
     // The criteria that are set with the sliders on the home screen
     ClothingCriteria clothingCriteria;
     // Local copy of the suggestion module to communicate with. Might be able to make it static
-    protected SuggestionModuleInterface sugg = new SuggestionModule();
+    protected SuggestionModule sugg = new SuggestionModule();
 
     /**
      * Used for linking the outfit livedata here with the observer in the homescreen activity.
@@ -59,6 +62,8 @@ abstract class HomeScreenViewModelInterface extends ViewModel {
     /**
      * Send a request for the weather to be fetched. Will update the livedata weather object, so nothing
      * else should have to be done.
+     *
+     * Also refreshes the accessory suggestions based on potential changes in weather.
      */
     abstract void updateWeather();
 
@@ -66,4 +71,5 @@ abstract class HomeScreenViewModelInterface extends ViewModel {
      * Refresh the entire outfit powerset in the suggestion module.
      */
     abstract void newOutfit();
+
 }

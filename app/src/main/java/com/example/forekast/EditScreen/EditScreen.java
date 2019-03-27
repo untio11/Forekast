@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 
 import com.example.forekast.R;
 import com.example.forekast.Wardrobe.WardrobeFragment;
+import com.example.forekast.clothing.Clothing;
 
 public class EditScreen extends Fragment {
 

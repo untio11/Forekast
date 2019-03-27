@@ -6,7 +6,7 @@ import com.example.forekast.external_data.Weather;
 
 import java.util.List;
 
-abstract class SuggestionModuleInterface {
+public abstract class SuggestionModuleInterface {
 
     ClothingCriteria criteria;
 
@@ -20,9 +20,9 @@ abstract class SuggestionModuleInterface {
 
     abstract Outfit getRandomOutfit();
 
-    abstract Outfit next(String location);
+    public abstract Outfit next(String location);
 
-    abstract Outfit previous(String location);
+    public abstract Outfit previous(String location);
 
     abstract List<Clothing> getClothing(String location);
 }

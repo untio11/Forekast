@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 
 import com.example.forekast.EditScreen.EditScreen;
 import com.example.forekast.R;
+import com.example.forekast.clothing.Clothing;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

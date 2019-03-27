@@ -1,5 +1,7 @@
 package com.example.forekast.Suggestion;
 
+import android.util.Log;
+
 import com.example.forekast.clothing.*;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
@@ -52,7 +54,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
     /** First establish the criteria */
     @Override
-    void setCurrentCriteria(ClothingCriteria criteria, Weather weather) {
+    public void setCurrentCriteria(ClothingCriteria criteria, Weather weather) {
         this.criteria = criteria;
         this.weather = weather;
 
@@ -75,7 +77,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
     }
 
     // Set the booleans for the accessories based on the critieria assigned
-    private void setAccessories() {
+    public void setAccessories() {
         coat = false;
         gloves = false;
         umbrella = false;
@@ -290,31 +292,41 @@ public class SuggestionModule extends SuggestionModuleInterface {
     }
 
     private void setClothing(){
-        Clothing tempInner = new Clothing();
-        Clothing tempOuter = new Clothing();
+        Clothing tempInner = null;
+        Clothing tempOuter = null;
 
         int index = 0;
 
         // Needs optimising
-        while (tempInner == null && tempOuter == null) {
-            tempInner = outfits.inner_torso.get(index);
-            currentIndIT = index;
-            tempOuter = outfits.outer_torso.get(index);
-            currentIndOT = index;
+        if (outfits.inner_torso.size() > 0 && outfits.outer_torso.size() > 0) {
+            while (tempInner == null && tempOuter == null && (index < outfits.outer_torso.size() || index < outfits.inner_torso.size())) {
+                tempInner = outfits.inner_torso.get(index);
+                currentIndIT = index;
+                tempOuter = outfits.outer_torso.get(index);
+                currentIndOT = index;
 
-            if ((tempInner.warmth + tempOuter.warmth) >= (warmth.second*2)){
-                currentInnerTorso = tempInner;
-                currentOuterTorso = tempOuter;
+                if ((tempInner.warmth + tempOuter.warmth) >= (warmth.second * 2)) {
+                    currentInnerTorso = tempInner;
+                    currentOuterTorso = tempOuter;
+                }
+
+                index++;
             }
-            else {
-                tempInner = null;
-                tempOuter = null;
+            if (tempInner == null){
+                currentInnerTorso = outfits.inner_torso.get(0);
+                currentIndIT = 0;
             }
-            index++;
+            else if (tempOuter == null){
+                currentOuterTorso = outfits.outer_torso.get(0);
+                currentIndOT = 0;
+            }
         }
-
-        currentBottoms = outfits.bottoms.get(0);
-        currentShoes = outfits.shoes.get(0);
+        if (outfits.bottoms.size() > 0) {
+            currentBottoms = outfits.bottoms.get(0);
+        }
+        if (outfits.shoes.size() > 0){
+            currentShoes = outfits.shoes.get(0);
+        }
     }
 
     private void shuffle() {
