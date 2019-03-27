@@ -14,7 +14,7 @@ import java.net.URL;
 
 import androidx.lifecycle.MutableLiveData;
 
-public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
+class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
     // URL constants
     private static final String apikey = "APPID=0b9abbd80c094690566a12c404593543";
     private static final String baseurl = "http://api.openweathermap.org/data/2.5/";

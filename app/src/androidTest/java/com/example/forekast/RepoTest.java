@@ -3,11 +3,9 @@ package com.example.forekast;
 import android.content.Context;
 
 import com.example.forekast.clothing.*;
-import com.example.forekast.external_data.AppDatabase;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
 
-import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,9 +14,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
-import androidx.room.Room;
 import androidx.test.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
 
