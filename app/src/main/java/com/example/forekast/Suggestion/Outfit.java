@@ -1,4 +1,4 @@
-package com.example.forekast.Outfits;
+package com.example.forekast.Suggestion;
 
 import com.example.forekast.clothing.Clothing;
 

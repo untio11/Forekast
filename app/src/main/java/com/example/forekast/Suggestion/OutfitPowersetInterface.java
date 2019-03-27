@@ -1,4 +1,4 @@
-package com.example.forekast.Outfits;
+package com.example.forekast.Suggestion;
 
 import com.example.forekast.Suggestion.SuggestionModule;
 import com.example.forekast.clothing.Clothing;
@@ -7,17 +7,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-abstract public class OutfitPowersetInterface implements Iterable<List<Clothing>> {
+abstract class OutfitPowersetInterface implements Iterable<List<Clothing>> {
     SuggestionModule sm = new SuggestionModule();
 
-    public List<Clothing> tops  = sm.getClothing("torso");;
+    public List<Clothing> inner_torso  = sm.getClothing("torso");;
+    public List<Clothing> outer_torso  = sm.getClothing("torso");;
     public List<Clothing> bottoms = sm.getClothing("legs");
     public List<Clothing> shoes = sm.getClothing("feet");
 
     private List<List<Clothing>> all = new ArrayList<>();
 
-    OutfitPowersetInterface() {
-        all.add(tops);
+    public OutfitPowersetInterface() {
+        all.add(inner_torso);
+        all.add(outer_torso);
         all.add(bottoms);
         all.add(shoes);
     }
