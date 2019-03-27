@@ -1,12 +1,14 @@
 package com.example.forekast.Suggestion;
 
 import com.example.forekast.Outfits.Outfit;
+import com.example.forekast.Outfits.OutfitPowersetInterface;
 import com.example.forekast.clothing.Clothing;
 import com.example.forekast.clothing.ClothingCriteria;
 import com.example.forekast.clothing.ClothingCriteriaInterface;
 import com.example.forekast.external_data.Weather;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class SuggestionModule extends SuggestionModuleInterface {
@@ -80,8 +82,6 @@ public class SuggestionModule extends SuggestionModuleInterface {
         sunglasses = false;
         leggings = false;
 
-        String type = outfit.type
-
         /** When to suggest sunglasses */
         // If the UV Index is greater than 3 (medium risk) then wear sunglasses
         if (uv_index >= 3){
@@ -115,7 +115,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
         /** When to suggest leggings */
         // If the clothes need to be warmer than 5 and the bottoms are a skirt or a dress
-        if (warmth.second > 5 && (type.equals("skirt") || type.equals("dress"))){
+        if (warmth.second > 5 && (currentBottoms.type.equals("skirt") || currentInnerTorso.type.equals("dress"))){ // placeholder terms used
             leggings = true;
         }
 
@@ -129,7 +129,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
         Clothing clothingInRepo = new Clothing("torso"); // Placeholder for accessing Repo
 
         // For all clothing in repo:
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 20; i++) { // Arbitrary 20 given in stead of database size
             if (!clothingInRepo.washing_machine && clothingInRepo.location.equals(location)) { // For now, only consider available clothes
                 currentLocationList.add(clothingInRepo);
             }
@@ -143,19 +143,46 @@ public class SuggestionModule extends SuggestionModuleInterface {
     // OutfitPowerset contains lists of appropriate clothing
     @Override
     public void generateOutfit(ClothingCriteria criteria) {
-        
-        /*
-        if (clothingInRepo.location.equals("torso")) {
-            if (clothingInRepo.underwearable) {
-                currentLocationList.add(clothingInRepo);
-            } else { // clothingInRepo.overwearable
-                currentLocationList.add(clothingInRepo);
+        generateCriteria();
+        List<List<Clothing>> localPowerset = new ArrayList<>();
+        List<Clothing> inner_torso = new ArrayList<>();
+        List<Clothing> outer_torso = new ArrayList<>();
+        List<Clothing> bottoms = new ArrayList<>();
+        List<Clothing> shoes = new ArrayList<>();
+
+        Iterator<List<Clothing>> itr = OutfitPowersetInterface.iterator();
+        Clothing clothing = new Clothing(); // Placeholder clothing item
+
+        int warmthUpper = warmth.second; // upper bound
+        int warmthLower = warmth.second; // lower bound
+
+        int comfortUpper = comfort.second;
+        int comfortLower = comfort.second;
+
+        int formalityUpper = formality.second;
+        int formalityLower = formality.second;
+
+        int currentPreference = 10;
+
+        while (inner_torso.isEmpty()){
+            if (clothing.location.equals("torso") && clothing.underwearable == true && clothing.preference == currentPreference
+                    && clothing.warmth <= warmthUpper && clothing.warmth >= warmthLower
+                    && clothing.comfort <= comfortUpper && clothing.comfort >= comfortLower
+                    && clothing.formality <= formalityUpper && clothing.formality >= formalityLower) {
             }
-        } else if (clothingInRepo.location.equals("legs")) {
-            currentLocationList.add(clothingInRepo);
-        } else if (clothingInRepo.location.equals("feet")) {
-            currentLocationList.add(clothingInRepo);
-        }*/
+            // Expand the range
+            warmthUpper++;
+            warmthLower--; 
+
+            comfortUpper++;
+            comfortLower--;
+
+            formalityUpper++;
+            formalityLower--;
+
+            currentPreference --;
+        }
+
 
         // Communicate with OutfitPowersetInterface
 
@@ -173,6 +200,12 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
         generateOutfit(criteria);
         setAccessories();
+
+        Clothing clothing = new Clothing(); // Placeholder clothing item
+
+        if (clothing.location.equals("torso")) {
+
+        }
 
         randomOutfit = new Outfit(currentInnerTorso, currentOuterTorso, currentBottoms, currentShoes, coat, gloves, umbrella, sunglasses, leggings);
 

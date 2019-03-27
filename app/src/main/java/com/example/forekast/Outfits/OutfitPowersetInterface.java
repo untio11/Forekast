@@ -10,16 +10,14 @@ import java.util.List;
 abstract public class OutfitPowersetInterface implements Iterable<List<Clothing>> {
     SuggestionModule sm = new SuggestionModule();
 
-    public List<Clothing> inner_top  = sm.getClothing("torso");;
-    public List<Clothing> outer_top = sm.getClothing("torso");;
+    public List<Clothing> tops  = sm.getClothing("torso");;
     public List<Clothing> bottoms = sm.getClothing("legs");
     public List<Clothing> shoes = sm.getClothing("feet");
 
     private List<List<Clothing>> all = new ArrayList<>();
 
     OutfitPowersetInterface() {
-        all.add(inner_top);
-        all.add(outer_top);
+        all.add(tops);
         all.add(bottoms);
         all.add(shoes);
     }
