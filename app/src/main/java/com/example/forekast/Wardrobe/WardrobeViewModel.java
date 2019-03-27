@@ -15,33 +15,31 @@ import androidx.lifecycle.ViewModel;
 
 public class WardrobeViewModel extends ViewModel {
 
-    public MutableLiveData<List<Clothing>> torsoList;
-    public MutableLiveData<List<Clothing>> legsList;
-    public MutableLiveData<List<Clothing>> feetList;
+    private MutableLiveData<List<Clothing>> torsoList = new MutableLiveData<>();
+    private MutableLiveData<List<Clothing>> legsList = new MutableLiveData<>();
+    private MutableLiveData<List<Clothing>> feetList = new MutableLiveData<>();
 
     public void getLists() {
-        //new AgentAsyncTask("Torso").execute(torsoList);
-        //new AgentAsyncTask("Legs").execute(legsList);
-        //new AgentAsyncTask("Feet").execute(feetList);
+        new AgentAsyncTask("Torso").execute(torsoList);
+        new AgentAsyncTask("Legs").execute(legsList);
+        new AgentAsyncTask("Feet").execute(feetList);
     }
 
     public LiveData<List<Clothing>> getTorsoList() {
-        new AgentAsyncTask("Torso").execute(torsoList);
         return torsoList;
     }
 
     public LiveData<List<Clothing>> getLegsList() {
-        new AgentAsyncTask("Legs").execute(legsList);
         return legsList;
     }
 
     public LiveData<List<Clothing>> getFeetList() {
-        new AgentAsyncTask("Feet").execute(feetList);
         return feetList;
     }
 
     private static class AgentAsyncTask extends AsyncTask<MutableLiveData<List<Clothing>>, Void, Void> {
         private String location;
+        private MutableLiveData<List<Clothing>> clothingList;
 
         AgentAsyncTask(String location) {
             this.location = location;
@@ -52,7 +50,7 @@ public class WardrobeViewModel extends ViewModel {
             ClothingCriteria criteria = new ClothingCriteria();
             criteria.owner = "General";
 
-            MutableLiveData<List<Clothing>> clothingList = lists[0];
+            clothingList = lists[0];
             clothingList.postValue(Repository.getClothing(location, criteria));
             return null;
         }

@@ -111,18 +111,19 @@ public class WardrobeFragment extends Fragment {
             transaction.replace(R.id.wardrobefragment, fragment).commit();
         });
 
+        // Viewmodel stuff
         vm = ViewModelProviders.of(this).get(WardrobeViewModel.class);
-
         // Execute loading of database in background
-        final Observer<List<Clothing>> torsoObs = torsoList -> setLists(view, torsoList, (CustomGridView) view.findViewById(R.id.Torso));
-        final Observer<List<Clothing>> legsObs = legsList -> setLists(view, legsList, (CustomGridView) view.findViewById(R.id.Bottom));
-        final Observer<List<Clothing>> feetObs = feetList -> setLists(view, feetList, (CustomGridView) view.findViewById(R.id.Shoes));
+        Observer<List<Clothing>> torsoObs = torsoList -> setLists(view, torsoList, (CustomGridView) view.findViewById(R.id.Torso));
+        Observer<List<Clothing>> legsObs = legsList -> setLists(view, legsList, (CustomGridView) view.findViewById(R.id.Bottom));
+        Observer<List<Clothing>> feetObs = feetList -> setLists(view, feetList, (CustomGridView) view.findViewById(R.id.Shoes));
 
         vm.getTorsoList().observe(this, torsoObs);
         vm.getLegsList().observe(this, legsObs);
         vm.getFeetList().observe(this, feetObs);
 
-        //vm.getLists();
+        vm.getLists();
+
         // return view
         return view;
     }

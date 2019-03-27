@@ -31,7 +31,7 @@ public class Repository {
             db = Room.databaseBuilder(
                     appcontext,
                     AppDatabase.class,
-                    "clothing").fallbackToDestructiveMigration().allowMainThreadQueries().build();
+                    "clothing").fallbackToDestructiveMigration().build();
         }
     }
 
