@@ -88,13 +88,19 @@ public class Wardrobe extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         if (id == R.id.nav_home) {
-            startActivity(new Intent(getApplicationContext(), HomeScreen.class));
+            Intent start_homescreen = new Intent(getApplicationContext(), HomeScreen.class);
+            start_homescreen.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivityIfNeeded(start_homescreen, 0);
         } else if (id == R.id.nav_wardrobe) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(getApplicationContext(), Settings.class));
+            Intent start_settings = new Intent(getApplicationContext(), Settings.class);
+            start_settings.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivityIfNeeded(start_settings, 0);
         } else if (id == R.id.nav_switchwardrobe) {
-            startActivity(new Intent(getApplicationContext(), SwitchWardrobe.class));
+            Intent start_wardrobeswitch = new Intent(getApplicationContext(), SwitchWardrobe.class);
+            start_wardrobeswitch.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivityIfNeeded(start_wardrobeswitch, 0);
         }
 
         drawer.closeDrawer(GravityCompat.START);

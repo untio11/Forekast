@@ -167,11 +167,18 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         if (id == R.id.nav_home) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_wardrobe) {
-            startActivity(new Intent(getApplicationContext(), Wardrobe.class));
+            Intent start_wardrobe = new Intent(getApplicationContext(), Wardrobe.class);
+            start_wardrobe.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivityIfNeeded(start_wardrobe, 0);
+
         } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(getApplicationContext(), Settings.class));
+            Intent start_settings = new Intent(getApplicationContext(), Settings.class);
+            start_settings.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivityIfNeeded(start_settings, 0);
         } else if (id == R.id.nav_switchwardrobe) {
-            startActivity(new Intent(getApplicationContext(), SwitchWardrobe.class));
+            Intent start_wardrobe = new Intent(getApplicationContext(), SwitchWardrobe.class);
+            start_wardrobe.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivityIfNeeded(start_wardrobe, 0);
         }
 
         drawer.closeDrawer(GravityCompat.START);
