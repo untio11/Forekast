@@ -1,3 +1,4 @@
+
 package com.example.forekast.Wardrobe;
 
 import android.content.Context;
@@ -164,10 +165,13 @@ public class WardrobeFragment extends Fragment {
 
         @Override
         protected Integer doInBackground(Void... voids) {
+            ClothingCriteria criteria = new ClothingCriteria();
+            criteria.owner = "General";
+
 
             // Load Torso items from database into wardrobe list
             CustomGridView torsoListView = (CustomGridView) view.findViewById(R.id.Torso);
-            List<Clothing> torsoList = Repository.getClothing("Torso", new ClothingCriteria());
+            List<Clothing> torsoList = Repository.getClothing("Torso", criteria);
 
             // JUST SOME TESTING... DELETE THIS LATER!!!
             /*Clothing torso1 = new Clothing();
@@ -181,18 +185,20 @@ public class WardrobeFragment extends Fragment {
             torsoList.add(torso2);
             */
 
+
+
             WardrobeAdapter torsoAdapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, torsoList);
             torsoListView.setAdapter(torsoAdapter);
 
             // Load Legs items from database into wardrobe list
             CustomGridView legsListView = (CustomGridView) view.findViewById(R.id.Bottom);
-            List<Clothing> legsList = Repository.getClothing("Legs", new ClothingCriteria());
+            List<Clothing> legsList = Repository.getClothing("Legs", criteria);
             WardrobeAdapter legsAdapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, legsList);
             legsListView.setAdapter(legsAdapter);
 
             // Load Feet items from database into wardrobe list
             CustomGridView feetListView = (CustomGridView) view.findViewById(R.id.Shoes);
-            List<Clothing> feetList = Repository.getClothing("Feet", new ClothingCriteria());
+            List<Clothing> feetList = Repository.getClothing("Feet", criteria);
             WardrobeAdapter feetAdapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, feetList);
             feetListView.setAdapter(feetAdapter);
 

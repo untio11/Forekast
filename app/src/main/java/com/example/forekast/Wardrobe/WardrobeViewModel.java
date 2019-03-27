@@ -16,13 +16,10 @@ import androidx.lifecycle.ViewModel;
 
 public class WardrobeViewModel extends ViewModel {
 
-    public MutableLiveData<List<Clothing>> TorsoList() {
-        return AgentAsyncTask.;
-    }
+    private MutableLiveData<List<Clothing>> target;
 
 
-
-    private static class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
+    private static class AgentAsyncTask extends AsyncTask<MutableLiveData<List<Clothing>>, Void, Void> {
         View view;
 
         public AgentAsyncTask(View view) {
@@ -30,10 +27,12 @@ public class WardrobeViewModel extends ViewModel {
         }
 
         @Override
-        protected Integer doInBackground(Void... voids) {
+        protected Void doInBackground(MutableLiveData<List<Clothing>> ... lists) {
+            ClothingCriteria criteria = new ClothingCriteria();
 
+            MutableLiveData<List<Clothing>> torsoList = lists[0];
 
-            List<Clothing> torsoList = Repository.getClothing("Torso", new ClothingCriteria());
+            torsoList.postValue(Repository.getClothing("Torso", criteria));
 
             // JUST SOME TESTING... DELETE THIS LATER!!!
             /*Clothing torso1 = new Clothing();
@@ -46,8 +45,8 @@ public class WardrobeViewModel extends ViewModel {
             torsoList.add(torso1);
             torsoList.add(torso2);
             */
-/*
 
+/*
             WardrobeAdapter torsoAdapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, torsoList);
             torsoListView.setAdapter(torsoAdapter);
 

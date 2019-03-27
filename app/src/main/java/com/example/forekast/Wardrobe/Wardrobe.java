@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.example.forekast.clothing.ClothingCriteria;
+import com.example.forekast.clothing.Jeans;
+import com.example.forekast.external_data.Repository;
 import com.example.forekast.homescreen.HomeScreen;
 import com.example.forekast.R;
 import com.example.forekast.Settings.Settings;

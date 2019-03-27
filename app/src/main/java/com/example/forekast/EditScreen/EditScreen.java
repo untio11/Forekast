@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.forekast.R;
 import com.example.forekast.Wardrobe.WardrobeFragment;
 import com.example.forekast.clothing.Clothing;
+import com.example.forekast.clothing.ClothingCriteria;
 import com.example.forekast.clothing.Jeans;
 import com.example.forekast.external_data.Repository;
 
@@ -115,10 +116,12 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         returnbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 editClothing.warmth = seekWarmth.getProgress();
                 editClothing.formality = seekFormality.getProgress();
                 editClothing.comfort = seekComfort.getProgress();
                 editClothing.type = (String) spinner.getSelectedItem();
+                editClothing.owner = "General";
                 editClothing.washing_machine = checkBox.isSelected();
                 new AgentAsyncTask(editClothing).execute();
                 Fragment fragment = WardrobeFragment.newInstance();
@@ -172,7 +175,9 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
 
         @Override
         protected Integer doInBackground(Void... voids) {
-            Repository.addClothing(editClothing);
+            //Jeans jeans = new Jeans();
+            Repository.addClothing(clothing);
+            System.out.println(Repository.getClothing("Legs", new ClothingCriteria()));
             return null;
         }
     }
