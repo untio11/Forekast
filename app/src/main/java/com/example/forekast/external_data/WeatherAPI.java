@@ -156,7 +156,7 @@ class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
 
         for (int i = 0; i < size; i++) {
             try { // If the webapi does not have data on some weather attribute, it sets it to null, so we need to check for that
-                result += data.get(i).getAsJsonObject().get(cat).getAsJsonObject().get(element).getAsFloat();
+                result += data.get(i).getAsJsonObject().get(cat).getAsJsonObject().get(element).getAsFloat() / size;
             } catch (NullPointerException e) {
                 result += 0;
             }
