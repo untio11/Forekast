@@ -106,6 +106,14 @@ public class RepoTest {
         tshirt.overwearable = false;
         tshirt.underwearable = true;
 
+        Clothing tshirt2 = new Tshirt();
+        tshirt.comfort = 1;
+        tshirt.warmth = 16;
+        tshirt.formality = 23;
+        tshirt.owner = "hans";
+        tshirt.overwearable = false;
+        tshirt.underwearable = true;
+
         // Dummy criteria: should accept clothing of the appropriate type between warmth bounds, owned by hans
         ClothingCriteriaInterface criteria = new ClothingCriteria();
         criteria.owner = "hans";
@@ -113,7 +121,7 @@ public class RepoTest {
         criteria.warmth.first = 0;
 
         // To ensure the result will never be empty
-        Repository.addClothing(tshirt);
+        Repository.addClothing(tshirt, tshirt2);
 
         List<Clothing> result = Repository.getClothing("Torso", criteria);
 

@@ -1,5 +1,7 @@
 package com.example.forekast.homescreen;
 
+import android.util.Log;
+
 import com.example.forekast.clothing.ClothingCriteria;
 import com.example.forekast.external_data.Weather;
 import com.example.forekast.outfits.Outfit;
@@ -15,9 +17,10 @@ abstract class HomeScreenViewModelInterface extends ViewModel {
     // The weather that is currently shown on screen
     MutableLiveData<Weather> currentWeather = new MutableLiveData<>();
     // The criteria that are set with the sliders on the home screen
-    ClothingCriteria clothingCriteria;
+    ClothingCriteria clothingCriteria = new ClothingCriteria();
     // Local copy of the suggestion module to communicate with. Might be able to make it static
     protected SuggestionModuleInterface sugg = new SuggestionModule();
+
 
     /**
      * Used for linking the outfit livedata here with the observer in the homescreen activity.
@@ -38,12 +41,22 @@ abstract class HomeScreenViewModelInterface extends ViewModel {
     abstract ClothingCriteria getClothingCriteria();
 
     /**
-     * Used to update the viewmodel based on the state of the sliders on the home screen.
-     * Might change the method signature to take some integers, so the home screen activity doesn't
-     * have a dependency on ClothingCriteria
-     * @param criteria The values that are set with the sliders on the homescreen
+     * Set the upper bound of the warmth attribute of the current clothing criteria
+     * @param new_warmth The new value for the upper bound of warmth
      */
-    abstract void setClothingCriteria(ClothingCriteria criteria);
+    abstract void setWarmth(int new_warmth);
+
+    /**
+     * Return the current value for the upper bound of the warmth criteria
+     * @return current upper bound value for warmth
+     */
+    abstract int getWarmth();
+
+    abstract void setComfort(int new_comfort);
+    abstract int getComfort();
+
+    abstract void setFormality(int new_formality);
+    abstract int getFormality();
 
     /**
      * Used to get the next element in the outfit powerset of the parsed location of clothing
