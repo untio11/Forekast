@@ -15,6 +15,9 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
     private ClothingCriteria criteria;
     private Weather weather;
+    public SuggestionModule() {
+        outfits = new OutfitPowerset();
+    }
 
     /** Slider Criteria */
     private ClothingCriteriaInterface.MutablePair<Integer, Integer> warmth;
@@ -182,7 +185,6 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
             currentPreference --;
         }
-
 
         // Communicate with OutfitPowersetInterface
 
