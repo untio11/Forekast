@@ -96,11 +96,14 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
         final Clothing clothing = getItem(position);
 
         //Fill our view components with data
+        System.out.println("Hey! I'm " + clothing.picture);
         if (clothing.picture != null) {
-            final String url = clothing.picture;
+            System.out.println("Hey! I'm " + clothing.picture);
+            //holder.imageView.setImageBitmap((Bitmap)clothing.picture);
             //final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), url);
             //if (file != null) {
-                Picasso.with(context).load(url).config(Bitmap.Config.RGB_565).into(holder.imageView, new com.squareup.picasso.Callback() {
+                /*
+                Picasso.with(context).load(String.valueOf(url)).config(Bitmap.Config.RGB_565).into(holder.imageView, new com.squareup.picasso.Callback() {
                     @Override
                     public void onSuccess() {
                         // When image is loaded, no progressbar
@@ -121,6 +124,8 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
         } else if (holder.progressBar != null) {
             // If no image was added to a clothing item, no progressbar (show default picture from XML)
             holder.progressBar.setVisibility(View.GONE);
+        }
+        */
         }
 
         holder.imageView.setOnClickListener(new View.OnClickListener() {

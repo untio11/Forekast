@@ -48,6 +48,8 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
 
     private EditScreenViewModel mViewModel;
 
+    Bitmap bitmap;
+
     public static EditScreen newInstance(Clothing clothing) {
         /*
         owner = clothing.owner;
@@ -112,6 +114,8 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
 
         spinner.setSelection(adapter.getPosition(editClothing.type));
 
+        bitmap = editClothing.picture;
+
 
         returnbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,6 +127,8 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
                 editClothing.type = (String) spinner.getSelectedItem();
                 editClothing.owner = "General";
                 editClothing.washing_machine = checkBox.isSelected();
+                editClothing.picture = bitmap;
+                System.out.println(bitmap);
                 new AgentAsyncTask(editClothing).execute();
                 Fragment fragment = WardrobeFragment.newInstance();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -162,7 +168,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+        bitmap = (Bitmap) data.getExtras().get("data");
         imageView.setImageBitmap(bitmap);
     }
 

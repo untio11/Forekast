@@ -1,5 +1,7 @@
 package com.example.forekast.clothing;
 
+import android.graphics.Bitmap;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -65,6 +67,7 @@ public class Clothing {
     @ColumnInfo(name = "underwearable")
     public boolean underwearable;
 
+    @Ignore
     @ColumnInfo(name = "picture")
     public String picture;
 
@@ -104,8 +107,8 @@ public class Clothing {
         return "[" + ID + "] " + owner + "::" + location + "::" + type + " - " + "(" + warmth + "," + formality + "," + comfort + ")";
     }
 
-    public void setImageUrl(String url) {
-        this.picture = url;
+    public void setImageUrl(Bitmap bitmap) {
+        this.picture = bitmap.toString();
     }
 
     /**
@@ -121,7 +124,7 @@ public class Clothing {
      * @param picture URL to the image
      */
     @Ignore
-    public Clothing(String owner, int warmth, int formality, int comfort, int preference, int[] color, boolean washing_machine, int washing_time, String picture) {
+    public Clothing(String owner, int warmth, int formality, int comfort, int preference, int[] color, boolean washing_machine, int washing_time, Bitmap picture) {
         setLocAndTyp();
         this.owner = owner;
         this.warmth = warmth;
@@ -131,7 +134,7 @@ public class Clothing {
         this.color = color;
         this.washing_machine = washing_machine;
         this.washing_time = washing_time;
-        this.picture = picture;
+        this.picture = picture.toString();
     }
 
     @Ignore

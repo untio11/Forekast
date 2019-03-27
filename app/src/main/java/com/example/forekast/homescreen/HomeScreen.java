@@ -32,7 +32,7 @@ public class HomeScreen extends AppCompatActivity
         setContentView(R.layout.activity_home_screen);
 
         Repository.setDB(Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "clothing").fallbackToDestructiveMigration().allowMainThreadQueries().build());
+                AppDatabase.class, "clothing").fallbackToDestructiveMigration().build());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
