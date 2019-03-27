@@ -1,5 +1,7 @@
 package com.example.forekast.external_data;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Weather {
 
     public float temp; // In degrees celsius
@@ -79,5 +81,11 @@ public class Weather {
 
     public float getWind() {
         return wind;
+    }
+
+    @NotNull
+    @Override
+    public String toString() {
+        return city + ": " + temp + " Degrees, feels like: " + feels_like;
     }
 }

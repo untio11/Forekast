@@ -74,6 +74,7 @@ public class Clothing {
         setLocAndTyp();
     }
 
+
     /**
      * Set the location and type of a subclass of clothing based on the parent class.
      */
@@ -94,6 +95,9 @@ public class Clothing {
             // the location of this piece to our parents class name and the type to our own name
             location = father;
             type = us;
+        } else if ("Object".equals(father)) {
+            location = "";
+            type = "";
         }
     }
 

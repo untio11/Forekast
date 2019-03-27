@@ -65,7 +65,9 @@ class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
 
         // Start of by just sending the last used weather, so something is on the screen.
         target = weather;
-        target.postValue(last_weather);
+        if (target.getValue() == null || !target.getValue().toString().equals(last_weather.toString())) {
+            target.postValue(last_weather);
+        }
 
         try {
             setWeatherProperties(result);
@@ -156,7 +158,7 @@ class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
 
         for (int i = 0; i < size; i++) {
             try { // If the webapi does not have data on some weather attribute, it sets it to null, so we need to check for that
-                result += data.get(i).getAsJsonObject().get(cat).getAsJsonObject().get(element).getAsFloat();
+                result += data.get(i).getAsJsonObject().get(cat).getAsJsonObject().get(element).getAsFloat() / size;
             } catch (NullPointerException e) {
                 result += 0;
             }
