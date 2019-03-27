@@ -112,6 +112,14 @@ public class Repository {
         }
     }
 
+    public static void updateClothing(Clothing ... clothing) throws  NullPointerException {
+        if (db == null) {
+            throw new NullPointerException("The database has not been instantiated yet");
+        }
+
+        db.clothingDao().updateAll(clothing);
+    }
+
     /**
      * Remove the parsed pieces of clothing from the database
      * @param clothing Pieces of clothing to be removed
