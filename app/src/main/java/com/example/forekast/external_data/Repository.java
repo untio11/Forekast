@@ -112,7 +112,13 @@ public class Repository {
         }
     }
 
-    public static void updateClothing(Clothing ... clothing) throws  NullPointerException {
+    /**
+     * Update the values of a piece of clothing in the database. Used for editing pieces after first
+     * insertion.
+     * @param clothing The piece of clothing to be edited.
+     * @throws NullPointerException When the database is not instantiated yet.
+     */
+    public static void updateClothing(Clothing clothing) throws  NullPointerException {
         if (db == null) {
             throw new NullPointerException("The database has not been instantiated yet");
         }
