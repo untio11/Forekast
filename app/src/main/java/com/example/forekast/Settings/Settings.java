@@ -22,15 +22,11 @@ import java.util.List;
 
 public class Settings extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    public boolean useActualLocation;
-    public boolean useAvailabilitySystem;
-    public String manualLocation;
-    public List<String> owners;
-    public int unavailabilityDuration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_settings);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -86,7 +82,6 @@ public class Settings extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -105,36 +100,5 @@ public class Settings extends AppCompatActivity
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    /**
-     * Settings methods
-     */
-    private void switchLocationSetting() {
-        if(useActualLocation) {
-            useActualLocation = false;
-        } else {
-            useActualLocation = true;
-        }
-    }
-
-    private void switchAvailabilitySystem() {
-        if(useAvailabilitySystem) {
-            useAvailabilitySystem = false;
-        } else {
-            useAvailabilitySystem = true;
-        }
-    }
-
-    private void setUnavailabilityDuration(int duration) {
-        this.unavailabilityDuration = duration;
-    }
-
-    private void setManualLocation(String mlocation) {
-        this.manualLocation = mlocation;
-    }
-
-    private void newOwner(String newOwnerName) {
-        owners.add(newOwnerName);
     }
 }
