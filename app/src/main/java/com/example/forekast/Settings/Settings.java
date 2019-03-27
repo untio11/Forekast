@@ -18,8 +18,15 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
 public class Settings extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    public boolean useActualLocation;
+    public boolean useAvailabilitySystem;
+    public String manualLocation;
+    public List<String> owners;
+    public int unavailabilityDuration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,5 +105,36 @@ public class Settings extends AppCompatActivity
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * Settings methods
+     */
+    private void switchLocationSetting() {
+        if(useActualLocation) {
+            useActualLocation = false;
+        } else {
+            useActualLocation = true;
+        }
+    }
+
+    private void switchAvailabilitySystem() {
+        if(useAvailabilitySystem) {
+            useAvailabilitySystem = false;
+        } else {
+            useAvailabilitySystem = true;
+        }
+    }
+
+    private void setUnavailabilityDuration(int duration) {
+        this.unavailabilityDuration = duration;
+    }
+
+    private void setManualLocation(String mlocation) {
+        this.manualLocation = mlocation;
+    }
+
+    private void newOwner(String newOwnerName) {
+        owners.add(newOwnerName);
     }
 }
