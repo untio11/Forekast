@@ -11,17 +11,13 @@ import androidx.lifecycle.ViewModel;
 
 abstract class HomeScreenViewModelInterface extends ViewModel {
     // The outfit that is currently shown on screen
-    MutableLiveData<Outfit> currentOutfit;
+    MutableLiveData<Outfit> currentOutfit = new MutableLiveData<>();
     // The weather that is currently shown on screen
-    MutableLiveData<Weather> currentWeather;
+    MutableLiveData<Weather> currentWeather = new MutableLiveData<>();
     // The criteria that are set with the sliders on the home screen
     ClothingCriteria clothingCriteria;
     // Local copy of the suggestion module to communicate with. Might be able to make it static
-    protected SuggestionModuleInterface sugg;
-
-    HomeScreenViewModelInterface() {
-        this.sugg = new SuggestionModule();
-    }
+    protected SuggestionModuleInterface sugg = new SuggestionModule();
 
     /**
      * Used for linking the outfit livedata here with the observer in the homescreen activity.
