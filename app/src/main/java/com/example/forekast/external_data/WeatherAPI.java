@@ -65,7 +65,9 @@ class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
 
         // Start of by just sending the last used weather, so something is on the screen.
         target = weather;
-        target.postValue(last_weather);
+        if (target.getValue() == null || !target.getValue().toString().equals(last_weather.toString())) {
+            target.postValue(last_weather);
+        }
 
         try {
             setWeatherProperties(result);
