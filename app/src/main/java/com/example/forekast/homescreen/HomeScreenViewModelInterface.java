@@ -17,7 +17,7 @@ abstract class HomeScreenViewModelInterface extends ViewModel {
     // The criteria that are set with the sliders on the home screen
     ClothingCriteria clothingCriteria;
     // Local copy of the suggestion module to communicate with. Might be able to make it static
-    SuggestionModuleInterface sugg;
+    protected SuggestionModuleInterface sugg;
 
     HomeScreenViewModelInterface() {
         this.sugg = new SuggestionModule();

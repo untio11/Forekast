@@ -29,12 +29,14 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
 
     @Override
     void nextClothing(String clothing_type) {
-        this.currentOutfit.postValue(this.sugg.next(clothing_type));
+        // sugg.next not implemented yet
+        //this.currentOutfit.postValue(this.sugg.next(clothing_type));
     }
 
     @Override
     void previousClothing(String clothing_type) {
-        this.currentOutfit.postValue(this.sugg.previous(clothing_type));
+        // sugg.previous not implemented yet
+        //this.currentOutfit.postValue(this.sugg.previous(clothing_type));
     }
 
     @Override
