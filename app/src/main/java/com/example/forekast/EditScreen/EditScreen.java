@@ -2,6 +2,7 @@ package com.example.forekast.EditScreen;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -19,6 +21,8 @@ import android.widget.Toast;
 import com.example.forekast.R;
 import com.example.forekast.Wardrobe.WardrobeFragment;
 import com.example.forekast.clothing.Clothing;
+import com.example.forekast.clothing.Jeans;
+import com.example.forekast.external_data.Repository;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,11 +32,34 @@ import androidx.lifecycle.ViewModelProviders;
 
 public class EditScreen extends Fragment implements AdapterView.OnItemSelectedListener{
 
+    /*
+    static String owner;
+    static int warmth;
+    static int formality;
+    static int comfort;
+    static int preference;
+    static int[] color;
+    static boolean washing_machine;
+    static int washing_time;
+    static String picture;
+    */
+    static Clothing editClothing;
+
     private EditScreenViewModel mViewModel;
 
     public static EditScreen newInstance(Clothing clothing) {
-        // Do what you want with clothing here
-
+        /*
+        owner = clothing.owner;
+        warmth = clothing.warmth;
+        formality = clothing.formality;
+        comfort = clothing.comfort;
+        preference = clothing.preference;
+        color = clothing.color;
+        washing_machine = clothing.washing_machine;
+        washing_time = clothing.washing_time;
+        picture = clothing.picture;
+        */
+        editClothing = clothing;
         return new EditScreen();
     }
 
@@ -67,13 +94,37 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         //seekComfort: listen to what changes
         //seekWarmth: listen to what changes
 
+        // Implement the checkbox
+        CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox);
+
+
+        seekWarmth.setMax(10);
+        seekWarmth.setProgress(editClothing.warmth);
+
+        seekComfort.setMax(10);
+        seekComfort.setProgress(editClothing.comfort);
+
+        seekFormality.setMax(10);
+        seekFormality.setProgress(editClothing.formality);
+
+        checkBox.setChecked(editClothing.washing_machine);
+
+        spinner.setSelection(adapter.getPosition(editClothing.type));
+
 
         returnbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editClothing.warmth = seekWarmth.getProgress();
+                editClothing.formality = seekFormality.getProgress();
+                editClothing.comfort = seekComfort.getProgress();
+                editClothing.type = (String) spinner.getSelectedItem();
+                editClothing.washing_machine = checkBox.isSelected();
+                new AgentAsyncTask(editClothing).execute();
                 Fragment fragment = WardrobeFragment.newInstance();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.wardrobefragment, fragment).commit();
+
             }
         });
 
@@ -112,4 +163,17 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         imageView.setImageBitmap(bitmap);
     }
 
+    private static class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
+        Clothing clothing;
+
+        public AgentAsyncTask(Clothing clothing) {
+        this.clothing = clothing;
+    }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            Repository.addClothing(editClothing);
+            return null;
+        }
+    }
 }

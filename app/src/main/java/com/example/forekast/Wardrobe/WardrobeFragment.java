@@ -43,6 +43,7 @@ public class WardrobeFragment extends Fragment {
     // TODO: Rename and change types of parameters
 
     private OnFragmentInteractionListener mListener;
+    //private WardrobeViewModel viewModel;
 
     public WardrobeFragment() {
         // Required empty public constructor
@@ -101,7 +102,7 @@ public class WardrobeFragment extends Fragment {
 
         // The add shoes button will add a new clothing of type shoes
         addFeet.setOnClickListener(v -> {
-            Clothing feet = new Feet(); // CHANGE TO SHOES (SUPER)
+            Clothing feet = new Feet(); // CHANGE TO FEET
             // Navigate to edit screen
             Fragment fragment = EditScreen.newInstance(feet);
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
