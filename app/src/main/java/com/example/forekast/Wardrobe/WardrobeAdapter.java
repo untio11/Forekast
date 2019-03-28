@@ -79,7 +79,6 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
 
             //Get xml components into our holder class
             holder.imageView = (ImageView) convertView.findViewById(R.id.clothingimage);
-            holder.progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar);
 
             //Attach our holder class to this particular cell
             convertView.setTag(holder);
@@ -97,38 +96,9 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
         final Clothing clothing = getItem(position);
 
         //Fill our view components with data
-        System.out.println("Hey! I'm " + clothing.picture);
         if (clothing.picture != null) {
-            System.out.println("Hey! I'm " + clothing.picture);
             Bitmap bitmap = BitmapFactory.decodeByteArray(clothing.picture, 0, clothing.picture.length);
-            System.out.println(bitmap);
             holder.imageView.setImageBitmap(bitmap);
-            //final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), url);
-            //if (file != null) {
-                /*
-                Picasso.with(context).load(String.valueOf(url)).config(Bitmap.Config.RGB_565).into(holder.imageView, new com.squareup.picasso.Callback() {
-                    @Override
-                    public void onSuccess() {
-                        // When image is loaded, no progressbar
-                        if (holder.progressBar != null) {
-                            holder.progressBar.setVisibility(View.GONE);
-                        }
-                    }
-
-                    @Override
-                    public void onError() {
-                        // When an error has occured, print which one
-                        System.out.println("Wardrobe: Error displaying picture: " + url);
-                    }
-                });
-            //} else {
-            //    System.out.println("Wardrobe: Error loading file: " + url);
-            //}
-        } else if (holder.progressBar != null) {
-            // If no image was added to a clothing item, no progressbar (show default picture from XML)
-            holder.progressBar.setVisibility(View.GONE);
-        }
-        */
         }
 
         holder.imageView.setOnClickListener(new View.OnClickListener() {
@@ -149,7 +119,6 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
      * We have an imageview for the picture and a progressBar to show progress
      */
     private class Holder {
-        ProgressBar progressBar;
         ImageView imageView;
     }
 }

@@ -68,7 +68,6 @@ public class Clothing {
     @ColumnInfo(name = "underwearable")
     public boolean underwearable;
 
-    @Ignore
     @ColumnInfo(name = "picture")
     public byte[] picture;
 
@@ -143,7 +142,6 @@ public class Clothing {
         this.picture = picture;
     }
 
-    @Ignore
     public Clothing(String location) {
         setLocAndTyp();
         this.location = location;

@@ -51,9 +51,9 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
     */
     static Clothing editClothing;
 
-    private EditScreenViewModel mViewModel;
+    private EditScreenViewModel mViewModel = new EditScreenViewModel();
 
-    Bitmap bitmap;
+    public Bitmap bitmap;
     static Boolean addBool;
 
     ImageView imageView;
@@ -131,17 +131,16 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         checkBox.setChecked(editClothing.washing_machine);
 
         spinner.setSelection(adapter.getPosition(editClothing.type));
-        System.out.println(editClothing.picture);
+
         if (editClothing.picture != null) {
             bitmap = BitmapFactory.decodeByteArray(editClothing.picture, 0, editClothing.picture.length);
-            System.out.println(bitmap);
             imageView.setImageBitmap(bitmap);
         }
 
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AgentAsyncTask(true).execute();
+                new AgentAsyncTaskDelete().execute();
                 Fragment fragment = WardrobeFragment.newInstance();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.wardrobefragment, fragment).commit();
@@ -158,18 +157,15 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
                 editClothing.type = (String) spinner.getSelectedItem();
                 editClothing.owner = "General";
                 editClothing.washing_machine = checkBox.isSelected();
-                //editClothing.picture = bitmap;
-                System.out.println(bitmap);
                 if (bitmap != null) {
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.PNG, 1, bos);
                     byte[] img = bos.toByteArray();
-                    System.out.println(img);
                     editClothing.picture = img;
                 }
 
 
-                new AgentAsyncTask(false).execute();
+                new AgentAsyncTask().execute();
 
                 Fragment fragment = WardrobeFragment.newInstance();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -212,7 +208,10 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(EditScreenViewModel.class);
-        // TODO: Use the ViewModel
+        if (savedInstanceState != null && mViewModel.getBitmap() != null) {
+            bitmap = mViewModel.getBitmap();
+            imageView.setImageBitmap(bitmap);
+        }
     }
 
     @Override
@@ -221,25 +220,33 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         if (data.getExtras() != null) {
             bitmap = (Bitmap) data.getExtras().get("data");
             imageView.setImageBitmap(bitmap);
+            mViewModel.setBitmap(bitmap);
         }
     }
 
-    private static class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
-        Boolean delete;
 
-        public AgentAsyncTask(Boolean delete) {
-            this.delete = delete;
-        }
+    private static class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
+
+        public AgentAsyncTask() {}
 
         @Override
         protected Integer doInBackground(Void... voids) {
-            if (delete) {
-                Repository.removeClothing(editClothing);
-            } else if (addBool) {
+            if (addBool) {
                 Repository.addClothing(editClothing);
             } else {
                 Repository.updateClothing(editClothing);
             }
+            return null;
+        }
+    }
+
+    private static class AgentAsyncTaskDelete extends AsyncTask<Void, Void, Integer> {
+
+        public AgentAsyncTaskDelete() {}
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            Repository.removeClothing(editClothing);
             return null;
         }
     }
