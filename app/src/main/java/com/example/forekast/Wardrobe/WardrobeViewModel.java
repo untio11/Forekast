@@ -19,10 +19,17 @@ public class WardrobeViewModel extends ViewModel {
     private MutableLiveData<List<Clothing>> legsList = new MutableLiveData<>();
     private MutableLiveData<List<Clothing>> feetList = new MutableLiveData<>();
 
-    public void getLists() {
+    private static boolean washingState;
+
+    public void getLists(boolean washingMachine) {
+        washingState = washingMachine;
         new AgentAsyncTask("Torso").execute(torsoList);
         new AgentAsyncTask("Legs").execute(legsList);
         new AgentAsyncTask("Feet").execute(feetList);
+    }
+
+    public boolean getWashing() {
+        return washingState;
     }
 
     public LiveData<List<Clothing>> getTorsoList() {
@@ -49,6 +56,7 @@ public class WardrobeViewModel extends ViewModel {
         protected Void doInBackground(MutableLiveData<List<Clothing>> ... lists) {
             ClothingCriteria criteria = new ClothingCriteria();
             criteria.owner = "General";
+            criteria.washingMachine = washingState;
 
             clothingList = lists[0];
             clothingList.postValue(Repository.getClothing(location, criteria));

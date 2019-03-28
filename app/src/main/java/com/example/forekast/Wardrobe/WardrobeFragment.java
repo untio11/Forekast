@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModelProviders;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 
 import com.example.forekast.EditScreen.EditScreen;
@@ -62,6 +64,7 @@ public class WardrobeFragment extends Fragment {
         WardrobeFragment fragment = new WardrobeFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -80,9 +83,15 @@ public class WardrobeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_wardrobe_list, container, false);
 
+        // Viewmodel stuff
+        vm = ViewModelProviders.of(this).get(WardrobeViewModel.class);
+
         ImageButton addTorso = (ImageButton) view.findViewById(R.id.addTorso);
         ImageButton addLegs = (ImageButton)  view.findViewById(R.id.addBottom);
         ImageButton addFeet = (ImageButton)  view.findViewById(R.id.addShoes);
+
+        CheckBox showWashing = (CheckBox) view.findViewById(R.id.showWashing);
+        showWashing.setChecked(vm.getWashing());
 
         // The add torso button will add a new clothing of type torso
         addTorso.setOnClickListener(v -> {
@@ -111,8 +120,6 @@ public class WardrobeFragment extends Fragment {
             transaction.replace(R.id.wardrobefragment, fragment).commit();
         });
 
-        // Viewmodel stuff
-        vm = ViewModelProviders.of(this).get(WardrobeViewModel.class);
         // Execute loading of database in background
         Observer<List<Clothing>> torsoObs = torsoList -> setLists(view, torsoList, (CustomGridView) view.findViewById(R.id.Torso));
         Observer<List<Clothing>> legsObs = legsList -> setLists(view, legsList, (CustomGridView) view.findViewById(R.id.Bottom));
@@ -122,7 +129,15 @@ public class WardrobeFragment extends Fragment {
         vm.getLegsList().observe(this, legsObs);
         vm.getFeetList().observe(this, feetObs);
 
-        vm.getLists();
+        vm.getLists(showWashing.isChecked());
+
+        // Check if checkbox for showing items in washingMachine is checked off.
+        showWashing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                vm.getLists(isChecked);
+            }
+        });
 
         // return view
         return view;

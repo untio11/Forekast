@@ -1,7 +1,8 @@
 package com.example.forekast.EditScreen;
 
-import android.content.ContentValues;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -26,51 +27,28 @@ import com.example.forekast.clothing.Clothing;
 import com.example.forekast.external_data.Repository;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
-import static androidx.room.RoomMasterTable.TABLE_NAME;
 
 public class EditScreen extends Fragment implements AdapterView.OnItemSelectedListener{
 
-    /*
-    static String owner;
-    static int warmth;
-    static int formality;
-    static int comfort;
-    static int preference;
-    static int[] color;
-    static boolean washing_machine;
-    static int washing_time;
-    static String picture;
-    */
-    static Clothing editClothing;
+    private static Clothing editClothing;
 
-    private EditScreenViewModel mViewModel = new EditScreenViewModel();
+    private static EditScreenViewModel mViewModel = new EditScreenViewModel();
 
-    public Bitmap bitmap;
-    static Boolean addBool;
-
-    ImageView imageView;
+    private static Bitmap bitmap;
+    private static ImageView imageView;
+    private static boolean addBool;
     private static String items[];
+    private static boolean preWashingState;
 
     public static EditScreen newInstance(Clothing clothing, Boolean add) {
-        /*
-        owner = clothing.owner;
-        warmth = clothing.warmth;
-        formality = clothing.formality;
-        comfort = clothing.comfort;
-        preference = clothing.preference;
-        color = clothing.color;
-        washing_machine = clothing.washing_machine;
-        washing_time = clothing.washing_time;
-        picture = clothing.picture;
-        */
         editClothing = clothing;
         addBool = add;
         switch (clothing.location) {
@@ -86,10 +64,12 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
             default:
                 break;
         }
-
         return new EditScreen();
     }
 
+    private boolean decideWashingState() {
+        return false;
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -156,7 +136,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
                 editClothing.comfort = seekComfort.getProgress();
                 editClothing.type = (String) spinner.getSelectedItem();
                 editClothing.owner = "General";
-                editClothing.washing_machine = checkBox.isSelected();
+                editClothing.washing_machine = checkBox.isChecked();
                 if (bitmap != null) {
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.PNG, 1, bos);
@@ -186,8 +166,13 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         redoImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 0);
+                if (ContextCompat.checkSelfPermission(getActivity(),
+                        Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, 0);
+                } else {
+                    Toast.makeText(getActivity(),"Please give permission for the camera.",Toast.LENGTH_LONG).show();
+                }
             }
         });
         return view;

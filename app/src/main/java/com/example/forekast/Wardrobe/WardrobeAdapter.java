@@ -64,6 +64,7 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         final Holder holder;
+        Bitmap bitmap;
 
         //If the listview does not have an xml layout ready set the layout
         if (convertView == null) {
@@ -97,8 +98,12 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
 
         //Fill our view components with data
         if (clothing.picture != null) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(clothing.picture, 0, clothing.picture.length);
+            bitmap = BitmapFactory.decodeByteArray(clothing.picture, 0, clothing.picture.length);
             holder.imageView.setImageBitmap(bitmap);
+        }
+
+        if (clothing.washing_machine == true) {
+            holder.imageView.setAlpha(0.5f);
         }
 
         holder.imageView.setOnClickListener(new View.OnClickListener() {

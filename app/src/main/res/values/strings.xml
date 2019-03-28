@@ -122,4 +122,5 @@
     <string name="torso">Torso </string>
     <string name="Bottom">Bottom </string>
     <string name="shoes">Shoes </string>
+    <string name="washing_items_show">Show items in washing machine</string>
 </resources>
