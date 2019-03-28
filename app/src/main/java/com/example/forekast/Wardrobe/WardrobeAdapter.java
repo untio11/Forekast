@@ -102,7 +102,8 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
             holder.imageView.setImageBitmap(bitmap);
         }
 
-        if (clothing.washing_machine == true) {
+        //Clothing is in washing machine, so set faded out picture
+        if (clothing.washing_machine) {
             holder.imageView.setAlpha(0.5f);
         }
 
