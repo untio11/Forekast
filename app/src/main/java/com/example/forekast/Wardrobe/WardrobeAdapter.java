@@ -2,6 +2,7 @@ package com.example.forekast.Wardrobe;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,7 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         final Holder holder;
+        Bitmap bitmap;
 
         //If the listview does not have an xml layout ready set the layout
         if (convertView == null) {
@@ -78,7 +80,6 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
 
             //Get xml components into our holder class
             holder.imageView = (ImageView) convertView.findViewById(R.id.clothingimage);
-            holder.progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar);
 
             //Attach our holder class to this particular cell
             convertView.setTag(holder);
@@ -97,37 +98,20 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
 
         //Fill our view components with data
         if (clothing.picture != null) {
-            final String url = clothing.picture;
-            //final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), url);
-            //if (file != null) {
-                Picasso.with(context).load(url).config(Bitmap.Config.RGB_565).into(holder.imageView, new com.squareup.picasso.Callback() {
-                    @Override
-                    public void onSuccess() {
-                        // When image is loaded, no progressbar
-                        if (holder.progressBar != null) {
-                            holder.progressBar.setVisibility(View.GONE);
-                        }
-                    }
+            bitmap = BitmapFactory.decodeByteArray(clothing.picture, 0, clothing.picture.length);
+            holder.imageView.setImageBitmap(bitmap);
+        }
 
-                    @Override
-                    public void onError() {
-                        // When an error has occured, print which one
-                        System.out.println("Wardrobe: Error displaying picture: " + url);
-                    }
-                });
-            //} else {
-            //    System.out.println("Wardrobe: Error loading file: " + url);
-            //}
-        } else if (holder.progressBar != null) {
-            // If no image was added to a clothing item, no progressbar (show default picture from XML)
-            holder.progressBar.setVisibility(View.GONE);
+        //Clothing is in washing machine, so set faded out picture
+        if (clothing.washing_machine) {
+            holder.imageView.setAlpha(0.5f);
         }
 
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Clicking on item will navigate to editscreen with the current clothing item
-                Fragment fragment = EditScreen.newInstance(clothing);
+                Fragment fragment = EditScreen.newInstance(clothing, false);
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.wardrobefragment, fragment).commit();
             }
@@ -141,7 +125,6 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
      * We have an imageview for the picture and a progressBar to show progress
      */
     private class Holder {
-        ProgressBar progressBar;
         ImageView imageView;
     }
 }

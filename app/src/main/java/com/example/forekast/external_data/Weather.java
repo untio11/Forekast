@@ -1,12 +1,14 @@
 package com.example.forekast.external_data;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Weather {
 
-    private float temp; // In degrees celsius
-    private float uv_index; // In standard units for this stuff
-    private float precipitation; // in mm
-    private float feels_like; // In degrees celsius
-    private float wind; // In km/h
+    public float temp; // In degrees celsius
+    public float uv_index; // In standard units for this stuff
+    public float precipitation; // in mm
+    public float feels_like; // In degrees celsius
+    public float wind; // In km/h
     private String city;
 
     /**
@@ -79,5 +81,11 @@ public class Weather {
 
     public float getWind() {
         return wind;
+    }
+
+    @NotNull
+    @Override
+    public String toString() {
+        return city + ": " + temp + " Degrees, feels like: " + feels_like;
     }
 }
