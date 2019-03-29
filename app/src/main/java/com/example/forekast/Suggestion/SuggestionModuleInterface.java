@@ -24,5 +24,5 @@ public abstract class SuggestionModuleInterface {
 
     public abstract Outfit previous(String location);
 
-    abstract List<Clothing> getClothing(String location);
+    //abstract List<Clothing> getClothing(String location);
 }

@@ -28,6 +28,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.view.Menu;
@@ -85,32 +86,8 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         SeekBar formality_slider = findViewById(R.id.slider_formality);
         formality_slider.setProgress(vm.getFormality());
         formality_slider.setOnSeekBarChangeListener(new updateCriteriaSeekbar());
-    }
 
-    private class updateCriteriaSeekbar implements SeekBar.OnSeekBarChangeListener {
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {}
 
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {}
-
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            String category = seekBar.getTag().toString();
-            Log.d("SeekbarListener", "Updating " + category + " to: " + progress);
-            switch (category) {
-                case "warmth":
-                    vm.setWarmth(progress);
-                    break;
-                case "formality":
-                    vm.setFormality(progress);
-                    break;
-                case "comfort":
-                    vm.setComfort(progress);
-                    break;
-                default:
-                    break;
-            }
         final Observer<Weather> weathereObserver = newWeather -> Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather"));
         final Observer<Outfit> clothingObserver = newClothing -> Log.d("ClothingUpdate", (newClothing != null ? newClothing.toString() : "No clothes"));
 
@@ -224,5 +201,34 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private class updateCriteriaSeekbar implements SeekBar.OnSeekBarChangeListener {
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+        }
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            String category = seekBar.getTag().toString();
+            Log.d("SeekbarListener", "Updating " + category + " to: " + progress);
+            switch (category) {
+                case "warmth":
+                    vm.setWarmth(progress);
+                    break;
+                case "formality":
+                    vm.setFormality(progress);
+                    break;
+                case "comfort":
+                    vm.setComfort(progress);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

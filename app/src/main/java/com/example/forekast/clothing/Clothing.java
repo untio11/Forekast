@@ -176,7 +176,6 @@ public class Clothing {
         this.picture = picture;
     }
 
-    @Ignore
     public Clothing(String location) {
         setLocAndTyp();
         this.location = location;

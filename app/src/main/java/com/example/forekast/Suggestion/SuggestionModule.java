@@ -117,18 +117,19 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
         /** When to suggest leggings */
         // If the clothes need to be warmer than 5 and the bottoms are a skirt or a dress
-        if (warmth.second > 5 && (currentBottoms.type.equals("skirt") || currentInnerTorso.type.equals("dress"))){
+        if (warmth.second > 5 && (currentBottoms.type.equals("Skirt") || currentInnerTorso.type.equals("Dress"))){
             leggings = true;
         }
 
     }
 
     /** Create the set of available clothing to draw from */
+    /*
     @Override
     public List<Clothing> getClothing(String location) {
         List<Clothing> currentLocationList = new ArrayList<>();
 
-        Clothing clothingInRepo = new Clothing("torso"); // Placeholder for accessing Repo
+        Clothing clothingInRepo = new Torso(); // Placeholder for accessing Repo
 
         // For all clothing in repo:
         for (int i = 0; i < 20; i++) { // Arbitrary 20 given in stead of database size
@@ -138,7 +139,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
         }
 
         return currentLocationList;
-    }
+    }*/
 
 
     /** Local clothing Powerset from which the other classes derive outfits*/
@@ -157,10 +158,10 @@ public class SuggestionModule extends SuggestionModuleInterface {
         List<Clothing> repoB = new ArrayList<>();
         List<Clothing> repoS = new ArrayList<>();
 
-        repoIT = Repository.getClothing("torso", criteria);
-        repoOT = Repository.getClothing("torso", criteria);
-        repoB = Repository.getClothing("legs", criteria);
-        repoS = Repository.getClothing("feet", criteria);
+        repoIT = Repository.getClothing("Torso", criteria);
+        repoOT = Repository.getClothing("Torso", criteria);
+        repoB = Repository.getClothing("Legs", criteria);
+        repoS = Repository.getClothing("Feet", criteria);
 
         //Clothing clothing = new Clothing(); // Placeholder clothing item
 
@@ -177,7 +178,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
 
         for (Clothing clothing : repoIT){
-            if (clothing.location.equals("torso") && clothing.preference == currentPreference
+            if (clothing.location.equals("Torso") && clothing.preference == currentPreference
                     && clothing.overwearable
                     /*&& clothing.warmth <= warmthUpper && clothing.warmth >= warmthLower*/
                     && clothing.comfort <= comfortUpper && clothing.comfort >= comfortLower
@@ -200,7 +201,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
         }
 
         for (Clothing clothing: repoOT){
-            if (clothing.location.equals("torso") && clothing.preference == currentPreference
+            if (clothing.location.equals("Torso") && clothing.preference == currentPreference
                     && clothing.underwearable
                     /*&& clothing.warmth <= warmthUpper && clothing.warmth >= warmthLower*/
                     && clothing.comfort <= comfortUpper && clothing.comfort >= comfortLower
@@ -223,7 +224,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
         }
 
         for (Clothing clothing: repoB){
-            if (clothing.location.equals("bottoms") && clothing.preference == currentPreference
+            if (clothing.location.equals("Legs") && clothing.preference == currentPreference
                     && clothing.warmth <= warmthUpper && clothing.warmth >= warmthLower
                     && clothing.comfort <= comfortUpper && clothing.comfort >= comfortLower
                     && clothing.formality <= formalityUpper && clothing.formality >= formalityLower
@@ -245,7 +246,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
         }
 
         for (Clothing clothing : repoS){
-            if (clothing.location.equals("shoes") && clothing.preference == currentPreference
+            if (clothing.location.equals("Feet") && clothing.preference == currentPreference
                     && clothing.warmth <= warmthUpper && clothing.warmth >= warmthLower
                     && clothing.comfort <= comfortUpper && clothing.comfort >= comfortLower
                     && clothing.formality <= formalityUpper && clothing.formality >= formalityLower
@@ -338,7 +339,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
     /** Next & Previous button functions (connected to button in the homescreen view model */
     @Override
     public Outfit next(String location) {
-        if (location.equals("torso")){
+        if (location.equals("Torso")){
             currentIndIT++;
             if (currentIndIT > outfits.inner_torso.size()){
                 currentIndIT = 0;
@@ -351,14 +352,14 @@ public class SuggestionModule extends SuggestionModuleInterface {
             }
             currentOuterTorso = outfits.inner_torso.get(currentIndOT);
         }
-        else if (location.equals("bottoms")){
+        else if (location.equals("Legs")){
             currentIndB++;
             if (currentIndB > outfits.bottoms.size()){
                 currentIndB = 0;
             }
             currentBottoms = outfits.inner_torso.get(currentIndB);
         }
-        else if (location.equals("shoes")){
+        else if (location.equals("Feet")){
             currentIndS++;
             if (currentIndS > outfits.shoes.size()){
                 currentIndS = 0;
@@ -371,7 +372,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
     @Override
     public Outfit previous(String location) {
-        if (location.equals("torso")){
+        if (location.equals("Torso")){
             currentIndIT--;
             if (currentIndIT < 0){
                 currentIndIT = outfits.inner_torso.size();
@@ -384,14 +385,14 @@ public class SuggestionModule extends SuggestionModuleInterface {
             }
             currentOuterTorso = outfits.inner_torso.get(currentIndOT);
         }
-        else if (location.equals("bottoms")){
+        else if (location.equals("Legs")){
             currentIndB--;
             if (currentIndB < 0){
                 currentIndB = outfits.bottoms.size();
             }
             currentBottoms = outfits.inner_torso.get(currentIndB);
         }
-        else if (location.equals("shoes")){
+        else if (location.equals("Feet")){
             currentIndS--;
             if (currentIndS < 0){
                 currentIndS = outfits.shoes.size();
