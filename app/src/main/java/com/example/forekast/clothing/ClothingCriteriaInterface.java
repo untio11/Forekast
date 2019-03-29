@@ -33,16 +33,16 @@ public abstract class ClothingCriteriaInterface implements Iterable<Pair<String,
 
     // Add all the criteria to a big list for the iteration
     ClothingCriteriaInterface() {
-        all = new ArrayList<>();
-        formality =  new MutablePair<>(Integer.MIN_VALUE, Integer.MAX_VALUE);
-        comfort =    new MutablePair<>(Integer.MIN_VALUE, Integer.MAX_VALUE);
-        warmth =     new MutablePair<>(Integer.MIN_VALUE, Integer.MAX_VALUE);
-        preference = new MutablePair<>(Integer.MIN_VALUE, Integer.MAX_VALUE);
+        this.all = new ArrayList<>();
+        this.formality =  new MutablePair<>(Integer.MIN_VALUE, Integer.MAX_VALUE);
+        this.comfort =    new MutablePair<>(Integer.MIN_VALUE, Integer.MAX_VALUE);
+        this.warmth =     new MutablePair<>(Integer.MIN_VALUE, Integer.MAX_VALUE);
+        this.preference = new MutablePair<>(Integer.MIN_VALUE, Integer.MAX_VALUE);
 
-        all.add(new Pair<>("warmth",     warmth));
-        all.add(new Pair<>("formality",  formality));
-        all.add(new Pair<>("comfort",    comfort));
-        all.add(new Pair<>("preference", preference));
+        this.all.add(new Pair<>("warmth",     warmth));
+        this.all.add(new Pair<>("formality",  formality));
+        this.all.add(new Pair<>("comfort",    comfort));
+        this.all.add(new Pair<>("preference", preference));
     }
 
     /**

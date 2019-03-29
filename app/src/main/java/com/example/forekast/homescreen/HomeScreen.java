@@ -3,12 +3,15 @@ package com.example.forekast.homescreen;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
+import android.media.Image;
 import android.os.Bundle;
 
 import com.example.forekast.R;
 import com.example.forekast.Settings.Settings;
 import com.example.forekast.Settings.SwitchWardrobe;
+import com.example.forekast.Suggestion.Outfit;
 import com.example.forekast.Wardrobe.Wardrobe;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
@@ -30,6 +33,7 @@ import androidx.lifecycle.ViewModelProviders;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SeekBar;
+import android.widget.ImageView;
 
 public class HomeScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -107,6 +111,50 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
                 default:
                     break;
             }
+        final Observer<Weather> weathereObserver = newWeather -> Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather"));
+        final Observer<Outfit> clothingObserver = newClothing -> Log.d("ClothingUpdate", (newClothing != null ? newClothing.toString() : "No clothes"));
+
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        vm.getLiveWeather().observe(this, weathereObserver);
+        vm.getLiveOutfit().observe(this, clothingObserver);
+    }
+
+    public void accessories(){
+        Boolean sunglasses = false;
+        Boolean coat = false;
+        Boolean gloves = false;
+        Boolean umbrella = false;
+        Boolean leggings = false;
+
+        ImageView sunglassesView = findViewById(R.id.noti_sunglasses);
+        ImageView coatView = findViewById(R.id.noti_coat);
+        ImageView glovesView = findViewById(R.id.noti_gloves);
+        ImageView umbrellaView = findViewById(R.id.noti_umbrella);
+        ImageView leggingsView = findViewById(R.id.noti_leggings);
+
+        if (sunglasses) {
+            sunglassesView.setColorFilter(Color.GRAY);
+        }
+        else {
+            sunglassesView.setColorFilter(Color.BLACK);
+        }
+        if (coat) {
+            coatView.setColorFilter(Color.GRAY);
+        }
+        else {
+            coatView.setColorFilter(Color.BLACK);
+        }
+        if (gloves) {
+            glovesView.setColorFilter(Color.GRAY);
+        }
+        else {
+            glovesView.setColorFilter(Color.BLACK);
+        }
+        if (umbrella) {
+            umbrellaView.setColorFilter(Color.GRAY);
+        }
+        else {
+            umbrellaView.setColorFilter(Color.BLACK);
         }
     }
 
@@ -124,7 +172,6 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         vm.previousClothing(v.getTag().toString());
         Log.d("Prev", v.getTag().toString());
     }
-
 
     @Override
     public void onBackPressed() {

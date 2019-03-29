@@ -1,9 +1,9 @@
 package com.example.forekast.homescreen;
 
+import com.example.forekast.Suggestion.Outfit;
 import com.example.forekast.clothing.ClothingCriteria;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
-import com.example.forekast.outfits.Outfit;
 import androidx.lifecycle.LiveData;
 
 class HomeScreenViewModel extends HomeScreenViewModelInterface {
@@ -13,9 +13,7 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
     }
 
     @Override
-    LiveData<Weather> getLiveWeather() {
-        return currentWeather;
-    }
+    LiveData<Weather> getLiveWeather() { return currentWeather; }
 
     @Override
     ClothingCriteria getClothingCriteria() {
@@ -54,14 +52,12 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
 
     @Override
     void nextClothing(String clothing_type) {
-        // sugg.next not implemented yet
-        //this.currentOutfit.postValue(this.sugg.next(clothing_type));
+        currentOutfit.postValue(sugg.next(clothing_type));
     }
 
     @Override
     void previousClothing(String clothing_type) {
-        // sugg.previous not implemented yet
-        //this.currentOutfit.postValue(this.sugg.previous(clothing_type));
+        currentOutfit.postValue(sugg.previous(clothing_type));
     }
 
     @Override
@@ -71,6 +67,6 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
 
     @Override
     void newOutfit() {
-
+        currentOutfit.postValue(sugg.getRandomOutfit());
     }
 }
