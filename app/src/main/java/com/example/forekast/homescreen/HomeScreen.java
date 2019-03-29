@@ -63,11 +63,24 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        init(savedInstanceState);
+
+    }
+
+    private void init(Bundle savedInstance) {
         vm = ViewModelProviders.of(this).get(HomeScreenViewModel.class);
         Repository.initDB(getApplicationContext());
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        vm.getLiveWeather().observe(this, newWeather -> Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather")));
+        vm.getLiveWeather().observe(
+                this,
+                newWeather -> Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather")));
+
+        if (savedInstance != null) {
+            vm.setComfort(savedInstance.getInt("Comfortsl"));
+            vm.setFormality(savedInstance.getInt("Formalsl"));
+            vm.setWarmth(savedInstance.getInt("Warmthsl"));
+        }
 
         SeekBar comfort_slider = findViewById(R.id.slider_comfort);
         comfort_slider.setProgress(vm.getComfort());
@@ -124,7 +137,6 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         Log.d("Prev", v.getTag().toString());
     }
 
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -161,27 +173,38 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        item.setChecked(true);
         int id = item.getItemId();
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        if (id == R.id.nav_home) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else if (id == R.id.nav_wardrobe) {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+
+        if (id == R.id.nav_wardrobe) {
             Intent start_wardrobe = new Intent(getApplicationContext(), Wardrobe.class);
-            start_wardrobe.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            startActivityIfNeeded(start_wardrobe, 0);
-
+            start_wardrobe.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(start_wardrobe);
         } else if (id == R.id.nav_settings) {
             Intent start_settings = new Intent(getApplicationContext(), Settings.class);
-            start_settings.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            startActivityIfNeeded(start_settings, 0);
+            start_settings.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(start_settings);
         } else if (id == R.id.nav_switchwardrobe) {
             Intent start_wardrobe = new Intent(getApplicationContext(), SwitchWardrobe.class);
-            start_wardrobe.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            startActivityIfNeeded(start_wardrobe, 0);
+            start_wardrobe.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(start_wardrobe);
         }
 
-        drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+
+        // Save the user's current game state
+        savedInstanceState.putInt("Warmthsl", vm.getWarmth());
+        savedInstanceState.putInt("Comfortsl", vm.getComfort());
+        savedInstanceState.putInt("Formalsl", vm.getFormality());
+
     }
 }

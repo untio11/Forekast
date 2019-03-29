@@ -85,25 +85,25 @@ public class Wardrobe extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        item.setChecked(true);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
 
         if (id == R.id.nav_home) {
-            Intent start_homescreen = new Intent(getApplicationContext(), HomeScreen.class);
-            start_homescreen.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            startActivityIfNeeded(start_homescreen, 0);
-        } else if (id == R.id.nav_wardrobe) {
-            drawer.closeDrawer(GravityCompat.START);
+            //Intent start_homescreen = new Intent(getApplicationContext(), HomeScreen.class);
+            //start_homescreen.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            //startActivity(start_homescreen);
+            super.onBackPressed();
         } else if (id == R.id.nav_settings) {
             Intent start_settings = new Intent(getApplicationContext(), Settings.class);
-            start_settings.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            startActivityIfNeeded(start_settings, 0);
+            start_settings.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(start_settings);
         } else if (id == R.id.nav_switchwardrobe) {
             Intent start_wardrobeswitch = new Intent(getApplicationContext(), SwitchWardrobe.class);
-            start_wardrobeswitch.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            startActivityIfNeeded(start_wardrobeswitch, 0);
+            start_wardrobeswitch.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(start_wardrobeswitch);
         }
 
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
