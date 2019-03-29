@@ -1,19 +1,29 @@
 package com.example.forekast;
 
 import android.content.Context;
+import android.util.Log;
 
-import com.example.forekast.clothing.*;
+import com.example.forekast.clothing.Boots;
+import com.example.forekast.clothing.Clothing;
+import com.example.forekast.clothing.Shirt;
+import com.example.forekast.clothing.Sweater;
+import com.example.forekast.clothing.Torso;
+import com.example.forekast.clothing.Tshirt;
 import com.example.forekast.external_data.AppDatabase;
 
 import androidx.room.Room;
 import androidx.test.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 

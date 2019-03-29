@@ -2,8 +2,6 @@ package com.example.forekast.outfits;
 
 import com.example.forekast.clothing.Clothing;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +21,6 @@ abstract public class OutfitPowersetInterface implements Iterable<List<Clothing>
         all.add(shoes);
     }
 
-    @NotNull
     @Override
     public Iterator<List<Clothing>> iterator() {
         return all.iterator();
