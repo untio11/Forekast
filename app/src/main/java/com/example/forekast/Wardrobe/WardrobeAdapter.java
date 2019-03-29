@@ -36,7 +36,6 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
         fragmentManager = ((FragmentActivity)context).getSupportFragmentManager();
     }
 
-
     @Override
     public int getCount() {
         if(myList != null)

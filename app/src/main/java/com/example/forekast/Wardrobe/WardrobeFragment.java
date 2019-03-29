@@ -144,6 +144,7 @@ public class WardrobeFragment extends Fragment {
     }
 
     public void setLists(View view, List<Clothing> list, CustomGridView listView) {
+        list.sort((c1, c2) -> c1.type.compareTo(c2.type));
         WardrobeAdapter adapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, list);
         listView.setAdapter(adapter);
     }
