@@ -1,5 +1,7 @@
 package com.example.forekast.external_data;
 
+import android.content.Context;
+
 import com.example.forekast.clothing.Clothing;
 import com.example.forekast.clothing.ClothingCriteriaInterface;
 
@@ -8,17 +10,29 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.room.Room;
 
+/**
+ * A static wrapper for all external data access.
+ */
 public class Repository {
     private static AppDatabase db;
 
     /**
      * Set the database instance for the repository. Needs to be done externally because of lifecycle awareness
-     * @param dbinstance The appdatabase instance to be used
+     * @param appcontext The context of the application where the database will be used
      */
-    public static void setDB(final AppDatabase dbinstance) {
+    public static void initDB(final Context appcontext) throws IllegalArgumentException {
+        if (appcontext == null) {
+            throw new IllegalArgumentException("The given appcontext should not be null");
+        }
 
-        db = dbinstance;
+        if (db == null) {
+            db = Room.databaseBuilder(
+                    appcontext,
+                    AppDatabase.class,
+                    "clothing").fallbackToDestructiveMigration().build();
+        }
     }
 
     /**

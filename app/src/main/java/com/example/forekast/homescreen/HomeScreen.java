@@ -7,7 +7,6 @@ import com.example.forekast.R;
 import com.example.forekast.Settings.Settings;
 import com.example.forekast.Settings.SwitchWardrobe;
 import com.example.forekast.Wardrobe.Wardrobe;
-import com.example.forekast.external_data.AppDatabase;
 import com.example.forekast.external_data.Repository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -18,7 +17,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.room.Room;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,8 +29,7 @@ public class HomeScreen extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
-        Repository.setDB(Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "clothing").fallbackToDestructiveMigration().build());
+        Repository.initDB(getApplicationContext());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
