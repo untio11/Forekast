@@ -58,6 +58,9 @@ public class WardrobeViewModel extends ViewModel {
             criteria.owner = "General";
             criteria.washingMachine = washingState;
 
+            if (location == "Torso") {
+
+            }
             clothingList = lists[0];
             clothingList.postValue(Repository.getClothing(location, criteria));
             return null;
