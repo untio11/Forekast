@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <CheckBoxPreference
+        android:key="live_location"
+        android:title="Live Location"
+        android:summary="Use GPS to track location"
+        android:disableDependentsState="true"
+        android:defaultValue="true"/>
+
+    <EditTextPreference
+        android:dependency="live_location"
+        android:key="manual_location"
+        android:title="Set Location"
+        android:inputType="text"
+        android:defaultValue="Eindhoven"
+        android:summary="Set manual location"/>
+
+    <CheckBoxPreference
+        android:key="availability_system"
+        android:title="Availability System"
+        android:summary="Clothes become unavailable when in washing machine"
+        android:defaultValue="true"/>
+
+    <EditTextPreference
+        android:key="unavailability_duration"
+        android:title="Unavailability Duration"
+        android:inputType="number"
+        android:defaultValue="14"
+        android:dependency="availability_system"/>
+
+    <ListPreference
+        android:key="user_list"
+        android:title="Wardrobe"
+        android:summary="Switch between wardrobes"/>
+
+    <EditTextPreference
+        android:key="add_wardrobe"
+        android:title="Add New Wardrobe"/>
+
+
+</PreferenceScreen>
