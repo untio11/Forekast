@@ -63,7 +63,7 @@ public class Clothing {
      * How much this piece is liked
      * */
     @ColumnInfo(name = "preference")
-    public int preference;
+    public int preference = 5;
 
     /**
      * RGB array: [Red, Green, Blue]

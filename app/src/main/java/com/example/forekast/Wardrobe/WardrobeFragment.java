@@ -1,7 +1,9 @@
 
 package com.example.forekast.Wardrobe;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -39,12 +41,6 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class WardrobeFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    //private static final String ARG_PARAM1 = "param1";
-    //private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
 
     private OnFragmentInteractionListener mListener;
     private WardrobeViewModel vm;
@@ -66,6 +62,19 @@ public class WardrobeFragment extends Fragment {
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    public static final String[] getTypes(String location) {
+        switch (location) {
+            case "Torso":
+                return new String[]{"T-Shirt", "Dress", "Jacket", "Shirt", "Sweater", "Tanktop"};
+            case "Legs":
+                return new String[]{"Jeans", "Shorts", "Skirt", "Trousers"};
+            case "Feet":
+                return new String[]{"Shoes", "Sandals", "Sneakers"};
+            default:
+                return null;
+        }
     }
 
     @Override
@@ -95,29 +104,23 @@ public class WardrobeFragment extends Fragment {
 
         // The add torso button will add a new clothing of type torso
         addTorso.setOnClickListener(v -> {
-            Clothing torso = new Torso(); // CHANGE TO TORSO
+            Clothing torso = new Torso();
             // Navigate to edit screen
-            Fragment fragment = EditScreen.newInstance(torso, true);
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.wardrobefragment, fragment).commit();
+            navigateEditscreen(torso);
         });
 
         // The add bottom button will add a new clothing of type bottom
         addLegs.setOnClickListener(v -> {
-            Clothing legs = new Legs(); // CHANGE TO BOTTOM
+            Clothing legs = new Legs();
             // Navigate to edit screen
-            Fragment fragment = EditScreen.newInstance(legs, true);
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.wardrobefragment, fragment).commit();
+            navigateEditscreen(legs);
         });
 
         // The add shoes button will add a new clothing of type shoes
         addFeet.setOnClickListener(v -> {
-            Clothing feet = new Feet(); // CHANGE TO FEET
+            Clothing feet = new Feet();
             // Navigate to edit screen
-            Fragment fragment = EditScreen.newInstance(feet, true);
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.wardrobefragment, fragment).commit();
+            navigateEditscreen(feet);
         });
 
         // Execute loading of database in background
@@ -141,6 +144,25 @@ public class WardrobeFragment extends Fragment {
 
         // return view
         return view;
+    }
+
+    private void navigateEditscreen(Clothing clothing) {
+        String[] types = getTypes(clothing.location);
+        // Pop up
+        new android.app.AlertDialog.Builder(getContext())
+                .setTitle("What kind of clothing is this?")
+                .setItems(types,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // The 'which' argument contains the index position
+                                // of the selected item
+                                clothing.type = types[which];
+                                // Navigate to the editscreen and pass the clothing objects
+                                Fragment fragment = EditScreen.newInstance(clothing, true);
+                                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                transaction.replace(R.id.wardrobefragment, fragment).commit();
+                            }
+                        }).show();
     }
 
     public void setLists(View view, List<Clothing> list, CustomGridView listView) {
