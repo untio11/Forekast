@@ -34,7 +34,8 @@ public class RepoTest {
 
     @Test
     public void testAddClothing() {
-        Clothing tshirt = new Tshirt();
+        Clothing tshirt = new Torso();
+        tshirt.type = "T-Shirt";
         tshirt.comfort = 12;
         tshirt.warmth = 4;
         tshirt.formality = 88;
@@ -42,13 +43,15 @@ public class RepoTest {
         tshirt.overwearable = false;
         tshirt.underwearable = true;
 
-        Clothing pant = new Jeans();
+        Clothing pant = new Legs();
+        pant.type = "Jeans";
         pant.comfort = 5;
         pant.warmth = 76;
         pant.formality = 1;
         pant.owner = "hans";
 
-        Clothing footglove = new Boots();
+        Clothing footglove = new Feet();
+        footglove.type = "Boots";
         footglove.comfort = 69;
         footglove.warmth = 76;
         footglove.formality = 1;
@@ -69,7 +72,8 @@ public class RepoTest {
 
     @Test
     public void testGetClothing() {
-        Clothing tshirt = new Tshirt();
+        Clothing tshirt = new Torso();
+        tshirt.type = "Torso";
         tshirt.comfort = 1;
         tshirt.warmth = 55;
         tshirt.formality = 23;
@@ -98,7 +102,8 @@ public class RepoTest {
 
     @Test
     public void testGetClothingWithCriteria() {
-        Clothing tshirt = new Tshirt();
+        Clothing tshirt = new Torso();
+        tshirt.type = "T-Shirt";
         tshirt.comfort = 1;
         tshirt.warmth = 5;
         tshirt.formality = 23;
@@ -106,13 +111,14 @@ public class RepoTest {
         tshirt.overwearable = false;
         tshirt.underwearable = true;
 
-        Clothing tshirt2 = new Tshirt();
-        tshirt.comfort = 1;
-        tshirt.warmth = 16;
-        tshirt.formality = 23;
-        tshirt.owner = "hans";
-        tshirt.overwearable = false;
-        tshirt.underwearable = true;
+        Clothing tshirt2 = new Torso();
+        tshirt2.type = "T-Shirt";
+        tshirt2.comfort = 1;
+        tshirt2.warmth = 16;
+        tshirt2.formality = 23;
+        tshirt2.owner = "hans";
+        tshirt2.overwearable = false;
+        tshirt2.underwearable = true;
 
         // Dummy criteria: should accept clothing of the appropriate type between warmth bounds, owned by hans
         ClothingCriteriaInterface criteria = new ClothingCriteria();

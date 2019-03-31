@@ -52,20 +52,26 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
     private static String[] items;
     private static boolean preWashingState;
 
-    public static String[] getItems() {
-        return items;
-    }
-
     public static EditScreen newInstance(Clothing clothing, Boolean add) {
+        addBool = add;
+        if (addBool) {
+            clothing.preSet();
+        }
+        preWashingState = clothing.washing_machine;
         editClothing = clothing;
         items = WardrobeFragment.getTypes(editClothing.location);
-        addBool = add;
         bitmap = null;
         return new EditScreen();
     }
 
-    private boolean decideWashingState() {
-        return false;
+    private void setWashingTime() {
+        if (editClothing.washing_machine && !preWashingState) {
+            // If not in washingmachine before, but it is now: set time to current time
+            editClothing.washing_time = System.currentTimeMillis()/1000;
+        } else if (!editClothing.washing_machine && preWashingState) {
+            // If in washingmachine before, but not anymore: set time to 0
+            editClothing.washing_time = 0;
+        }
     }
 
     @Override
@@ -153,6 +159,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
                 editClothing.type = (String) spinner.getSelectedItem();
                 editClothing.owner = "General"; // GET THIS VARIABLE FROM SETTINGS!
                 editClothing.washing_machine = checkBox.isChecked();
+                setWashingTime();
                 // save the picture if there is one
                 if (bitmap != null) {
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();

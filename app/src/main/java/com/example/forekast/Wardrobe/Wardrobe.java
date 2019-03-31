@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.example.forekast.clothing.ClothingCriteria;
-import com.example.forekast.clothing.Jeans;
-import com.example.forekast.external_data.Repository;
 import com.example.forekast.homescreen.HomeScreen;
 import com.example.forekast.R;
 import com.example.forekast.Settings.Settings;
@@ -22,7 +19,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.view.Menu;
+
 import android.view.MenuItem;
 
 public class Wardrobe extends AppCompatActivity

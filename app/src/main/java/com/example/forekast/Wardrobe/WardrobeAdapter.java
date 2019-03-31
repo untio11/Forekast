@@ -3,6 +3,7 @@ package com.example.forekast.Wardrobe;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import android.widget.ProgressBar;
 import com.example.forekast.EditScreen.EditScreen;
 import com.example.forekast.R;
 import com.example.forekast.clothing.Clothing;
-import com.squareup.picasso.Picasso;
+import com.example.forekast.external_data.Repository;
 
 import java.util.List;
 
@@ -93,12 +94,28 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
         //Fill our cell with data
 
         //get our clothing object from the list we passed to the adapter
-        final Clothing clothing = getItem(position);
+        Clothing clothing = getItem(position);
 
         //Fill our view components with data
         if (clothing.picture != null) {
             bitmap = BitmapFactory.decodeByteArray(clothing.picture, 0, clothing.picture.length);
             holder.imageView.setImageBitmap(bitmap);
+        }
+
+        // Check if the time in washingmachine has passed for this item
+        if (clothing.washing_machine) {
+            if (clothing.washing_time != 0) {
+                if ((System.currentTimeMillis() / 1000) - clothing.washing_time > 10) {
+                    // 10 seconds have passed since this item was in the washing machine,
+                    // make it available again
+                    clothing.washing_machine = false;
+                    clothing.washing_time = 0;
+                    // update to the database
+                    new AgentAsyncTask(clothing).execute();
+                }
+            } else {
+                throw new IllegalArgumentException("Something is wrong with a clothing's washing time");
+            }
         }
 
         //Clothing is in washing machine, so set faded out picture
@@ -125,5 +142,21 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
      */
     private class Holder {
         ImageView imageView;
+    }
+
+    private static class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
+        Clothing clothing;
+
+        public AgentAsyncTask(Clothing clothing) {
+            // Get the clothing object
+            this.clothing = clothing;
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            // Update clothing to the database
+            Repository.updateClothing(clothing);
+            return null;
+        }
     }
 }

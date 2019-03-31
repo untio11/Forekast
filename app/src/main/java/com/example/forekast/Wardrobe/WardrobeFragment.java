@@ -71,7 +71,7 @@ public class WardrobeFragment extends Fragment {
             case "Legs":
                 return new String[]{"Jeans", "Shorts", "Skirt", "Trousers"};
             case "Feet":
-                return new String[]{"Shoes", "Sandals", "Sneakers"};
+                return new String[]{"Shoes", "Sandals", "Sneakers", "Formal"};
             default:
                 return null;
         }
@@ -80,10 +80,6 @@ public class WardrobeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            //mParam1 = getArguments().getString(ARG_PARAM1);
-            //mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
