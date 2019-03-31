@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -103,7 +104,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         // Get the checkbox
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox);
 
-        if (addBool) {
+        if (addBool && savedInstanceState == null) {
             selectPicture();
         } else if (editClothing.picture != null) {
             bitmap = BitmapFactory.decodeByteArray(editClothing.picture, 0, editClothing.picture.length);
@@ -279,7 +280,9 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
                 cursor.close();
 
                 // Decode into bitmap and set image
-                bitmap = BitmapFactory.decodeFile(picturePath);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                bitmap = BitmapFactory.decodeFile(picturePath, options);
                 imageView.setImageBitmap(bitmap);
                 mViewModel.setBitmap(bitmap);
             }

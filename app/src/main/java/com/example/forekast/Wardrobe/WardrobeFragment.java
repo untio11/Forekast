@@ -146,7 +146,7 @@ public class WardrobeFragment extends Fragment {
         String[] types = getTypes(clothing.location);
         // Pop up
         new android.app.AlertDialog.Builder(getContext())
-                .setTitle("What kind of clothing is this?")
+                .setTitle("What do you want to add?")
                 .setItems(types,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {

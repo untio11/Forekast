@@ -82,7 +82,7 @@ public class Clothing {
      * How long this piece of clothing is gone for
      * */
     @ColumnInfo(name = "washing_time")
-    public long washing_time;
+    public long washing_time = 0;
 
     /**
      * This item can be worn over other items
