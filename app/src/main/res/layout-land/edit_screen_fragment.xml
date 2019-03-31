@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditScreen.EditScreen" >
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/todo"
+        android:text="@string/formality"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/seekFormality"
+        app:layout_constraintEnd_toEndOf="@+id/seekFormality"
+        app:layout_constraintStart_toStartOf="@+id/seekFormality"
+        app:layout_constraintTop_toBottomOf="@+id/seekWarmth" />
+
+    <SeekBar
+        android:id="@+id/seekFormality"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="223dp"
+        android:layout_height="21dp"
+        android:max="10"
+        android:progress="3"
+        app:layout_constraintEnd_toEndOf="@+id/seekWarmth"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/seekWarmth"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="200dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/todo"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.154"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.428"
+        app:srcCompat="@drawable/p68946" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/todo"
+        android:text="@string/warmth"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/seekWarmth"
+        app:layout_constraintEnd_toEndOf="@+id/seekWarmth"
+        app:layout_constraintHorizontal_bias="0.474"
+        app:layout_constraintStart_toStartOf="@+id/seekWarmth"
+        app:layout_constraintTop_toBottomOf="@+id/seekComfort" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        style="@android:style/Widget.Holo.Light.CompoundButton.CheckBox"
+        android:layout_width="33dp"
+        android:layout_height="35dp"
+        android:checked="false"
+        app:layout_constraintEnd_toEndOf="@+id/imageButton9"
+        app:layout_constraintStart_toStartOf="@+id/imageButton9"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton9" />
+
+    <ImageButton
+        android:id="@+id/imageButton9"
+        android:layout_width="51dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="64dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/todo"
+        android:elevation="1dp"
+        android:scaleType="centerInside"
+        android:tint="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView10"
+        app:layout_constraintHorizontal_bias="0.277"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/returnbutton"
+        app:srcCompat="@drawable/p15282" />
+
+    <Button
+        android:id="@+id/redoImage"
+        android:layout_width="90dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="4dp"
+        android:contentDescription="@string/todo"
+        android:fontFamily="sans-serif-condensed-light"
+        android:text="@string/editPhoto"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView10"
+        app:layout_constraintTop_toTopOf="@+id/imageView10" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_marginTop="8dp"
+        android:background="#00ff0000"
+        android:gravity="center"
+        android:dropDownWidth="wrap_content"
+        android:spinnerMode="dropdown"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@+id/textView11"
+        app:layout_constraintStart_toStartOf="@+id/textView11"
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+    <ImageButton
+        android:id="@+id/returnbutton"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/Return"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/redoImage"
+        app:layout_constraintEnd_toStartOf="@+id/imageView10"
+        app:layout_constraintHorizontal_bias="0.68"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/redoImage"
+        app:layout_constraintVertical_bias="0.4"
+        app:srcCompat="?attr/actionModeCloseDrawable" />
+
+    <SeekBar
+        android:id="@+id/seekPreference"
+        style="@android:style/Widget.Material.SeekBar"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="64dp"
+        android:max="10"
+        android:progress="5"
+        android:rotation="-90"
+        android:thumb="@drawable/thumb"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView10"
+        app:layout_constraintEnd_toStartOf="@+id/seekFormality"
+        app:layout_constraintStart_toEndOf="@+id/imageView10"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="@string/preference"
+        app:layout_constraintEnd_toEndOf="@+id/seekPreference"
+        app:layout_constraintStart_toStartOf="@+id/seekPreference"
+        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/type"
+        app:layout_constraintEnd_toEndOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="@+id/imageView10" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="128dp"
+        android:layout_height="71dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="bottom|center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/seekFormality"
+        app:layout_constraintStart_toStartOf="@+id/seekFormality"
+        app:layout_constraintTop_toBottomOf="@+id/seekFormality">
+
+        <ImageButton
+            android:id="@+id/delete"
+            style="@android:style/Widget.ImageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="92dp"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/todo"
+            android:scaleType="fitCenter"
+            android:tint="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.356"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/seekFormality"
+            app:srcCompat="@android:drawable/ic_menu_delete" />
+
+        <ImageButton
+            android:id="@+id/save"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:tint="@android:color/background_dark"
+            app:srcCompat="@android:drawable/ic_menu_save" />
+    </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/seekWarmth"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="223dp"
+        android:layout_height="21dp"
+        android:layout_marginBottom="8dp"
+        android:max="10"
+        android:progress="3"
+        app:layout_constraintBottom_toTopOf="@+id/textView10"
+        app:layout_constraintEnd_toEndOf="@+id/seekComfort"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/seekComfort"
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+    <SeekBar
+        android:id="@+id/seekComfort"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="223dp"
+        android:layout_height="21dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:max="10"
+        android:progress="3"
+        app:layout_constraintBottom_toTopOf="@+id/textView9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.622"
+        app:layout_constraintStart_toEndOf="@+id/redoImage"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:contentDescription="@string/todo"
+        android:text="@string/comfort"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/seekComfort"
+        app:layout_constraintEnd_toEndOf="@+id/seekComfort"
+        app:layout_constraintHorizontal_bias="0.479"
+        app:layout_constraintStart_toStartOf="@+id/seekComfort"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

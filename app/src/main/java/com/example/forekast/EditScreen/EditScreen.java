@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -68,7 +67,8 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
     private void setWashingTime() {
         if (editClothing.washing_machine && !preWashingState) {
             // If not in washingmachine before, but it is now: set time to current time
-            editClothing.washing_time = System.currentTimeMillis()/1000;
+            editClothing.washing_time = System.currentTimeMillis()/1000; // seconds,
+            // change the above to / (1000*60*60*24) for the amount of days
         } else if (!editClothing.washing_machine && preWashingState) {
             // If in washingmachine before, but not anymore: set time to 0
             editClothing.washing_time = 0;

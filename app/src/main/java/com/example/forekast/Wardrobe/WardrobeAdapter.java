@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import com.example.forekast.EditScreen.EditScreen;
 import com.example.forekast.R;
@@ -106,6 +105,7 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
         if (clothing.washing_machine) {
             if (clothing.washing_time != 0) {
                 if ((System.currentTimeMillis() / 1000) - clothing.washing_time > 10) {
+                    // change the above to / (1000*60*60*24) for the amount of days
                     // 10 seconds have passed since this item was in the washing machine,
                     // make it available again
                     clothing.washing_machine = false;
