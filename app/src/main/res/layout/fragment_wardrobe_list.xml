@@ -24,6 +24,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <CheckBox
+                android:id="@+id/showWashing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/washing_items_show"
+                android:textAlignment="textStart"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,7 +55,7 @@
                     android:layout_height="@android:dimen/app_icon_size"
                     android:contentDescription="@string/todo"
                     android:scaleType="centerInside"
-                    android:src="@drawable/plus_icon" />
+                    app:srcCompat="@drawable/plus_icon" />
 
             </LinearLayout>
 
@@ -69,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="3dp"
-                    android:text="@string/Bottom"
+                    android:text="@string/legs"
                     android:textAlignment="textStart"
                     android:textSize="30sp" />
 
@@ -79,7 +88,7 @@
                     android:layout_height="@android:dimen/app_icon_size"
                     android:contentDescription="@string/todo"
                     android:scaleType="centerInside"
-                    android:src="@drawable/plus_icon" />
+                    app:srcCompat="@drawable/plus_icon" />
 
             </LinearLayout>
 
@@ -102,7 +111,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="3dp"
-                    android:text="@string/shoes"
+                    android:text="@string/feet"
                     android:textAlignment="textStart"
                     android:textSize="30sp" />
 
@@ -112,7 +121,7 @@
                     android:layout_height="@android:dimen/app_icon_size"
                     android:contentDescription="@string/todo"
                     android:scaleType="centerInside"
-                    android:src="@drawable/plus_icon" />
+                    app:srcCompat="@drawable/plus_icon" />
             </LinearLayout>
 
             <com.example.forekast.Wardrobe.CustomGridView

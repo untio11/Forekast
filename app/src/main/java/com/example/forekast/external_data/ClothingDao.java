@@ -39,8 +39,11 @@ public interface ClothingDao {
     @Query("Select * From clothing Where ID = :ID Limit 1")
     Clothing getByID(long ID);
 
-    @Query("Select * From clothing Where location = :location and owner = :owner")
+    @Query("Select * From clothing Where location = :location and owner = :owner and washing_machine = 0")
     List<Clothing> getByLocation(String owner, String location);
+
+    @Query("Select * From clothing Where location = :location and owner = :owner")
+    List<Clothing> getByLocationWashing(String owner, String location);
 
     @Query("Select * From clothing Where type = :type and owner = :owner")
     List<Clothing> getByType(String owner, String type);

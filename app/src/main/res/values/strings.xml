@@ -6,7 +6,7 @@
     <string name="nav_header_subtitle">Clothing App by Group 17</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_home_screen">HomeScreen</string>
+    <string name="title_activity_home_screen">Forekast</string>
     <string name="home">Home</string>
     <string name="Wardrobe">Wardrobe</string>
     <string name="Settings">Settings</string>
@@ -120,6 +120,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="torso">Torso </string>
-    <string name="Bottom">Bottom </string>
-    <string name="shoes">Shoes </string>
+    <string name="legs">Legs </string>
+    <string name="feet">Feet </string>
+    <string name="washing_items_show">Show items in washing machine</string>
+    <string name="preference">Preference</string>
+    <string name="type">Type</string>
+    <string name="Return">Return to Wardrobe</string>
 </resources>

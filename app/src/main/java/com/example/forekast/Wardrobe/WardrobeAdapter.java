@@ -2,17 +2,18 @@ package com.example.forekast.Wardrobe;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import com.example.forekast.EditScreen.EditScreen;
 import com.example.forekast.R;
 import com.example.forekast.clothing.Clothing;
-import com.squareup.picasso.Picasso;
+import com.example.forekast.external_data.Repository;
 
 import java.util.List;
 
@@ -34,7 +35,6 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
         this.myList = objects;
         fragmentManager = ((FragmentActivity)context).getSupportFragmentManager();
     }
-
 
     @Override
     public int getCount() {
@@ -63,6 +63,7 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         final Holder holder;
+        Bitmap bitmap;
 
         //If the listview does not have an xml layout ready set the layout
         if (convertView == null) {
@@ -78,7 +79,6 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
 
             //Get xml components into our holder class
             holder.imageView = (ImageView) convertView.findViewById(R.id.clothingimage);
-            holder.progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar);
 
             //Attach our holder class to this particular cell
             convertView.setTag(holder);
@@ -93,41 +93,41 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
         //Fill our cell with data
 
         //get our clothing object from the list we passed to the adapter
-        final Clothing clothing = getItem(position);
+        Clothing clothing = getItem(position);
 
         //Fill our view components with data
         if (clothing.picture != null) {
-            final String url = clothing.picture;
-            //final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), url);
-            //if (file != null) {
-                Picasso.with(context).load(url).config(Bitmap.Config.RGB_565).into(holder.imageView, new com.squareup.picasso.Callback() {
-                    @Override
-                    public void onSuccess() {
-                        // When image is loaded, no progressbar
-                        if (holder.progressBar != null) {
-                            holder.progressBar.setVisibility(View.GONE);
-                        }
-                    }
+            bitmap = BitmapFactory.decodeByteArray(clothing.picture, 0, clothing.picture.length);
+            holder.imageView.setImageBitmap(bitmap);
+        }
 
-                    @Override
-                    public void onError() {
-                        // When an error has occured, print which one
-                        System.out.println("Wardrobe: Error displaying picture: " + url);
-                    }
-                });
-            //} else {
-            //    System.out.println("Wardrobe: Error loading file: " + url);
-            //}
-        } else if (holder.progressBar != null) {
-            // If no image was added to a clothing item, no progressbar (show default picture from XML)
-            holder.progressBar.setVisibility(View.GONE);
+        // Check if the time in washingmachine has passed for this item
+        if (clothing.washing_machine) {
+            if (clothing.washing_time != 0) {
+                if ((System.currentTimeMillis() / 1000) - clothing.washing_time > 10) {
+                    // change the above to / (1000*60*60*24) for the amount of days
+                    // 10 seconds have passed since this item was in the washing machine,
+                    // make it available again
+                    clothing.washing_machine = false;
+                    clothing.washing_time = 0;
+                    // update to the database
+                    new AgentAsyncTask(clothing).execute();
+                }
+            } else {
+                throw new IllegalArgumentException("Something is wrong with a clothing's washing time");
+            }
+        }
+
+        //Clothing is in washing machine, so set faded out picture
+        if (clothing.washing_machine) {
+            holder.imageView.setAlpha(0.5f);
         }
 
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Clicking on item will navigate to editscreen with the current clothing item
-                Fragment fragment = EditScreen.newInstance(clothing);
+                Fragment fragment = EditScreen.newInstance(clothing, false);
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.wardrobefragment, fragment).commit();
             }
@@ -141,7 +141,22 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
      * We have an imageview for the picture and a progressBar to show progress
      */
     private class Holder {
-        ProgressBar progressBar;
         ImageView imageView;
+    }
+
+    private static class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
+        Clothing clothing;
+
+        public AgentAsyncTask(Clothing clothing) {
+            // Get the clothing object
+            this.clothing = clothing;
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            // Update clothing to the database
+            Repository.updateClothing(clothing);
+            return null;
+        }
     }
 }

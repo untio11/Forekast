@@ -1,16 +1,23 @@
+
 package com.example.forekast.Wardrobe;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 
 import com.example.forekast.EditScreen.EditScreen;
@@ -34,14 +41,9 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class WardrobeFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    //private static final String ARG_PARAM1 = "param1";
-    //private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
 
     private OnFragmentInteractionListener mListener;
+    private WardrobeViewModel vm;
 
     public WardrobeFragment() {
         // Required empty public constructor
@@ -58,16 +60,26 @@ public class WardrobeFragment extends Fragment {
         WardrobeFragment fragment = new WardrobeFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+
         return fragment;
+    }
+
+    public static final String[] getTypes(String location) {
+        switch (location) {
+            case "Torso":
+                return new String[]{"T-Shirt", "Dress", "Jacket", "Shirt", "Sweater", "Tanktop"};
+            case "Legs":
+                return new String[]{"Jeans", "Shorts", "Skirt", "Trousers"};
+            case "Feet":
+                return new String[]{"Shoes", "Sandals", "Sneakers", "Formal"};
+            default:
+                return null;
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            //mParam1 = getArguments().getString(ARG_PARAM1);
-            //mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -76,42 +88,83 @@ public class WardrobeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_wardrobe_list, container, false);
 
+        // Viewmodel stuff
+        vm = ViewModelProviders.of(this).get(WardrobeViewModel.class);
+
         ImageButton addTorso = (ImageButton) view.findViewById(R.id.addTorso);
         ImageButton addLegs = (ImageButton)  view.findViewById(R.id.addBottom);
         ImageButton addFeet = (ImageButton)  view.findViewById(R.id.addShoes);
 
+        CheckBox showWashing = (CheckBox) view.findViewById(R.id.showWashing);
+        showWashing.setChecked(vm.getWashing());
+
         // The add torso button will add a new clothing of type torso
         addTorso.setOnClickListener(v -> {
-            Clothing torso = new Torso(); // CHANGE TO TORSO
+            Clothing torso = new Torso();
             // Navigate to edit screen
-            Fragment fragment = EditScreen.newInstance(torso);
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.wardrobefragment, fragment).commit();
+            navigateEditscreen(torso);
         });
 
         // The add bottom button will add a new clothing of type bottom
         addLegs.setOnClickListener(v -> {
-            Clothing legs = new Legs(); // CHANGE TO BOTTOM
+            Clothing legs = new Legs();
             // Navigate to edit screen
-            Fragment fragment = EditScreen.newInstance(legs);
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.wardrobefragment, fragment).commit();
+            navigateEditscreen(legs);
         });
 
         // The add shoes button will add a new clothing of type shoes
         addFeet.setOnClickListener(v -> {
-            Clothing feet = new Feet(); // CHANGE TO SHOES (SUPER)
+            Clothing feet = new Feet();
             // Navigate to edit screen
-            Fragment fragment = EditScreen.newInstance(feet);
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.wardrobefragment, fragment).commit();
+            navigateEditscreen(feet);
         });
 
         // Execute loading of database in background
-        new AgentAsyncTask(view).execute();
+        Observer<List<Clothing>> torsoObs = torsoList -> setLists(view, torsoList, (CustomGridView) view.findViewById(R.id.Torso));
+        Observer<List<Clothing>> legsObs = legsList -> setLists(view, legsList, (CustomGridView) view.findViewById(R.id.Bottom));
+        Observer<List<Clothing>> feetObs = feetList -> setLists(view, feetList, (CustomGridView) view.findViewById(R.id.Shoes));
+
+        vm.getTorsoList().observe(this, torsoObs);
+        vm.getLegsList().observe(this, legsObs);
+        vm.getFeetList().observe(this, feetObs);
+
+        vm.getLists(showWashing.isChecked());
+
+        // Check if checkbox for showing items in washingMachine is checked off.
+        showWashing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                vm.getLists(isChecked);
+            }
+        });
 
         // return view
         return view;
+    }
+
+    private void navigateEditscreen(Clothing clothing) {
+        String[] types = getTypes(clothing.location);
+        // Pop up
+        new android.app.AlertDialog.Builder(getContext())
+                .setTitle("What do you want to add?")
+                .setItems(types,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // The 'which' argument contains the index position
+                                // of the selected item
+                                clothing.type = types[which];
+                                // Navigate to the editscreen and pass the clothing objects
+                                Fragment fragment = EditScreen.newInstance(clothing, true);
+                                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                transaction.replace(R.id.wardrobefragment, fragment).commit();
+                            }
+                        }).show();
+    }
+
+    public void setLists(View view, List<Clothing> list, CustomGridView listView) {
+        list.sort((c1, c2) -> c1.type.compareTo(c2.type));
+        WardrobeAdapter adapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, list);
+        listView.setAdapter(adapter);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -151,50 +204,5 @@ public class WardrobeFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    private static class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
-        View view;
-
-        public AgentAsyncTask(View view) {
-            this.view = view;
-        }
-
-        @Override
-        protected Integer doInBackground(Void... voids) {
-
-            // Load Torso items from database into wardrobe list
-            CustomGridView torsoListView = (CustomGridView) view.findViewById(R.id.Torso);
-            List<Clothing> torsoList = Repository.getClothing("Torso", new ClothingCriteria());
-
-            // JUST SOME TESTING... DELETE THIS LATER!!!
-            /*Clothing torso1 = new Clothing();
-            Clothing torso2 = new Clothing();
-
-            //clothing.setImageUrl("IMG_20190323_174603.jpg");
-            //clothing2.setImageUrl("IMG_20190215_084658.jpg");
-            torso1.setImageUrl("https://www.hekonvalentijn.nl/Portals/0/Entity/109/Images/Wine.jpg");
-            torso2.setImageUrl("https://www.tipdebruin.nl/media/catalog/product/cache/3eefb03207b57b648a3f7359289ae856/s/t/stone-island-sweater-701562751-wit-00043036-1.jpg.jpg");
-            torsoList.add(torso1);
-            torsoList.add(torso2);
-            */
-
-            WardrobeAdapter torsoAdapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, torsoList);
-            torsoListView.setAdapter(torsoAdapter);
-
-            // Load Legs items from database into wardrobe list
-            CustomGridView legsListView = (CustomGridView) view.findViewById(R.id.Bottom);
-            List<Clothing> legsList = Repository.getClothing("Legs", new ClothingCriteria());
-            WardrobeAdapter legsAdapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, legsList);
-            legsListView.setAdapter(legsAdapter);
-
-            // Load Feet items from database into wardrobe list
-            CustomGridView feetListView = (CustomGridView) view.findViewById(R.id.Shoes);
-            List<Clothing> feetList = Repository.getClothing("Feet", new ClothingCriteria());
-            WardrobeAdapter feetAdapter = new WardrobeAdapter(view.getContext(), R.layout.fragment_wardrobe, feetList);
-            feetListView.setAdapter(feetAdapter);
-
-            return null;
-        }
     }
 }

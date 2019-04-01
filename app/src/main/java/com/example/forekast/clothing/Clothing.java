@@ -1,5 +1,6 @@
 package com.example.forekast.clothing;
 
+import android.graphics.Bitmap;
 import org.jetbrains.annotations.NotNull;
 
 import androidx.room.ColumnInfo;
@@ -14,18 +15,22 @@ import androidx.room.PrimaryKey;
 public class Clothing {
     /**
      * Do not manually change this variable, it will break the system
+     *
+     * The ID number of the clothing
      */
     @PrimaryKey(autoGenerate = true)
     public long ID;
 
     /**
      * Do not manually change this variable, it will break the system
+     *
+     * Owner of this piece of clothing (warderobe owner)
      */
     @ColumnInfo(name = "owner")
     public String owner;
 
     /**
-     * Do not manually change this variable, it will break the system
+     * The type of clothing (We do set the type manually now, different classes are ignored)
      */
     @ColumnInfo(name = "type")
     public String type = "";
@@ -36,44 +41,70 @@ public class Clothing {
     @ColumnInfo(name = "location")
     public String location = "";
 
+    /**
+     * The comfort of this piece
+     * */
     @ColumnInfo(name = "comfort")
-    public int comfort;
+    public int comfort = 5;
 
+    /**
+     * The warmth of this piece
+     * */
     @ColumnInfo(name = "warmth")
-    public int warmth;
+    public int warmth = 5;
 
+    /**
+     * The formality of this piece
+     * */
     @ColumnInfo(name = "Formality")
-    public int formality;
+    public int formality = 5;
 
+    /**
+     * How much this piece is liked
+     * */
     @ColumnInfo(name = "preference")
-    public int preference;
+    public int preference = 5;
 
+    /**
+     * RGB array: [Red, Green, Blue]
+     * */
     @Ignore
     @ColumnInfo(name = "color")
     public int[] color;
 
+    /**
+     * Whether the piece is in the laundry machine
+     * */
     @ColumnInfo(name = "washing_machine")
-    public boolean washing_machine;
+    public boolean washing_machine = false;
 
-    @ColumnInfo(name = "last_washing_state")
-    public boolean last_washing_state;
-
+    /**
+     * How long this piece of clothing is gone for
+     * */
     @ColumnInfo(name = "washing_time")
-    public int washing_time;
+    public long washing_time = 0;
 
+    /**
+     * This item can be worn over other items
+     * */
     @ColumnInfo(name = "overwearable")
-    public boolean overwearable;
+    public boolean overwearable = false;
 
+    /**
+     * This item can be worn under other items
+     * */
     @ColumnInfo(name = "underwearable")
-    public boolean underwearable;
+    public boolean underwearable = false;
 
+    /**
+     * Bitmap converted to array of bytes
+     * */
     @ColumnInfo(name = "picture")
-    public String picture;
+    public byte[] picture;
 
     public Clothing() {
         setLocAndTyp();
     }
-
 
     /**
      * Set the location and type of a subclass of clothing based on the parent class.
@@ -111,9 +142,15 @@ public class Clothing {
         return "[" + ID + "] " + owner + "::" + location + "::" + type + " - " + "(" + warmth + "," + formality + "," + comfort + ")";
     }
 
-    public void setImageUrl(String url) {
-        this.picture = url;
+    /**
+     * Presets the comfort, warmth and formality attributes when adding a piece of clothing,
+     * as well as the over- and underwearable values for the Torso clothing
+     * @throws IllegalArgumentException if not the right instance of Torso, Legs or Feet was created
+     */
+    public void preSet() throws IllegalArgumentException {
+        throw new IllegalArgumentException("Location was not defined");
     }
+
 
     /**
      * No type or location parameter because those are set automatically if you use the correct subclass of clothing!
@@ -125,10 +162,11 @@ public class Clothing {
      * @param color RGB array: [Red, Green, Blue]
      * @param washing_machine Whether the piece is in the laundry machine
      * @param washing_time How long this piece of clothing is gone for
-     * @param picture URL to the image
+     * @param picture Bitmap converted to array of bytes
      */
+    /*
     @Ignore
-    public Clothing(String owner, int warmth, int formality, int comfort, int preference, int[] color, boolean washing_machine, int washing_time, String picture) {
+    public Clothing(String owner, int warmth, int formality, int comfort, int preference, int[] color, boolean washing_machine, int washing_time, byte[] picture) {
         setLocAndTyp();
         this.owner = owner;
         this.warmth = warmth;
@@ -141,9 +179,9 @@ public class Clothing {
         this.picture = picture;
     }
 
-    @Ignore
     public Clothing(String location) {
         setLocAndTyp();
         this.location = location;
     }
+    */
 }

@@ -69,7 +69,12 @@ public class Repository {
             throw new IllegalArgumentException("Criteria were not set!");
         }
 
-        List<Clothing> result = db.clothingDao().getByLocation(criteria.owner, location);
+        List<Clothing> result;
+        if (criteria.washingMachine) {
+            result = db.clothingDao().getByLocationWashing(criteria.owner, location);
+        } else {
+            result = db.clothingDao().getByLocation(criteria.owner, location);
+        }
 
         return filter(result, criteria);
     }
