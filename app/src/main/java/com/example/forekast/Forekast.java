@@ -1,12 +1,15 @@
 package com.example.forekast;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.SeekBar;
 
 import com.example.forekast.EditScreen.EditScreen;
 import com.example.forekast.Settings.Settings;
+import com.example.forekast.Settings.SettingsFragments;
 import com.example.forekast.Suggestion.Outfit;
 import com.example.forekast.Wardrobe.Wardrobe;
 import com.example.forekast.external_data.Repository;
@@ -24,7 +27,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-public class Forekast extends AppCompatActivity {
+public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentInteractionListener {
     @Override
     protected void onCreate(Bundle savedState) {
         super.onCreate(savedState);
@@ -41,7 +44,15 @@ public class Forekast extends AppCompatActivity {
                 toolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close
-        );
+        ) {
+            public void onDrawerClosed(View view) {
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                drawerView.bringToFront();
+            }
+        };
 
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -65,15 +76,13 @@ public class Forekast extends AppCompatActivity {
                     // Switch to wardrobe fragment
                     break;
                 case (R.id.nav_settings):
-                    // Open settings activity
-                    Intent start_settings = new Intent(getApplicationContext(), Settings.class);
-                    startActivity(start_settings);
+                    fragment = new SettingsFragments();
                     break;
             }
 
             if (fragment != null) {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.content_area, fragment).commit();
+                transaction.replace(R.id.content_area, fragment).addToBackStack(null).commit();
             }
 
             return true;
@@ -91,4 +100,7 @@ public class Forekast extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {}
 }

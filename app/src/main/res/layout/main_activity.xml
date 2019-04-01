@@ -15,14 +15,13 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_bar_content"/>
+        app:menu="@menu/nav_bar_content" />
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/content_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/common_google_signin_btn_text_dark_default"
         tools:context=".homescreen.HomeScreen">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -40,12 +39,12 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <fragment
+        <FrameLayout
             android:id="@+id/content_area"
-            android:name="com.example.forekast.homescreen.HomeScreen"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/home_screen" />
+            android:layout_height="match_parent">
+
+        </FrameLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
