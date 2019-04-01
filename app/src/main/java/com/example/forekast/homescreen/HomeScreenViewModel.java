@@ -1,5 +1,8 @@
 package com.example.forekast.homescreen;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import com.example.forekast.Suggestion.Outfit;
 import com.example.forekast.clothing.ClothingCriteria;
 import com.example.forekast.external_data.Repository;
@@ -28,6 +31,11 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
     @Override
     int getWarmth() {
         return (clothingCriteria.warmth.second == Integer.MAX_VALUE ? 3 : clothingCriteria.warmth.second);
+    }
+
+    @Override
+    void setOwner(String new_owner) {
+        clothingCriteria.owner = new_owner;
     }
 
     @Override

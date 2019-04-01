@@ -1,10 +1,8 @@
 package com.example.forekast.homescreen;
 
-import android.util.Log;
 
 import com.example.forekast.Suggestion.Outfit;
 import com.example.forekast.Suggestion.SuggestionModule;
-import com.example.forekast.Suggestion.SuggestionModuleInterface;
 import com.example.forekast.clothing.ClothingCriteria;
 import com.example.forekast.external_data.Weather;
 
@@ -59,6 +57,8 @@ abstract class HomeScreenViewModelInterface extends ViewModel {
 
     abstract void setFormality(int new_formality);
     abstract int getFormality();
+
+    abstract void setOwner(String new_owner);
 
     /**
      * Used to get the next element in the outfit powerset of the parsed location of clothing
