@@ -17,6 +17,7 @@ public class CustomGridView extends GridView {
         super(context, attrs, defStyle);
     }
 
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int heightSpec;

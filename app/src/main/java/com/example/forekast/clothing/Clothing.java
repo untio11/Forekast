@@ -45,25 +45,25 @@ public class Clothing {
      * The comfort of this piece
      * */
     @ColumnInfo(name = "comfort")
-    public int comfort;
+    public int comfort = 5;
 
     /**
      * The warmth of this piece
      * */
     @ColumnInfo(name = "warmth")
-    public int warmth;
+    public int warmth = 5;
 
     /**
      * The formality of this piece
      * */
     @ColumnInfo(name = "Formality")
-    public int formality;
+    public int formality = 5;
 
     /**
      * How much this piece is liked
      * */
     @ColumnInfo(name = "preference")
-    public int preference;
+    public int preference = 5;
 
     /**
      * RGB array: [Red, Green, Blue]
@@ -76,31 +76,25 @@ public class Clothing {
      * Whether the piece is in the laundry machine
      * */
     @ColumnInfo(name = "washing_machine")
-    public boolean washing_machine;
-
-    /**
-     *
-     * */
-    @ColumnInfo(name = "last_washing_state")
-    public boolean last_washing_state;
+    public boolean washing_machine = false;
 
     /**
      * How long this piece of clothing is gone for
      * */
     @ColumnInfo(name = "washing_time")
-    public int washing_time;
+    public long washing_time = 0;
 
     /**
      * This item can be worn over other items
      * */
     @ColumnInfo(name = "overwearable")
-    public boolean overwearable;
+    public boolean overwearable = false;
 
     /**
      * This item can be worn under other items
      * */
     @ColumnInfo(name = "underwearable")
-    public boolean underwearable;
+    public boolean underwearable = false;
 
     /**
      * Bitmap converted to array of bytes
@@ -146,6 +140,15 @@ public class Clothing {
     @Override
     public String toString() {
         return "[" + ID + "] " + owner + "::" + location + "::" + type + " - " + "(" + warmth + "," + formality + "," + comfort + ")";
+    }
+
+    /**
+     * Presets the comfort, warmth and formality attributes when adding a piece of clothing,
+     * as well as the over- and underwearable values for the Torso clothing
+     * @throws IllegalArgumentException if not the right instance of Torso, Legs or Feet was created
+     */
+    public void preSet() throws IllegalArgumentException {
+        throw new IllegalArgumentException("Location was not defined");
     }
 
 

@@ -19,7 +19,7 @@ public class WardrobeViewModel extends ViewModel {
     private MutableLiveData<List<Clothing>> legsList = new MutableLiveData<>();
     private MutableLiveData<List<Clothing>> feetList = new MutableLiveData<>();
 
-    private static boolean washingState;
+    private static boolean washingState = true;
 
     public void getLists(boolean washingMachine) {
         washingState = washingMachine;

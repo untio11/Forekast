@@ -35,7 +35,8 @@ public class DBTest {
 
     @Test
     public void testInsertandDel() {
-        Clothing tshirt = new Tshirt();
+        Clothing tshirt = new Torso();
+        tshirt.type = "T-Shirt";
         tshirt.comfort = 10;
         tshirt.formality = 2;
         tshirt.warmth = 69;
@@ -53,17 +54,23 @@ public class DBTest {
 
     @Test
     public void testWearableProperties() {
-        Clothing tshirt = new Tshirt();
+        Clothing tshirt = new Torso();
+        tshirt.type = "T-Shirt";
+        tshirt.preSet();
         tshirt.ID = db.clothingDao().insert(tshirt);
         assertTrue(tshirt.underwearable);
         assertFalse(tshirt.overwearable);
 
-        Clothing sweater = new Sweater();
+        Clothing sweater = new Torso();
+        sweater.type = "Sweater";
+        sweater.preSet();
         sweater.ID = db.clothingDao().insert(sweater);
         assertFalse(sweater.underwearable);
         assertTrue(sweater.overwearable);
 
-        Clothing shirt = new Shirt();
+        Clothing shirt = new Torso();
+        shirt.type = "Shirt";
+        shirt.preSet();
         shirt.ID = db.clothingDao().insert(shirt);
         assertTrue(shirt.underwearable);
         assertTrue(shirt.overwearable);
