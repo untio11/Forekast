@@ -45,6 +45,13 @@ public class Settings extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        if(findViewById(R.id.fragment_container) != null){
+            if(savedInstanceState != null){
+                return;
+            }
+            getFragmentManager().beginTransaction().add(R.id.fragment_container, new SettingsFragments()).commit();
+        }
     }
 
     @Override

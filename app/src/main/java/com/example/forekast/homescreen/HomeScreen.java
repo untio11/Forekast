@@ -13,6 +13,7 @@ import com.example.forekast.Settings.Settings;
 import com.example.forekast.Settings.SwitchWardrobe;
 import com.example.forekast.Suggestion.Outfit;
 import com.example.forekast.Wardrobe.Wardrobe;
+import com.example.forekast.external_data.AppDatabase;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
