@@ -63,19 +63,25 @@ public class Wardrobe extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        item.setChecked(true);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
 
         if (id == R.id.nav_home) {
-            startActivity(new Intent(getApplicationContext(), HomeScreen.class));
-        } else if (id == R.id.nav_wardrobe) {
-            drawer.closeDrawer(GravityCompat.START);
+            //Intent start_homescreen = new Intent(getApplicationContext(), HomeScreen.class);
+            //start_homescreen.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            //startActivity(start_homescreen);
+            super.onBackPressed();
         } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(getApplicationContext(), Settings.class));
+            Intent start_settings = new Intent(getApplicationContext(), Settings.class);
+            start_settings.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(start_settings);
         } else if (id == R.id.nav_switchwardrobe) {
-            startActivity(new Intent(getApplicationContext(), SwitchWardrobe.class));
+            Intent start_wardrobeswitch = new Intent(getApplicationContext(), SwitchWardrobe.class);
+            start_wardrobeswitch.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(start_wardrobeswitch);
         }
 
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
