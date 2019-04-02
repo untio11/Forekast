@@ -123,24 +123,13 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
     }
 
-    /** Create the set of available clothing to draw from */
-    /*
-    @Override
-    public List<Clothing> getClothing(String location) {
-        List<Clothing> currentLocationList = new ArrayList<>();
-
-        Clothing clothingInRepo = new Torso(); // Placeholder for accessing Repo
-
-        // For all clothing in repo:
-        for (int i = 0; i < 20; i++) { // Arbitrary 20 given in stead of database size
-            if (!clothingInRepo.washing_machine && clothingInRepo.location.equals(location)) { // For now, only consider available clothes
-                currentLocationList.add(clothingInRepo);
-            }
+    public boolean[] getAccessories(){
+        boolean[] accessories = {false, false, false, false, false};
+        if (criteria != null){
+            accessories = new boolean[] {sunglasses, coat, gloves, umbrella, leggings};
         }
-
-        return currentLocationList;
-    }*/
-
+        return accessories;
+    }
 
     /** Local clothing Powerset from which the other classes derive outfits*/
     // OutfitPowerset contains lists of appropriate clothing
@@ -153,17 +142,10 @@ public class SuggestionModule extends SuggestionModuleInterface {
         List<Clothing> bottoms = new ArrayList<>();
         List<Clothing> shoes = new ArrayList<>();
 
-        List<Clothing> repoIT = new ArrayList<>();
-        List<Clothing> repoOT = new ArrayList<>();
-        List<Clothing> repoB = new ArrayList<>();
-        List<Clothing> repoS = new ArrayList<>();
-
-        repoIT = Repository.getClothing("Torso", criteria);
-        repoOT = Repository.getClothing("Torso", criteria);
-        repoB = Repository.getClothing("Legs", criteria);
-        repoS = Repository.getClothing("Feet", criteria);
-
-        //Clothing clothing = new Clothing(); // Placeholder clothing item
+        List<Clothing> repoIT = Repository.getClothing("Torso", criteria);
+        List<Clothing> repoOT = Repository.getClothing("Torso", criteria);
+        List<Clothing> repoB = Repository.getClothing("Legs", criteria);
+        List<Clothing> repoS = Repository.getClothing("Feet", criteria);
 
         int warmthUpper = warmth.second; // upper bound
         int warmthLower = warmth.second; // lower bound
@@ -283,9 +265,11 @@ public class SuggestionModule extends SuggestionModuleInterface {
         if (outfits == null) {
             generateOutfit(criteria);
             setAccessories();
+            if (outfits != null) {
+                shuffle();
+            }
         }
 
-        shuffle();
         setClothing();
 
         Outfit randomOutfit = new Outfit(currentInnerTorso, currentOuterTorso, currentBottoms, currentShoes, coat, gloves, umbrella, sunglasses, leggings);
@@ -339,67 +323,87 @@ public class SuggestionModule extends SuggestionModuleInterface {
     /** Next & Previous button functions (connected to button in the homescreen view model */
     @Override
     public Outfit next(String location) {
-        if (location.equals("Torso")){
-            currentIndIT++;
+        indexCalculator(location, 1);
+
+        if (location.equals("Torso") && outfits.inner_torso.size() > 0){
+            // Inner Torso
             if (currentIndIT > outfits.inner_torso.size()){
                 currentIndIT = 0;
             }
             currentInnerTorso = outfits.inner_torso.get(currentIndIT);
 
-            currentIndOT++;
+            // Outer Torso
             if (currentIndOT > outfits.outer_torso.size()){
                 currentIndOT = 0;
             }
             currentOuterTorso = outfits.inner_torso.get(currentIndOT);
         }
-        else if (location.equals("Legs")){
-            currentIndB++;
+
+        // Bottoms
+        else if (location.equals("Legs") && outfits.outer_torso.size() > 0){
             if (currentIndB > outfits.bottoms.size()){
                 currentIndB = 0;
             }
             currentBottoms = outfits.inner_torso.get(currentIndB);
         }
-        else if (location.equals("Feet")){
-            currentIndS++;
+
+        // Shoes
+        else if (location.equals("Feet") && outfits.shoes.size() > 0){
             if (currentIndS > outfits.shoes.size()){
                 currentIndS = 0;
             }
             currentShoes = outfits.shoes.get(currentIndS);
         }
+
         Outfit nextOutfit = new Outfit(currentInnerTorso, currentOuterTorso, currentBottoms, currentShoes, coat, gloves, umbrella, sunglasses, leggings);
         return nextOutfit;
     }
 
     @Override
     public Outfit previous(String location) {
-        if (location.equals("Torso")){
-            currentIndIT--;
+        indexCalculator(location, -1);
+
+        //Torso
+        if (location.equals("Torso") && outfits.inner_torso.size() > 0){
+            // Inner
             if (currentIndIT < 0){
                 currentIndIT = outfits.inner_torso.size();
             }
             currentInnerTorso = outfits.inner_torso.get(currentIndIT);
-
-            currentIndOT--;
+            // Outer
             if (currentIndOT < 0){
                 currentIndOT = outfits.outer_torso.size();
             }
             currentOuterTorso = outfits.inner_torso.get(currentIndOT);
         }
-        else if (location.equals("Legs")){
-            currentIndB--;
+        // Bottoms
+        else if (location.equals("Legs") && outfits.bottoms.size() > 0){
             if (currentIndB < 0){
                 currentIndB = outfits.bottoms.size();
             }
             currentBottoms = outfits.inner_torso.get(currentIndB);
         }
-        else if (location.equals("Feet")){
-            currentIndS--;
+        // Shoes
+        else if (location.equals("Feet") && outfits.shoes.size() > 0){
             if (currentIndS < 0){
                 currentIndS = outfits.shoes.size();
             }
             currentShoes = outfits.shoes.get(currentIndS);
         }
-        Outfit nextOutfit = new Outfit(currentInnerTorso, currentOuterTorso, currentBottoms, currentShoes, coat, gloves, umbrella, sunglasses, leggings);
-        return nextOutfit;
+        Outfit previousOutfit = new Outfit(currentInnerTorso, currentOuterTorso, currentBottoms, currentShoes, coat, gloves, umbrella, sunglasses, leggings);
+        return previousOutfit;
+    }
+
+    private void indexCalculator(String location, int x){
+        if (location.equals("Torso")){
+            currentIndIT = currentIndIT + x;
+            currentIndOT = currentIndOT + x;
+        }
+        else if (location.equals("Legs")) {
+            currentIndB = currentIndB + x;
+        }
+        else if (location.equals("Feet")) {
+            currentIndS = currentIndS + x;
+        }
     }
 }

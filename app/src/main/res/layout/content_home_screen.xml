@@ -24,59 +24,54 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/innerTorso"
         android:layout_width="110dp"
         android:layout_height="110dp"
-        android:layout_marginStart="84dp"
         android:layout_marginTop="44dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.009"
-        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/todo"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="@+id/divider"
-        tools:srcCompat="@tools:sample/avatars"
-        android:contentDescription="@string/todo" />
+        app:srcCompat="@drawable/def_clothing" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/outerTorso"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="44dp"
+        android:contentDescription="@string/todo"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/home"
+        app:srcCompat="@drawable/def_clothing" />
+
+    <ImageView
+        android:id="@+id/bottoms"
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="168dp"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/todo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/home"
-        tools:srcCompat="@tools:sample/avatars"
-        android:contentDescription="@string/todo" />
+        app:srcCompat="@drawable/def_clothing" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/shoes"
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/imageView4"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="@+id/imageView4"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4"
-        tools:srcCompat="@tools:sample/avatars"
-        android:contentDescription="@string/todo" />
-
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="8dp"
         android:contentDescription="@string/todo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.094"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/home" />
+        app:layout_constraintEnd_toEndOf="@+id/bottoms"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="@+id/bottoms"
+        app:layout_constraintTop_toBottomOf="@+id/bottoms"
+        app:srcCompat="@drawable/def_clothing" />
 
     <View
         android:id="@+id/divider"
@@ -131,7 +126,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+        app:layout_constraintTop_toBottomOf="@+id/shoes" />
 
     <SeekBar
         android:id="@+id/slider_warmth"
@@ -173,9 +168,9 @@
         android:scaleType="centerInside"
         android:tag="Torso"
         android:tint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView6"
-        app:layout_constraintStart_toEndOf="@+id/imageView6"
-        app:layout_constraintTop_toTopOf="@+id/imageView6"
+        app:layout_constraintBottom_toBottomOf="@+id/outerTorso"
+        app:layout_constraintStart_toEndOf="@+id/outerTorso"
+        app:layout_constraintTop_toTopOf="@+id/outerTorso"
         app:srcCompat="@drawable/next" />
 
     <ImageButton
@@ -190,9 +185,9 @@
         android:scaleType="centerInside"
         android:tag="Torso"
         android:tint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-        app:layout_constraintEnd_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="@+id/imageView2"
+        app:layout_constraintBottom_toBottomOf="@+id/innerTorso"
+        app:layout_constraintEnd_toStartOf="@+id/innerTorso"
+        app:layout_constraintTop_toTopOf="@+id/innerTorso"
         app:srcCompat="@drawable/next_2" />
 
     <ImageButton
@@ -207,9 +202,9 @@
         android:scaleType="centerInside"
         android:tag="Legs"
         android:tint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
-        app:layout_constraintEnd_toStartOf="@+id/imageView4"
-        app:layout_constraintTop_toTopOf="@+id/imageView4"
+        app:layout_constraintBottom_toBottomOf="@+id/bottoms"
+        app:layout_constraintEnd_toStartOf="@+id/bottoms"
+        app:layout_constraintTop_toTopOf="@+id/bottoms"
         app:srcCompat="@drawable/next_2" />
 
     <ImageButton
@@ -224,9 +219,9 @@
         android:scaleType="centerInside"
         android:tag="Feet"
         android:tint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-        app:layout_constraintEnd_toStartOf="@+id/imageView5"
-        app:layout_constraintTop_toTopOf="@+id/imageView5"
+        app:layout_constraintBottom_toBottomOf="@+id/shoes"
+        app:layout_constraintEnd_toStartOf="@+id/shoes"
+        app:layout_constraintTop_toTopOf="@+id/shoes"
         app:srcCompat="@drawable/next_2" />
 
     <ImageButton
@@ -241,9 +236,9 @@
         android:scaleType="centerInside"
         android:tag="Legs"
         android:tint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toTopOf="@+id/imageView4"
+        app:layout_constraintBottom_toBottomOf="@+id/bottoms"
+        app:layout_constraintStart_toEndOf="@+id/bottoms"
+        app:layout_constraintTop_toTopOf="@+id/bottoms"
         app:srcCompat="@drawable/next" />
 
     <ImageButton
@@ -258,34 +253,31 @@
         android:scaleType="centerInside"
         android:tag="Feet"
         android:tint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-        app:layout_constraintStart_toEndOf="@+id/imageView5"
-        app:layout_constraintTop_toTopOf="@+id/imageView5"
+        app:layout_constraintBottom_toBottomOf="@+id/shoes"
+        app:layout_constraintStart_toEndOf="@+id/shoes"
+        app:layout_constraintTop_toTopOf="@+id/shoes"
         app:srcCompat="@drawable/next" />
 
     <ImageView
         android:id="@+id/noti_coat"
         android:layout_width="50dp"
         android:layout_height="49dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="4dp"
         android:contentDescription="@string/todo"
         app:layout_constraintEnd_toStartOf="@+id/noti_gloves"
         app:layout_constraintTop_toBottomOf="@+id/slider_formality"
-        app:srcCompat="@drawable/sunglasses" />
+        app:srcCompat="@drawable/women_long_coat" />
 
     <ImageView
         android:id="@+id/noti_sunglasses"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginTop="16dp"
         android:contentDescription="@string/todo"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/noti_umbrella"
         app:layout_constraintTop_toBottomOf="@+id/slider_formality"
-        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/sunglasses" />
 
     <ImageView
@@ -293,21 +285,21 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:contentDescription="@string/todo"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/slider_formality"
-        app:srcCompat="@drawable/sunglasses" />
+        app:srcCompat="@drawable/socks" />
 
     <ImageView
         android:id="@+id/noti_umbrella"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="4dp"
         android:contentDescription="@string/todo"
         app:layout_constraintEnd_toStartOf="@+id/noti_sunglasses"
@@ -319,19 +311,19 @@
         android:id="@+id/noti_gloves"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="4dp"
         android:contentDescription="@string/todo"
         app:layout_constraintEnd_toStartOf="@+id/noti_leggings"
         app:layout_constraintTop_toBottomOf="@+id/slider_formality"
-        app:srcCompat="@drawable/umbrella" />
+        app:srcCompat="@drawable/knitted_mittens" />
 
     <ImageButton
         android:id="@+id/refresh"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/todo"
         android:onClick="refreshClothing"
@@ -392,5 +384,14 @@
         app:layout_constraintTop_toBottomOf="@+id/slider_warmth"
         app:layout_constraintVertical_bias="0.0"
         app:layout_constraintVertical_chainStyle="packed" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_end="207dp"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,10 +4,10 @@ import com.example.forekast.clothing.Clothing;
 
 public class Outfit {
 
-    Clothing inner_torso;
-    Clothing outer_torso;
-    Clothing pants;
-    Clothing shoes;
+    public Clothing inner_torso;
+    public Clothing outer_torso;
+    public Clothing pants;
+    public Clothing shoes;
     Boolean coat;
     Boolean gloves;
     Boolean umbrella;

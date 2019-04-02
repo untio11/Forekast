@@ -3,6 +3,8 @@ package com.example.forekast.homescreen;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.media.Image;
@@ -75,6 +77,9 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         vm.getLiveWeather().observe(
                 this,
                 newWeather -> Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather")));
+        vm.getLiveOutfit().observe(
+                this,
+                newOutfit -> Log.d("ClothingUpdate", (newOutfit != null ? newOutfit.toString() : "No clothes")));
 
         if (savedInstance != null) {
             vm.setComfort(savedInstance.getInt("Comfortsl"));
@@ -94,57 +99,90 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         formality_slider.setProgress(vm.getFormality());
         formality_slider.setOnSeekBarChangeListener(new updateCriteriaSeekbar());
 
-
         final Observer<Weather> weathereObserver = newWeather -> Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather"));
         final Observer<Outfit> clothingObserver = newClothing -> Log.d("ClothingUpdate", (newClothing != null ? newClothing.toString() : "No clothes"));
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         vm.getLiveWeather().observe(this, weathereObserver);
         vm.getLiveOutfit().observe(this, clothingObserver);
+
+    }
+    public void setOutfit(){
+        ImageView innerTorso = findViewById(R.id.innerTorso);
+        ImageView outerTorso = findViewById(R.id.outerTorso);
+        ImageView bottoms = findViewById(R.id.bottoms);
+        ImageView shoes = findViewById(R.id.shoes);
+
+        Bitmap bitmapIT;
+        Bitmap bitmapOT;
+        Bitmap bitmapP;
+        Bitmap bitmapS;
+
+        Outfit outfit = vm.sugg.getRandomOutfit();
+
+        if (outfit.inner_torso != null){
+            bitmapIT = BitmapFactory.decodeByteArray(outfit.inner_torso.picture, 0, outfit.inner_torso.picture.length);
+            innerTorso.setImageBitmap(bitmapIT);
+        }
+        if (outfit.outer_torso != null){
+            bitmapOT = BitmapFactory.decodeByteArray(outfit.outer_torso.picture, 0, outfit.outer_torso.picture.length);
+            outerTorso.setImageBitmap(bitmapOT);
+        }
+        if (outfit.pants != null){
+            bitmapP = BitmapFactory.decodeByteArray(outfit.pants.picture, 0, outfit.pants.picture.length);
+            bottoms.setImageBitmap(bitmapP);
+        }
+        if (outfit.shoes != null){
+            bitmapS = BitmapFactory.decodeByteArray(outfit.shoes.picture, 0, outfit.shoes.picture.length);
+            shoes.setImageBitmap(bitmapS);
+        }
     }
 
     public void accessories(){
-        Boolean sunglasses = false;
-        Boolean coat = false;
-        Boolean gloves = false;
-        Boolean umbrella = false;
-        Boolean leggings = false;
-
         ImageView sunglassesView = findViewById(R.id.noti_sunglasses);
         ImageView coatView = findViewById(R.id.noti_coat);
         ImageView glovesView = findViewById(R.id.noti_gloves);
         ImageView umbrellaView = findViewById(R.id.noti_umbrella);
         ImageView leggingsView = findViewById(R.id.noti_leggings);
 
-        if (sunglasses) {
-            sunglassesView.setColorFilter(Color.GRAY);
-        }
-        else {
+        boolean[] accessories = vm.getAccessories();
+
+        if (accessories[0]) { // Sunglasses
             sunglassesView.setColorFilter(Color.BLACK);
         }
-        if (coat) {
-            coatView.setColorFilter(Color.GRAY);
-        }
         else {
+            sunglassesView.setColorFilter(Color.LTGRAY);
+        }
+        if (accessories[1]) { // Coat
             coatView.setColorFilter(Color.BLACK);
         }
-        if (gloves) {
-            glovesView.setColorFilter(Color.GRAY);
-        }
         else {
+            coatView.setColorFilter(Color.LTGRAY);
+        }
+        if (accessories[2]) { // Gloves
             glovesView.setColorFilter(Color.BLACK);
         }
-        if (umbrella) {
-            umbrellaView.setColorFilter(Color.GRAY);
+        else {
+            glovesView.setColorFilter(Color.LTGRAY);
+        }
+        if (accessories[3]) { // Umbrella
+            umbrellaView.setColorFilter(Color.BLACK);
         }
         else {
-            umbrellaView.setColorFilter(Color.BLACK);
+            umbrellaView.setColorFilter(Color.LTGRAY);
+        }
+        if (accessories[4]) { // Leggings
+            leggingsView.setColorFilter(Color.BLACK);
+        }
+        else {
+            leggingsView.setColorFilter(Color.LTGRAY);
         }
     }
 
     public void refreshClothing(View v) {
-        vm.newOutfit();
+        setOutfit();
         vm.updateWeather();
+        accessories();
     }
 
     public void nextClothing(View v) {
@@ -190,11 +228,10 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
             start_wardrobe.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(start_wardrobe);
         }
-
         return true;
     }
 
-  @Override
+    @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);

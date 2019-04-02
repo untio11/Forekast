@@ -1,10 +1,17 @@
 package com.example.forekast.homescreen;
 
+import android.os.AsyncTask;
+
 import com.example.forekast.Suggestion.Outfit;
+import com.example.forekast.clothing.Clothing;
 import com.example.forekast.clothing.ClothingCriteria;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
+
+import java.util.List;
+
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 class HomeScreenViewModel extends HomeScreenViewModelInterface {
     @Override
@@ -56,8 +63,7 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
     }
 
     @Override
-    void previousClothing(String clothing_type) {
-        currentOutfit.postValue(sugg.previous(clothing_type));
+    void previousClothing(String clothing_type) { currentOutfit.postValue(sugg.previous(clothing_type));
     }
 
     @Override
@@ -68,5 +74,27 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
     @Override
     void newOutfit() {
         currentOutfit.postValue(sugg.getRandomOutfit());
+    }
+
+    @Override
+    boolean[] getAccessories() {
+        boolean[] accessories = sugg.getAccessories();
+        return accessories;
+    }
+
+    private static class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
+        Clothing clothing;
+
+        public AgentAsyncTask(Clothing clothing) {
+            // Get the clothing object
+            this.clothing = clothing;
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            // Update clothing to the database
+            Repository.updateClothing(clothing);
+            return null;
+        }
     }
 }

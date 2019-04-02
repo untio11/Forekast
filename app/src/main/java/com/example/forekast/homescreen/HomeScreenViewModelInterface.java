@@ -85,4 +85,5 @@ abstract class HomeScreenViewModelInterface extends ViewModel {
      */
     abstract void newOutfit();
 
+    abstract boolean[] getAccessories();
 }
