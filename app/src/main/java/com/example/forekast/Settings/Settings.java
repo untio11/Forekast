@@ -1,6 +1,7 @@
 package com.example.forekast.Settings;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.example.forekast.R;
@@ -45,7 +46,12 @@ public class Settings extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        /*
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        SharedPreferences.Editor edit = sharedPreferences.edit();
+        edit.putInt("key_name1", 5);
+        edit.apply();
+        */
         if(findViewById(R.id.fragment_container) != null){
             if(savedInstanceState != null){
                 return;

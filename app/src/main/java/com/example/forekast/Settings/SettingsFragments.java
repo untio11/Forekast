@@ -1,16 +1,15 @@
 package com.example.forekast.Settings;
 
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
 
 import com.example.forekast.R;
-
-import androidx.preference.PreferenceFragment;
 
 public class SettingsFragments extends PreferenceFragment {
 
     @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
     }
 }
