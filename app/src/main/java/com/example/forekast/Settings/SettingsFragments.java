@@ -24,7 +24,7 @@ public class SettingsFragments extends PreferenceFragment {
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                 if(key.equals(NEW_WARDROBE)) {
                     Preference new_wardrobe = findPreference(key);
-                    new_wardrobe.setSummary(sharedPreferences.getString(key, "fuck"));
+                    //new_wardrobe.setSummary(sharedPreferences.getString(key, "fuck"));
                     ListPreference wardrobes = (ListPreference) findPreference("user_list");
                     CharSequence[] entries = new CharSequence[wardrobes.getEntries().length+1];
                     for(int i = 0; i < wardrobes.getEntries().length; i++) {
