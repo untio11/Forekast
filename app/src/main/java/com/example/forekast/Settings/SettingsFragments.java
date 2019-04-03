@@ -2,17 +2,20 @@ package com.example.forekast.Settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.PreferenceFragment;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
 import com.example.forekast.R;
 
-public class SettingsFragments extends PreferenceFragment {
+import java.util.prefs.PreferencesFactory;
+
+import androidx.preference.PreferenceFragmentCompat;
+
+public class SettingsFragments extends PreferenceFragmentCompat {
     private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
     public static final String NEW_WARDROBE = "add_wardrobe";
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreatePreferences(Bundle savedInstanceState, String rootkey) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
