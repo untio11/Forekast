@@ -143,7 +143,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     }
 
     public void refreshClothing(View v) {
-        vm.newOutfit();
+        //vm.newOutfit();
         vm.updateWeather();
     }
 

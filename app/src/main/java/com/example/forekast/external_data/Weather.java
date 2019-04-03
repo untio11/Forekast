@@ -10,6 +10,7 @@ public class Weather {
     public float feels_like; // In degrees celsius
     public float wind; // In km/h
     private String city;
+    private String weather_desc; // Short description of the weather
 
     /**
      * Set the city where the weather is polled
@@ -39,7 +40,7 @@ public class Weather {
      * Set the expected rain for that day
      * @param precipitation In mm
      */
-    public void setPrecipitation(float precipitation) {
+    void setPrecipitation(float precipitation) {
         this.precipitation = precipitation;
     }
 
@@ -51,7 +52,7 @@ public class Weather {
      * Set the feels like temperature
      * @param feels_like In degrees celsius
      */
-    public void setFeels_like(float feels_like) {
+    void setFeels_like(float feels_like) {
         this.feels_like = feels_like;
     }
 
@@ -63,7 +64,7 @@ public class Weather {
      * Set the UV-index
      * @param uv_index In UV standard units (whatever that might be)
      */
-    public void setUv_index(float uv_index) {
+    void setUv_index(float uv_index) {
         this.uv_index = uv_index;
     }
 
@@ -75,7 +76,7 @@ public class Weather {
      * Set the wind speed
      * @param wind In km/h
      */
-    public void setWind(float wind) {
+    void setWind(float wind) {
         this.wind = wind;
     }
 
@@ -83,9 +84,21 @@ public class Weather {
         return wind;
     }
 
+    /**
+     * Set a short description of the current weather conditions.
+     * @param weather_desc description
+     */
+    void setWeather_desc(String weather_desc) {
+        this.weather_desc = weather_desc;
+    }
+
+    public String getWeather_desc() {
+        return weather_desc;
+    }
+
     @NotNull
     @Override
     public String toString() {
-        return city + ": " + temp + " Degrees, feels like: " + feels_like;
+        return city + ": " + weather_desc + ", " + temp + " Degrees, feels like: " + feels_like;
     }
 }
