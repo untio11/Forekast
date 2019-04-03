@@ -2,13 +2,10 @@ package com.example.forekast.Settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
-import android.preference.Preference;
 import android.preference.PreferenceFragment;
-
 import com.example.forekast.R;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class SettingsFragments extends PreferenceFragment {
     private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
@@ -23,7 +20,7 @@ public class SettingsFragments extends PreferenceFragment {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                 if(key.equals(NEW_WARDROBE)) {
-                    Preference new_wardrobe = findPreference(key);
+                    EditTextPreference new_wardrobe = (EditTextPreference) findPreference(key);
                     //new_wardrobe.setSummary(sharedPreferences.getString(key, "fuck"));
                     ListPreference wardrobes = (ListPreference) findPreference("user_list");
                     CharSequence[] entries = new CharSequence[wardrobes.getEntries().length+1];
@@ -31,7 +28,9 @@ public class SettingsFragments extends PreferenceFragment {
                         entries[i] = wardrobes.getEntries()[i];
                     }
                     entries[wardrobes.getEntries().length] = sharedPreferences.getString(key, "fuck");
+                    new_wardrobe.setText("");
                     wardrobes.setEntries(entries);
+                    wardrobes.setEntryValues(entries);
                 }
             }
         };
