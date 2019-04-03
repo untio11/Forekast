@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <CheckBoxPreference
+        android:id="@+id/live_location_checkbox"
         android:key="live_location"
         android:title="Live Location"
         android:summary="Use GPS to track location"
