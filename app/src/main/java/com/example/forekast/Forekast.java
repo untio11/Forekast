@@ -81,6 +81,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
             Fragment fragment = null;
             String tag = null;
 
+
             switch (item.getItemId()) {
                 case (R.id.nav_home):
                     // Switch to home screen fragment
@@ -100,6 +101,10 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
 
             if (fragment != null) {
                 FragmentTransaction transaction = Forekast.this.getSupportFragmentManager().beginTransaction();
+                if (onBackstack(tag)) {
+                    getSupportFragmentManager().popBackStack(fragment.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+
                 transaction.replace(R.id.content_area, fragment).addToBackStack(tag).commit();
             }
 
@@ -123,23 +128,26 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
             FragmentManager.BackStackEntry backEntry = getSupportFragmentManager().getBackStackEntryAt(index);
             String tag = backEntry.getName();
 
-            int menu_index = 0;
-
-            switch (tag) {
-                case ("home"):
-                    menu_index = 0;
-                    break;
-                case ("wardrobe"):
-                    menu_index = 1;
-                    break;
-                case ("settings"):
-                    menu_index = 2;
-                    break;
+            if (onBackstack(tag)) {
+                getSupportFragmentManager().popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
 
-            navigationView.getMenu().getItem(menu_index).setChecked(true);
-            super.onBackPressed();
+            FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().replace(R.id.content_area, new HomeScreen()).addToBackStack("home").commit();
+            navigationView.getMenu().getItem(0).setChecked(true);
         }
+    }
+
+    private boolean onBackstack(String fragment_tag) {
+        FragmentManager fm = getSupportFragmentManager();
+
+        for (int i = 0; i < fm.getBackStackEntryCount(); i++) {
+            String name = fm.getBackStackEntryAt(i).getName();
+
+            if (name != null && name.equals(fragment_tag)) return true;
+        }
+
+        return false;
     }
 
     @Override
