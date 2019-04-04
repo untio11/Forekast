@@ -6,8 +6,6 @@ import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import com.example.forekast.R;
 
-import java.util.prefs.PreferencesFactory;
-
 import androidx.preference.PreferenceFragmentCompat;
 
 public class SettingsFragments extends PreferenceFragmentCompat {
@@ -16,8 +14,7 @@ public class SettingsFragments extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootkey) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preferences);
+        setPreferencesFromResource(R.xml.preferences, rootkey);
 
         preferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
