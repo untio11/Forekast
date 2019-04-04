@@ -15,8 +15,9 @@ import java.util.List;
 public class SuggestionModule extends SuggestionModuleInterface {
 
     private ClothingCriteria criteria;
+    private ClothingCriteria tempCriteria;
     private Weather weather;
-    OutfitPowerset outfits = new OutfitPowerset();
+    static OutfitPowerset outfits = new OutfitPowerset();
 
     /** Slider Criteria */
     private MutablePair<Integer, Integer> warmth;
@@ -49,15 +50,16 @@ public class SuggestionModule extends SuggestionModuleInterface {
     private Clothing currentShoes;
 
     /** Other */
-    private int currentIndOT;
-    private int currentIndIT;
-    private int currentIndB;
-    private int currentIndS;
+    private static int currentIndOT;
+    private static int currentIndIT;
+    private static int currentIndB;
+    private static int currentIndS;
 
     /** First establish the criteria */
     @Override
     public void setCurrentCriteria(ClothingCriteria criteria, Weather weather) {
         this.criteria = criteria;
+        this.tempCriteria = criteria;
         this.weather = weather;
 
         /* Slider Criteria */
@@ -79,10 +81,16 @@ public class SuggestionModule extends SuggestionModuleInterface {
         warmth.second = (tempRatio + warmth.second) / 2;
         System.out.println(temp);
         System.out.println(tempRatio);
+
+        generateOutfit();
     }
 
     // Set the booleans for the accessories based on the critieria assigned
     public void setAccessories() {
+        if (weather == null) {
+            return;
+        }
+
         coat = false;
         gloves = false;
         umbrella = false;
@@ -116,7 +124,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
         /** When to suggest gloves & scarf */
         // if it feels cold
-        if (feels_like < 10) {
+        if (feels_like < 3) {
             gloves = true;
         }
 
@@ -136,127 +144,84 @@ public class SuggestionModule extends SuggestionModuleInterface {
         return accessories;
     }
 
+    List<Clothing> inner_torso = new ArrayList<>();
+    List<Clothing> outer_torso = new ArrayList<>();
+    List<Clothing> bottoms = new ArrayList<>();
+    List<Clothing> shoes = new ArrayList<>();
+
+    private void resetRange() {
+        tempCriteria = criteria;
+    }
+
     /** Local clothing Powerset from which the other classes derive outfits*/
     // OutfitPowerset contains lists of appropriate clothing
     @Override
-    public void generateOutfit(ClothingCriteria criteria) {
-        List<Clothing> inner_torso = new ArrayList<>();
-        List<Clothing> outer_torso = new ArrayList<>();
-        List<Clothing> bottoms = new ArrayList<>();
-        List<Clothing> shoes = new ArrayList<>();
-
-        List<Clothing> repoIT = Repository.getClothing("Torso", criteria);
-        List<Clothing> repoOT = Repository.getClothing("Torso", criteria);
-        List<Clothing> repoB = Repository.getClothing("Legs", criteria);
-        List<Clothing> repoS = Repository.getClothing("Feet", criteria);
-
-        int warmthUpper = warmth.second; // upper bound
-        int warmthLower = warmth.second; // lower bound
-
-        int comfortUpper = comfort.second;
-        int comfortLower = comfort.second;
-
-        int formalityUpper = formality.second;
-        int formalityLower = formality.second;
-
-        int currentPreference = 10;
-
-
-        for (Clothing clothing : repoIT){
-            if (clothing.location.equals("Torso") && clothing.preference == currentPreference
-                    && clothing.overwearable
-                    /*&& clothing.warmth <= warmthUpper && clothing.warmth >= warmthLower*/
-                    && clothing.comfort <= comfortUpper && clothing.comfort >= comfortLower
-                    && clothing.formality <= formalityUpper && clothing.formality >= formalityLower
-                    && clothing.owner == owner) {
-                inner_torso.add(clothing);
-            }
-
-            // Expand the range
-            warmthUpper++;
-            warmthLower--;
-
-            comfortUpper++;
-            comfortLower--;
-
-            formalityUpper++;
-            formalityLower--;
-
-            currentPreference --;
-        }
-
-        for (Clothing clothing: repoOT){
-            if (clothing.location.equals("Torso") && clothing.preference == currentPreference
-                    && clothing.underwearable
-                    /*&& clothing.warmth <= warmthUpper && clothing.warmth >= warmthLower*/
-                    && clothing.comfort <= comfortUpper && clothing.comfort >= comfortLower
-                    && clothing.formality <= formalityUpper && clothing.formality >= formalityLower
-                    && clothing.owner == owner) {
-                outer_torso.add(clothing);
-            }
-
-            // Expand the range
-            warmthUpper++;
-            warmthLower--;
-
-            comfortUpper++;
-            comfortLower--;
-
-            formalityUpper++;
-            formalityLower--;
-
-            currentPreference --;
-        }
-
-        for (Clothing clothing: repoB){
-            if (clothing.location.equals("Legs") && clothing.preference == currentPreference
-                    && clothing.warmth <= warmthUpper && clothing.warmth >= warmthLower
-                    && clothing.comfort <= comfortUpper && clothing.comfort >= comfortLower
-                    && clothing.formality <= formalityUpper && clothing.formality >= formalityLower
-                    && clothing.owner == owner) {
-                bottoms.add(clothing);
-            }
-
-            // Expand the range
-            warmthUpper++;
-            warmthLower--;
-
-            comfortUpper++;
-            comfortLower--;
-
-            formalityUpper++;
-            formalityLower--;
-
-            currentPreference --;
-        }
-
-        for (Clothing clothing : repoS){
-            if (clothing.location.equals("Feet") && clothing.preference == currentPreference
-                    && clothing.warmth <= warmthUpper && clothing.warmth >= warmthLower
-                    && clothing.comfort <= comfortUpper && clothing.comfort >= comfortLower
-                    && clothing.formality <= formalityUpper && clothing.formality >= formalityLower
-                    && clothing.owner == owner) {
-                shoes.add(clothing);
-            }
-
-            // Expand the range
-            warmthUpper++;
-            warmthLower--;
-
-            comfortUpper++;
-            comfortLower--;
-
-            formalityUpper++;
-            formalityLower--;
-
-            currentPreference --;
-        }
+    public void generateOutfit() {
+        generateITRecursion();
+        generateOTRecursion();
+        generateBRecursion();
+        generateSRecursion();
 
         // Communicate with OutfitPowerset
         outfits.inner_torso = inner_torso;
         outfits.outer_torso = outer_torso;
         outfits.bottoms = bottoms;
         outfits.shoes = shoes;
+        outfits.set();
+    }
+
+    private void generateITRecursion() {
+        List<Clothing> repoIT = Repository.getClothing("Torso", tempCriteria);
+        for (Clothing clothing : repoIT) {
+            if (clothing.underwearable) {
+                inner_torso.add(clothing);
+            }
+        }
+        if (inner_torso.size() < 10 && tempCriteria.preference.second != 0) {
+            tempCriteria.expandRange();
+            generateITRecursion();
+        } else {
+            resetRange();
+        }
+    }
+
+    private void generateOTRecursion() {
+        List<Clothing> repoOT = Repository.getClothing("Torso", tempCriteria);
+        for (Clothing clothing : repoOT) {
+            if (clothing.overwearable) {
+                outer_torso.add(clothing);
+            }
+        }
+        if (outer_torso.size() < 10 && tempCriteria.preference.second != 0) {
+            tempCriteria.expandRange();
+            generateOTRecursion();
+        } else {
+            resetRange();
+        }
+    }
+
+    private void generateBRecursion() {
+        List<Clothing> repoB = Repository.getClothing("Legs", tempCriteria);
+        System.out.println("Based on criteria: " + tempCriteria);
+        System.out.println(repoB);
+        bottoms.addAll(repoB);
+        if (bottoms.size() < 10 && tempCriteria.preference.second != 0) {
+            tempCriteria.expandRange();
+            generateBRecursion();
+        } else {
+            resetRange();
+        }
+    }
+
+    private void generateSRecursion() {
+        List<Clothing> repoS = Repository.getClothing("Feet", tempCriteria);
+        shoes.addAll(repoS);
+        if (shoes.size() < 10 && tempCriteria.preference.second != 0) {
+            tempCriteria.expandRange();
+            generateSRecursion();
+        } else {
+            resetRange();
+        }
     }
 
     /** Draw from the local powerset */
@@ -264,14 +229,6 @@ public class SuggestionModule extends SuggestionModuleInterface {
     @Override
     public Outfit getRandomOutfit() {
         ClothingCriteria criteria = new ClothingCriteria(warmth, formality, comfort, preference, owner);
-
-        if (outfits == null) {
-            generateOutfit(criteria);
-            setAccessories();
-            if (outfits != null) {
-                shuffle();
-            }
-        }
 
         setClothing();
 
@@ -285,29 +242,49 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
         int index = 0;
 
-        // Needs optimising
-        if (outfits.inner_torso.size() > 0 && outfits.outer_torso.size() > 0) {
-            while (tempInner == null && tempOuter == null && (index < outfits.outer_torso.size() || index < outfits.inner_torso.size())) {
-                tempInner = outfits.inner_torso.get(index);
-                currentIndIT = index;
-                tempOuter = outfits.outer_torso.get(index);
-                currentIndOT = index;
+        System.out.println("innertorso set: "+outfits.inner_torso);
 
+        /*
+        // Needs optimising
+        if (outfits.inner_torso.size() > 0 || outfits.outer_torso.size() > 0) {
+            while ((tempInner == null || tempOuter == null) && (index < outfits.outer_torso.size() || index < outfits.inner_torso.size())) {
+
+                if (outfits.inner_torso.size() > 0 && tempInner == null) {
+                    tempInner = outfits.inner_torso.get(index);
+                    currentIndIT = index;
+                }
+                if (outfits.outer_torso.size() > 0 && tempOuter == null) {
+                    tempOuter = outfits.outer_torso.get(index);
+                    currentIndOT = index;
+                }
+                index++;
+            }
+            if (outfits.inner_torso.size() > 0 && outfits.outer_torso.size() > 0) {
                 if ((tempInner.warmth + tempOuter.warmth) >= (warmth.second * 2)) {
                     currentInnerTorso = tempInner;
                     currentOuterTorso = tempOuter;
                 }
-
-                index++;
             }
+
             if (tempInner == null){
-                currentInnerTorso = outfits.inner_torso.get(0);
-                currentIndIT = 0;
+                if (outfits.inner_torso.size() > 0) {
+                    currentInnerTorso = outfits.inner_torso.get(0);
+                    currentIndIT = 0;
+                }
             }
             else if (tempOuter == null){
-                currentOuterTorso = outfits.outer_torso.get(0);
-                currentIndOT = 0;
+                if (outfits.outer_torso.size() > 0) {
+                    currentOuterTorso = outfits.outer_torso.get(0);
+                    currentIndOT = 0;
+                }
             }
+        }
+        */
+        if (outfits.inner_torso.size() > 0) {
+            currentInnerTorso = outfits.inner_torso.get(0);
+        }
+        if (outfits.outer_torso.size() > 0) {
+            currentOuterTorso = outfits.outer_torso.get(0);
         }
         if (outfits.bottoms.size() > 0) {
             currentBottoms = outfits.bottoms.get(0);
@@ -315,12 +292,15 @@ public class SuggestionModule extends SuggestionModuleInterface {
         if (outfits.shoes.size() > 0){
             currentShoes = outfits.shoes.get(0);
         }
+
     }
 
     private void shuffle() {
         for (List<Clothing> category : outfits) {
+            System.out.println("lists:" + category);
             Collections.shuffle(category);
         }
+        setClothing();
     }
 
     /** Next & Previous button functions (connected to button in the homescreen view model */

@@ -27,7 +27,7 @@ public abstract class ClothingCriteriaInterface implements Iterable<Pair<String,
     public MutablePair<Integer, Integer> comfort;
     public MutablePair<Integer, Integer> preference;
     public String owner;
-    public boolean washingMachine;
+    public boolean washingMachine = false;
 
     private List<Pair<String, MutablePair<Integer, Integer>>> all;
 
@@ -54,4 +54,5 @@ public abstract class ClothingCriteriaInterface implements Iterable<Pair<String,
     public Iterator<Pair<String, MutablePair<Integer, Integer>>> iterator() {
         return all.iterator();
     }
+
 }

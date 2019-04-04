@@ -81,20 +81,4 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
         boolean[] accessories = sugg.getAccessories();
         return accessories;
     }
-
-    private static class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
-        Clothing clothing;
-
-        public AgentAsyncTask(Clothing clothing) {
-            // Get the clothing object
-            this.clothing = clothing;
-        }
-
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            // Update clothing to the database
-            Repository.updateClothing(clothing);
-            return null;
-        }
-    }
 }

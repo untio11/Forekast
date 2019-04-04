@@ -16,7 +16,7 @@ public abstract class SuggestionModuleInterface {
 
     abstract void setCurrentCriteria(ClothingCriteria criteria, Weather weather);
 
-    abstract void generateOutfit(ClothingCriteria criteria);
+    abstract void generateOutfit();
 
     abstract Outfit getRandomOutfit();
 

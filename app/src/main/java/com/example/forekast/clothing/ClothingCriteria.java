@@ -15,4 +15,24 @@ public class ClothingCriteria extends ClothingCriteriaInterface{
     public ClothingCriteria() {
         super();
     }
+
+    @Override
+    public String toString() {
+        return warmth.first + "+" + warmth.second + ", "+ formality.first + "+" + formality.second +
+                ", " + comfort.first + "+" + comfort.second + ", " + preference.second + ", " + owner;
+    }
+
+    public void expandRange() {
+        warmth.first--;
+        warmth.second++;
+
+        formality.first--;
+        formality.second++;
+
+        comfort.first--;
+        comfort.second++;
+
+        preference.first--;
+        // Upper bound preference does not have to increase, since it is always max.
+    }
 }

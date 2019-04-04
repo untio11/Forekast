@@ -52,7 +52,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     private MutablePair<Integer, Integer> warmth = new MutablePair<>(3, 3);
     private MutablePair<Integer, Integer> formality = new MutablePair<>(3, 3);
     private MutablePair<Integer, Integer> comfort = new MutablePair<>(3, 3);
-    private MutablePair<Integer, Integer> preference = new MutablePair<>(10, 10);
+    private MutablePair<Integer, Integer> preference = new MutablePair<>(0, 10);
 
     private ClothingCriteria criteria = new ClothingCriteria();
 
@@ -81,7 +81,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
 
         init(savedInstanceState);
         vm.updateWeather();
-        vm.newOutfit();
+        //vm.newOutfit();
     }
 
     private void init(Bundle savedInstance) {
@@ -103,14 +103,17 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         }
 
         SeekBar comfort_slider = findViewById(R.id.slider_comfort);
+        comfort_slider.setMax(10);
         comfort_slider.setProgress(vm.getComfort());
         comfort_slider.setOnSeekBarChangeListener(new updateCriteriaSeekbar());
 
         SeekBar warmth_slider = findViewById(R.id.slider_warmth);
+        warmth_slider.setMax(10);
         warmth_slider.setProgress(vm.getWarmth());
         warmth_slider.setOnSeekBarChangeListener(new updateCriteriaSeekbar());
 
         SeekBar formality_slider = findViewById(R.id.slider_formality);
+        formality_slider.setMax(10);
         formality_slider.setProgress(vm.getFormality());
         formality_slider.setOnSeekBarChangeListener(new updateCriteriaSeekbar());
     }
@@ -123,10 +126,14 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     }
 
     private void initOutfit(Outfit newOutfit) {
-        vm.sugg.setCurrentCriteria(criteria, weather);
+        //vm.sugg.setCurrentCriteria(criteria, weather);
         Log.d("ClothingUpdate", (newOutfit != null ? newOutfit.toString() : "No clothes"));
         if (newOutfit != null) {
             this.outfit = newOutfit;
+            System.out.println(outfit.inner_torso);
+            System.out.println(outfit.outer_torso);
+            System.out.println(outfit.pants);
+            System.out.println(outfit.shoes);
             setOutfit();
         }
     }
@@ -161,6 +168,8 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     }
 
     public void accessories(){
+        vm.sugg.setAccessories();
+
         ImageView sunglassesView = findViewById(R.id.noti_sunglasses);
         ImageView coatView = findViewById(R.id.noti_coat);
         ImageView glovesView = findViewById(R.id.noti_gloves);

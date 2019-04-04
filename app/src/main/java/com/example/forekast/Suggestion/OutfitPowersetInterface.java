@@ -24,7 +24,9 @@ abstract class OutfitPowersetInterface implements Iterable<List<Clothing>> {
         outer_torso = new ArrayList<>();
         bottoms = new ArrayList<>();
         shoes = new ArrayList<>();
+    }
 
+    public void set() {
         all.add(inner_torso);
         all.add(outer_torso);
         all.add(bottoms);
