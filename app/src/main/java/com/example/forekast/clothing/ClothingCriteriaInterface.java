@@ -13,11 +13,11 @@ import java.util.List;
  * Do not forget to set the owner of the clothing here as well, otherwise you won't get any clothes from the repo.
  */
 public abstract class ClothingCriteriaInterface implements Iterable<Pair<String, ClothingCriteriaInterface.MutablePair<Integer, Integer>>> {
-    public class MutablePair<L, R> {
+    public static class MutablePair<L, R> {
         public L first;
         public R second;
 
-        MutablePair(L first, R second) {
+        public MutablePair(L first, R second) {
             this.first = first;
             this.second = second;
         }

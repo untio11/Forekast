@@ -3,6 +3,8 @@ package com.example.forekast.Suggestion;
 import android.util.Log;
 
 import com.example.forekast.clothing.*;
+import com.example.forekast.clothing.ClothingCriteriaInterface;
+import com.example.forekast.clothing.ClothingCriteriaInterface.MutablePair;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
 
@@ -17,14 +19,14 @@ public class SuggestionModule extends SuggestionModuleInterface {
     OutfitPowerset outfits = new OutfitPowerset();
 
     /** Slider Criteria */
-    private ClothingCriteriaInterface.MutablePair<Integer, Integer> warmth;
-    private ClothingCriteriaInterface.MutablePair<Integer, Integer> formality;
-    private ClothingCriteriaInterface.MutablePair<Integer, Integer> comfort;
-    private ClothingCriteriaInterface.MutablePair<Integer, Integer> preference;
+    private MutablePair<Integer, Integer> warmth;
+    private MutablePair<Integer, Integer> formality;
+    private MutablePair<Integer, Integer> comfort;
+    private MutablePair<Integer, Integer> preference;
     private String owner;
 
     /** Weather Criteria */
-    private int temp;
+    private float temp;
     private float uv_index;
     private float precipitation;
     // float weather_icon; Not relevant
@@ -34,11 +36,11 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
 
     /** Accessories */
-    private Boolean coat;
-    private Boolean gloves;
-    private Boolean umbrella;
-    private Boolean sunglasses;
-    private Boolean leggings;
+    private boolean coat = false;
+    private boolean gloves = false;
+    private boolean umbrella = false;
+    private boolean sunglasses = false;
+    private boolean leggings = false;
 
     /** Clothing */
     private Clothing currentInnerTorso;
@@ -59,21 +61,24 @@ public class SuggestionModule extends SuggestionModuleInterface {
         this.weather = weather;
 
         /* Slider Criteria */
-        warmth = criteria.warmth;
-        formality = criteria.formality;
-        comfort = criteria.comfort;
-        preference = criteria.preference;
-        owner = criteria.owner;
+        this.warmth = criteria.warmth;
+        this.formality = criteria.formality;
+        this.comfort = criteria.comfort;
+        this.preference = criteria.preference;
+        this.owner = criteria.owner;
 
         /* Weather Criteria */
-        temp = (int) weather.temp;
-        uv_index = weather.uv_index;
-        precipitation = weather.precipitation;
-        feels_like = weather.feels_like;
-        wind = weather.wind;
+        this.temp = weather.temp;
+        this.uv_index = weather.uv_index;
+        this.precipitation = weather.precipitation;
+        this.feels_like = weather.feels_like;
+        this.wind = weather.wind;
 
-        int tempRatio = temp / 3;
+        int tempRatio =  (int) temp / 3;
+        System.out.println(warmth.second);
         warmth.second = (tempRatio + warmth.second) / 2;
+        System.out.println(temp);
+        System.out.println(tempRatio);
     }
 
     // Set the booleans for the accessories based on the critieria assigned
@@ -135,8 +140,6 @@ public class SuggestionModule extends SuggestionModuleInterface {
     // OutfitPowerset contains lists of appropriate clothing
     @Override
     public void generateOutfit(ClothingCriteria criteria) {
-        setCurrentCriteria(criteria, weather);
-
         List<Clothing> inner_torso = new ArrayList<>();
         List<Clothing> outer_torso = new ArrayList<>();
         List<Clothing> bottoms = new ArrayList<>();

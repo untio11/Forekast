@@ -2,6 +2,7 @@ package com.example.forekast.homescreen;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.MutableContextWrapper;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,12 +16,16 @@ import com.example.forekast.Settings.Settings;
 import com.example.forekast.Settings.SwitchWardrobe;
 import com.example.forekast.Suggestion.Outfit;
 import com.example.forekast.Wardrobe.Wardrobe;
+import com.example.forekast.clothing.ClothingCriteria;
+import com.example.forekast.clothing.ClothingCriteriaInterface;
+import com.example.forekast.clothing.ClothingCriteriaInterface.*;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
@@ -41,6 +46,15 @@ import android.widget.ImageView;
 public class HomeScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private HomeScreenViewModelInterface vm;
+    private Weather weather;
+    private Outfit outfit;
+
+    private MutablePair<Integer, Integer> warmth = new MutablePair<>(3, 3);
+    private MutablePair<Integer, Integer> formality = new MutablePair<>(3, 3);
+    private MutablePair<Integer, Integer> comfort = new MutablePair<>(3, 3);
+    private MutablePair<Integer, Integer> preference = new MutablePair<>(10, 10);
+
+    private ClothingCriteria criteria = new ClothingCriteria();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +80,8 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         navigationView.setNavigationItemSelectedListener(this);
 
         init(savedInstanceState);
-
+        vm.updateWeather();
+        vm.newOutfit();
     }
 
     private void init(Bundle savedInstance) {
@@ -76,10 +91,10 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         vm.getLiveWeather().observe(
                 this,
-                newWeather -> Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather")));
+                newWeather -> initWeather(newWeather));
         vm.getLiveOutfit().observe(
                 this,
-                newOutfit -> Log.d("ClothingUpdate", (newOutfit != null ? newOutfit.toString() : "No clothes")));
+                newOutfit -> initOutfit(newOutfit));
 
         if (savedInstance != null) {
             vm.setComfort(savedInstance.getInt("Comfortsl"));
@@ -98,15 +113,24 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         SeekBar formality_slider = findViewById(R.id.slider_formality);
         formality_slider.setProgress(vm.getFormality());
         formality_slider.setOnSeekBarChangeListener(new updateCriteriaSeekbar());
-
-        final Observer<Weather> weathereObserver = newWeather -> Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather"));
-        final Observer<Outfit> clothingObserver = newClothing -> Log.d("ClothingUpdate", (newClothing != null ? newClothing.toString() : "No clothes"));
-
-        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        vm.getLiveWeather().observe(this, weathereObserver);
-        vm.getLiveOutfit().observe(this, clothingObserver);
-
     }
+
+    private void initWeather(Weather newWeather) {
+        Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather"));
+        if (newWeather != null) {
+            this.weather = newWeather;
+        }
+    }
+
+    private void initOutfit(Outfit newOutfit) {
+        vm.sugg.setCurrentCriteria(criteria, weather);
+        Log.d("ClothingUpdate", (newOutfit != null ? newOutfit.toString() : "No clothes"));
+        if (newOutfit != null) {
+            this.outfit = newOutfit;
+            setOutfit();
+        }
+    }
+
     public void setOutfit(){
         ImageView innerTorso = findViewById(R.id.innerTorso);
         ImageView outerTorso = findViewById(R.id.outerTorso);
@@ -117,8 +141,6 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         Bitmap bitmapOT;
         Bitmap bitmapP;
         Bitmap bitmapS;
-
-        Outfit outfit = vm.sugg.getRandomOutfit();
 
         if (outfit.inner_torso != null){
             bitmapIT = BitmapFactory.decodeByteArray(outfit.inner_torso.picture, 0, outfit.inner_torso.picture.length);
@@ -180,8 +202,8 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     }
 
     public void refreshClothing(View v) {
-        setOutfit();
         vm.updateWeather();
+        vm.newOutfit();
         accessories();
     }
 
@@ -268,6 +290,14 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
                 default:
                     break;
             }
+            warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
+            formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
+            comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
+            preference = new MutablePair<>(10, 10);
+
+            criteria = new ClothingCriteria(warmth, formality, comfort, preference, "General");
+            vm.sugg.setCurrentCriteria(criteria, weather);
+            vm.newOutfit();
         }
     }
 }
