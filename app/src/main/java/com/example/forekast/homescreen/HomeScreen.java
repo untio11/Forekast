@@ -1,11 +1,13 @@
 package com.example.forekast.homescreen;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import com.example.forekast.R;
 import com.example.forekast.Suggestion.Outfit;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,15 +20,20 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.ImageView;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
+
 public class HomeScreen extends Fragment {
 
     private HomeScreenViewModelInterface vm;
     private View view;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.home_screen, container, false);
-        vm = ViewModelProviders.of(this.getActivity()).get(HomeScreenViewModel.class);
+        vm = ViewModelProviders.of(Objects.requireNonNull(this.getActivity())).get(HomeScreenViewModel.class);
+        init(savedInstanceState);
         return view;
     }
 
@@ -84,7 +91,7 @@ public class HomeScreen extends Fragment {
     }
 
   @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    public void onSaveInstanceState(@NotNull Bundle savedInstanceState) {
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
 
@@ -102,16 +109,17 @@ public class HomeScreen extends Fragment {
         }
 
         SeekBar comfort_slider = view.findViewById(R.id.slider_comfort);
-        comfort_slider.setProgress(vm.getComfort());
+        comfort_slider.setProgress(vm.getComfort() == Integer.MAX_VALUE ? 3 : vm.getComfort());
         comfort_slider.setOnSeekBarChangeListener(new updateCriteriaSeekBar());
 
         SeekBar warmth_slider = view.findViewById(R.id.slider_warmth);
-        warmth_slider.setProgress(vm.getWarmth());
+        warmth_slider.setProgress(vm.getWarmth() == Integer.MAX_VALUE ? 3 : vm.getWarmth());
         warmth_slider.setOnSeekBarChangeListener(new updateCriteriaSeekBar());
 
         SeekBar formality_slider = view.findViewById(R.id.slider_formality);
-        formality_slider.setProgress(vm.getFormality());
+        formality_slider.setProgress(vm.getFormality() == Integer.MAX_VALUE ? 3 : vm.getFormality());
         formality_slider.setOnSeekBarChangeListener(new updateCriteriaSeekBar());
+
 
 
         final Observer<Outfit> clothingObserver = newClothing -> Log.d("ClothingUpdate", (newClothing != null ? newClothing.toString() : "No clothes"));
@@ -125,6 +133,27 @@ public class HomeScreen extends Fragment {
                         (newWeather != null ? newWeather.toString() : "No weather")
                 )
         );
+    }
+
+    void refreshClothing(View v) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        boolean live = prefs.getBoolean("live_location", false);
+        if (live) {
+
+        } else {
+            vm.updateWeather(prefs.getString("manual_location", "Eindhoven"));
+        }
+        vm.newOutfit();
+    }
+
+    public void nextClothing(View v) {
+        vm.nextClothing(v.getTag().toString());
+        Log.d("Next", v.getTag().toString());
+    }
+
+    public void prevClothing(View v) {
+        vm.previousClothing(v.getTag().toString());
+        Log.d("Prev", v.getTag().toString());
     }
 
 

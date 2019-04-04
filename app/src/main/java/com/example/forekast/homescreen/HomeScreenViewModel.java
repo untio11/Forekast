@@ -1,6 +1,7 @@
 package com.example.forekast.homescreen;
 
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.preference.PreferenceManager;
 
 import com.example.forekast.Suggestion.Outfit;
@@ -9,7 +10,7 @@ import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
 import androidx.lifecycle.LiveData;
 
-class HomeScreenViewModel extends HomeScreenViewModelInterface {
+public class HomeScreenViewModel extends HomeScreenViewModelInterface {
     @Override
     LiveData<Outfit> getLiveOutfit() {
         return currentOutfit;
@@ -55,7 +56,7 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
 
     @Override
     int getFormality() {
-        return (clothingCriteria.formality.second == Integer.MAX_VALUE ? 3 : clothingCriteria.formality.second);
+        return clothingCriteria.formality.second;
     }
 
     @Override
@@ -69,8 +70,13 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
     }
 
     @Override
-    void updateWeather() {
-        Repository.getWeather("Eindhoven", currentWeather);
+    public void updateWeather(Location location) {
+        Repository.getWeather(Double.toString(location.getLatitude()), Double.toString(location.getLongitude()), currentWeather);
+    }
+
+    @Override
+    void updateWeather(String name) {
+        Repository.getWeather(name, currentWeather);
     }
 
     @Override

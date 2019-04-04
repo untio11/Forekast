@@ -6,6 +6,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -94,7 +96,13 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
 
         JsonArray weather_data = forecast_json.getAsJsonArray("list"); // For the weather data
 
-        HttpURLConnection uv_con = openCon(getUvURL(coordinates.get("lat").getAsString(), coordinates.get("lon").getAsString()));
+        HttpURLConnection uv_con;
+        if (current_latitude != null) {
+            uv_con = openCon(getUvURL(current_latitude, current_longitude));
+        } else {
+            uv_con = openCon(getUvURL(coordinates.get("lat").getAsString(), coordinates.get("lon").getAsString()));
+        }
+
         JsonObject uv_json = readResponse(uv_con);
 
 

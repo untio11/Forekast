@@ -1,24 +1,34 @@
 package com.example.forekast;
 
-
-import android.content.Intent;
+import android.Manifest;
+import android.content.IntentSender;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.SeekBar;
 
-import com.example.forekast.EditScreen.EditScreen;
-import com.example.forekast.Settings.Settings;
 import com.example.forekast.Settings.SettingsFragments;
-import com.example.forekast.Suggestion.Outfit;
 import com.example.forekast.Wardrobe.Wardrobe;
 import com.example.forekast.external_data.Repository;
-import com.example.forekast.external_data.Weather;
 import com.example.forekast.homescreen.HomeScreen;
-import com.google.android.material.internal.NavigationMenuItemView;
+import com.example.forekast.homescreen.HomeScreenViewModel;
+import com.example.forekast.homescreen.HomeScreenViewModelInterface;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -30,14 +40,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
 public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentInteractionListener {
     private NavigationView navigationView;
-    private int nav_home_id;
-    private int nav_wardrobe_id;
-    private int nav_settings_id;
+    public Location currentLocation;
+    private FusedLocationProviderClient fl;
+    private LocationRequest req;
+    private LocationCallback locationCallback;
+
 
     @Override
     protected void onCreate(Bundle savedState) {
@@ -49,16 +61,9 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this,
-                drawer,
-                toolbar,
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close
-        ) {
-            public void onDrawerClosed(View view) {
-            }
-
+                R.string.navigation_drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 drawerView.bringToFront();
@@ -67,9 +72,6 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
 
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        nav_home_id = R.id.nav_home;
-        nav_settings_id = R.id.nav_settings;
-        nav_wardrobe_id = R.id.nav_wardrobe;
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(item -> {
@@ -111,16 +113,88 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
             return true;
         });
 
-        Fragment fragment = HomeScreen.newInstance();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content_area, fragment).addToBackStack("home").commit();
+        init();
+    }
 
+    private void init() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_area, HomeScreen.newInstance()).addToBackStack("home").commit();
         Repository.initDB(getApplicationContext());
+        HomeScreenViewModelInterface vm = ViewModelProviders.of(Forekast.this).get(HomeScreenViewModel.class);
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    vm.updateWeather(location);
+                }
+            };
+        };
+
+        fl = new FusedLocationProviderClient(getApplicationContext());
+
+        req = createLocationRequest();
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(req);
+        SettingsClient client = LocationServices.getSettingsClient(this);
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+
+        task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                // All location settings are satisfied. The client can initialize
+                // location requests here.
+                // ...
+                startLocationUpdates(req);
+            }
+        });
+
+        task.addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ResolvableApiException) {
+                    // Location settings are not satisfied, but this can be fixed
+                    // by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(Forekast.this, 1);
+                    } catch (IntentSender.SendIntentException sendEx) {
+                        // Ignore the error.
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("live_location", false)) {
+            startLocationUpdates(req);
+        }
+    }
+
+    private LocationRequest createLocationRequest() {
+        LocationRequest req = LocationRequest.create();
+        req.setInterval(300000); // Five minutes
+        req.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        return req;
+    }
+
+    private void startLocationUpdates(LocationRequest req) {
+        try {
+            fl.requestLocationUpdates(req, locationCallback, null);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
