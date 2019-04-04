@@ -80,7 +80,7 @@ public abstract class HomeScreenViewModelInterface extends ViewModel {
      * Also refreshes the accessory suggestions based on potential changes in weather.
      * @param name The name of the city we want the weather from
      */
-    abstract void updateWeather(String name);
+    abstract public void updateWeather(String name);
 
     /**
      * Also sends a request for the weather to be fetched. It will also update the weather object,

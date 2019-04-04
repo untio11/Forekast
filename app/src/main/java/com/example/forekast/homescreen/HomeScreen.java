@@ -125,9 +125,10 @@ public class HomeScreen extends Fragment {
         final Observer<Outfit> clothingObserver = newClothing -> Log.d("ClothingUpdate", (newClothing != null ? newClothing.toString() : "No clothes"));
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        vm.getLiveOutfit().observe(this, clothingObserver);
+        // TODO: For merging, note that it is important to use the this.getActivity() instead of just this.
+        vm.getLiveOutfit().observe(Objects.requireNonNull(this.getActivity()), clothingObserver);
         vm.getLiveWeather().observe(
-                this,
+                this.getActivity(),
                 newWeather -> Log.d(
                         "WeatherUpdate",
                         (newWeather != null ? newWeather.toString() : "No weather")
@@ -136,13 +137,6 @@ public class HomeScreen extends Fragment {
     }
 
     void refreshClothing(View v) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        boolean live = prefs.getBoolean("live_location", false);
-        if (live) {
-
-        } else {
-            vm.updateWeather(prefs.getString("manual_location", "Eindhoven"));
-        }
         vm.newOutfit();
     }
 

@@ -1,14 +1,10 @@
 package com.example.forekast;
 
-import android.Manifest;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 
 import com.example.forekast.Settings.SettingsFragments;
@@ -26,12 +22,12 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.annotation.NonNull;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -40,16 +36,28 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
 public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentInteractionListener {
     private NavigationView navigationView;
-    public Location currentLocation;
     private FusedLocationProviderClient fl;
     private LocationRequest req;
-    private LocationCallback locationCallback;
+    private HomeScreenViewModelInterface vm;
+    private Timer static_weather_timer;
 
+    private LocationCallback locationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            if (locationResult == null) {
+                return;
+            }
+
+            for (Location location : locationResult.getLocations()) {
+                // Update the weather in the viewmodel
+                vm.updateWeather(location);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedState) {
@@ -57,6 +65,182 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
 
         setContentView(R.layout.main_activity);
 
+        initializeNavigation();
+
+        init();
+
+        // Initialize the homescreen in the content area on startup
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_area, HomeScreen.newInstance())
+                .addToBackStack("home")
+                .commit();
+    }
+
+    private void init() {
+        Repository.initDB(getApplicationContext());
+
+        vm = ViewModelProviders.of(Forekast.this).get(HomeScreenViewModel.class);
+
+        locationSetup();
+
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                .registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
+                    if (key.equals("live_location")) {
+                        // When we click the button, the last value was the one it isn't now
+                        if (usingLiveLocation()) {
+                            static_weather_timer.cancel();
+                            startWeatherUpdates();
+                        } else {
+                            resetWeatherUpdates();
+                        }
+                    } else if (key.equals("manual_weather")) {
+                        static_weather_timer.cancel();
+                        startWeatherUpdates();
+                    }
+                });
+    }
+
+    private void locationSetup() {
+        if (fl == null) {
+            fl = new FusedLocationProviderClient(getApplicationContext());
+        }
+
+        if (req == null) {
+            req = createLocationRequest();
+        }
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(req);
+
+        SettingsClient client = LocationServices.getSettingsClient(Forekast.this);
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+        task.addOnSuccessListener(Forekast.this, locationSettingsResponse -> {
+            if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("live_location", false)) {
+                startLocationUpdates(req);
+            }
+        });
+        task.addOnFailureListener(Forekast.this, e -> {
+            if (e instanceof ResolvableApiException) {
+                // Location settings are not satisfied, but this can be fixed
+                // by showing the user a dialog.
+                try {
+                    // Show the dialog by calling startResolutionForResult(),
+                    // and check the result in onActivityResult().
+                    ResolvableApiException resolvable = (ResolvableApiException) e;
+                    resolvable.startResolutionForResult(Forekast.this, 1);
+                } catch (IntentSender.SendIntentException sendEx) {
+                    // Ignore the error.
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //startWeatherUpdates();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //stopWeatherUpdates();
+    }
+
+    private LocationRequest createLocationRequest() {
+        LocationRequest req = LocationRequest.create();
+        req.setInterval(5000); // Five minutes
+        req.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        return req;
+    }
+
+    private void startLocationUpdates(LocationRequest req) {
+        try {
+            fl.requestLocationUpdates(req, locationCallback, null);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void startWeatherUpdates() {
+        if (usingLiveLocation()) {
+            // Start with making location requests and stuff
+            if (req == null) {
+                req = createLocationRequest();
+            }
+
+            startLocationUpdates(req);
+        } else {
+            // Setup some polling interval for static location
+            static_weather_timer = new Timer();
+            static_weather_timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    vm.updateWeather(PreferenceManager
+                            .getDefaultSharedPreferences(getApplicationContext())
+                            .getString("manual_location", "Eindhoven"));
+                }
+            }, 0, 5000);
+        }
+    }
+
+    private void stopWeatherUpdates() {
+        if (!usingLiveLocation()) {
+            // Stop listening to location updates
+            fl.removeLocationUpdates(locationCallback);
+        } else {
+            // Stop the running interval
+            static_weather_timer.cancel();
+        }
+
+    }
+
+    private void resetWeatherUpdates() {
+        //stopWeatherUpdates();
+        startWeatherUpdates();
+    }
+
+    private boolean usingLiveLocation() {
+        return PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext())
+                .getBoolean("live_location", false);
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            int index = getSupportFragmentManager().getBackStackEntryCount() - 2;
+            FragmentManager.BackStackEntry backEntry = getSupportFragmentManager().getBackStackEntryAt(index);
+            String tag = backEntry.getName();
+
+            if (onBackStack(tag)) {
+                getSupportFragmentManager().popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }
+
+            FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().replace(R.id.content_area, new HomeScreen()).addToBackStack("home").commit();
+            navigationView.getMenu().getItem(0).setChecked(true);
+        }
+    }
+
+    private boolean onBackStack(String fragment_tag) {
+        FragmentManager fm = getSupportFragmentManager();
+
+        for (int i = 0; i < fm.getBackStackEntryCount(); i++) {
+            String name = fm.getBackStackEntryAt(i).getName();
+
+            if (name != null && name.equals(fragment_tag)) return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {}
+
+    private void initializeNavigation() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -103,7 +287,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
 
             if (fragment != null) {
                 FragmentTransaction transaction = Forekast.this.getSupportFragmentManager().beginTransaction();
-                if (onBackstack(tag)) {
+                if (onBackStack(tag)) {
                     getSupportFragmentManager().popBackStack(fragment.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
 
@@ -112,118 +296,5 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
 
             return true;
         });
-
-        init();
     }
-
-    private void init() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_area, HomeScreen.newInstance()).addToBackStack("home").commit();
-        Repository.initDB(getApplicationContext());
-        HomeScreenViewModelInterface vm = ViewModelProviders.of(Forekast.this).get(HomeScreenViewModel.class);
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
-                    return;
-                }
-                for (Location location : locationResult.getLocations()) {
-                    vm.updateWeather(location);
-                }
-            };
-        };
-
-        fl = new FusedLocationProviderClient(getApplicationContext());
-
-        req = createLocationRequest();
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(req);
-        SettingsClient client = LocationServices.getSettingsClient(this);
-        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
-
-        task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
-            @Override
-            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                // All location settings are satisfied. The client can initialize
-                // location requests here.
-                // ...
-                startLocationUpdates(req);
-            }
-        });
-
-        task.addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                if (e instanceof ResolvableApiException) {
-                    // Location settings are not satisfied, but this can be fixed
-                    // by showing the user a dialog.
-                    try {
-                        // Show the dialog by calling startResolutionForResult(),
-                        // and check the result in onActivityResult().
-                        ResolvableApiException resolvable = (ResolvableApiException) e;
-                        resolvable.startResolutionForResult(Forekast.this, 1);
-                    } catch (IntentSender.SendIntentException sendEx) {
-                        // Ignore the error.
-                    }
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("live_location", false)) {
-            startLocationUpdates(req);
-        }
-    }
-
-    private LocationRequest createLocationRequest() {
-        LocationRequest req = LocationRequest.create();
-        req.setInterval(300000); // Five minutes
-        req.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        return req;
-    }
-
-    private void startLocationUpdates(LocationRequest req) {
-        try {
-            fl.requestLocationUpdates(req, locationCallback, null);
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            int index = getSupportFragmentManager().getBackStackEntryCount() - 2;
-            FragmentManager.BackStackEntry backEntry = getSupportFragmentManager().getBackStackEntryAt(index);
-            String tag = backEntry.getName();
-
-            if (onBackstack(tag)) {
-                getSupportFragmentManager().popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            }
-
-            FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().replace(R.id.content_area, new HomeScreen()).addToBackStack("home").commit();
-            navigationView.getMenu().getItem(0).setChecked(true);
-        }
-    }
-
-    private boolean onBackstack(String fragment_tag) {
-        FragmentManager fm = getSupportFragmentManager();
-
-        for (int i = 0; i < fm.getBackStackEntryCount(); i++) {
-            String name = fm.getBackStackEntryAt(i).getName();
-
-            if (name != null && name.equals(fragment_tag)) return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {}
 }
