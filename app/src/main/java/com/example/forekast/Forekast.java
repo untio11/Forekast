@@ -1,10 +1,13 @@
 package com.example.forekast;
 
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 
 import com.example.forekast.Settings.SettingsFragments;
@@ -44,6 +47,24 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
     private LocationRequest req;
     private HomeScreenViewModelInterface vm;
     private Timer static_weather_timer;
+    private SharedPreferences.OnSharedPreferenceChangeListener pref_change = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (key.equals("live_location")) {
+                // When we click the button, the last value was the one it isn't now
+                if (Forekast.this.usingLiveLocation()) { // Turned on -> stop static weather
+                    static_weather_timer.cancel();
+                    Forekast.this.startLiveWeather();
+                } else { // Turned off -> start static weather, stop location weather
+                    fl.removeLocationUpdates(locationCallback);
+                    Forekast.this.startStaticWeather();
+                }
+            } else if (key.equals("manual_weather")) {
+                static_weather_timer.cancel();
+                Forekast.this.startStaticWeather();
+            }
+        }
+    };
 
     private LocationCallback locationCallback = new LocationCallback() {
         @Override
@@ -84,20 +105,14 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
         locationSetup();
 
         PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                .registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
-                    if (key.equals("live_location")) {
-                        // When we click the button, the last value was the one it isn't now
-                        if (usingLiveLocation()) {
-                            static_weather_timer.cancel();
-                            startWeatherUpdates();
-                        } else {
-                            resetWeatherUpdates();
-                        }
-                    } else if (key.equals("manual_weather")) {
-                        static_weather_timer.cancel();
-                        startWeatherUpdates();
-                    }
-                });
+                .registerOnSharedPreferenceChangeListener(pref_change);
+
+        // Start the weather polling
+        if (usingLiveLocation()) {
+            startLiveWeather();
+        } else {
+            startStaticWeather();
+        }
     }
 
     private void locationSetup() {
@@ -137,13 +152,11 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
     @Override
     public void onResume() {
         super.onResume();
-        //startWeatherUpdates();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //stopWeatherUpdates();
     }
 
     private LocationRequest createLocationRequest() {
@@ -161,16 +174,16 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
         }
     }
 
-    private void startWeatherUpdates() {
-        if (usingLiveLocation()) {
-            // Start with making location requests and stuff
-            if (req == null) {
-                req = createLocationRequest();
-            }
+    private void startLiveWeather() {
+        // Start with making location requests and stuff
+        if (req == null) {
+            req = createLocationRequest();
+        }
 
-            startLocationUpdates(req);
-        } else {
-            // Setup some polling interval for static location
+        startLocationUpdates(req);
+    }
+
+    private void startStaticWeather() {
             static_weather_timer = new Timer();
             static_weather_timer.schedule(new TimerTask() {
                 @Override
@@ -180,23 +193,6 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
                             .getString("manual_location", "Eindhoven"));
                 }
             }, 0, 5000);
-        }
-    }
-
-    private void stopWeatherUpdates() {
-        if (!usingLiveLocation()) {
-            // Stop listening to location updates
-            fl.removeLocationUpdates(locationCallback);
-        } else {
-            // Stop the running interval
-            static_weather_timer.cancel();
-        }
-
-    }
-
-    private void resetWeatherUpdates() {
-        //stopWeatherUpdates();
-        startWeatherUpdates();
     }
 
     private boolean usingLiveLocation() {
@@ -206,7 +202,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed() { // TODO: fix the bug where you have to press back twice on the home screen to exit the app
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
