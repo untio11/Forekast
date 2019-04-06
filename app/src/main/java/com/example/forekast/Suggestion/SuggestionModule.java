@@ -173,11 +173,11 @@ public class SuggestionModule extends SuggestionModuleInterface {
     private void generateITRecursion() {
         List<Clothing> repoIT = Repository.getClothing("Torso", tempCriteria);
         for (Clothing clothing : repoIT) {
-            if (clothing.underwearable) {
+            if (clothing.underwearable && !inner_torso.contains(clothing)) {
                 inner_torso.add(clothing);
             }
         }
-        if (inner_torso.size() < 10 && tempCriteria.preference.second != 0) {
+        if (inner_torso.size() < 5 && tempCriteria.preference.second != 0) {
             tempCriteria.expandRange();
             generateITRecursion();
         } else {
@@ -188,11 +188,11 @@ public class SuggestionModule extends SuggestionModuleInterface {
     private void generateOTRecursion() {
         List<Clothing> repoOT = Repository.getClothing("Torso", tempCriteria);
         for (Clothing clothing : repoOT) {
-            if (clothing.overwearable) {
+            if (clothing.overwearable && !outer_torso.contains(clothing)) {
                 outer_torso.add(clothing);
             }
         }
-        if (outer_torso.size() < 10 && tempCriteria.preference.second != 0) {
+        if (outer_torso.size() < 5 && tempCriteria.preference.second != 0) {
             tempCriteria.expandRange();
             generateOTRecursion();
         } else {
@@ -204,8 +204,12 @@ public class SuggestionModule extends SuggestionModuleInterface {
         List<Clothing> repoB = Repository.getClothing("Legs", tempCriteria);
         System.out.println("Based on criteria: " + tempCriteria);
         System.out.println(repoB);
-        bottoms.addAll(repoB);
-        if (bottoms.size() < 10 && tempCriteria.preference.second != 0) {
+        for (Clothing clothing : repoB) {
+            if (!bottoms.contains(clothing)) {
+                bottoms.add(clothing);
+            }
+        }
+        if (bottoms.size() < 5 && tempCriteria.preference.second != 0) {
             tempCriteria.expandRange();
             generateBRecursion();
         } else {
@@ -215,8 +219,12 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
     private void generateSRecursion() {
         List<Clothing> repoS = Repository.getClothing("Feet", tempCriteria);
-        shoes.addAll(repoS);
-        if (shoes.size() < 10 && tempCriteria.preference.second != 0) {
+        for (Clothing clothing : repoS) {
+            if (!shoes.contains(clothing)) {
+                shoes.add(clothing);
+            }
+        }
+        if (shoes.size() < 5 && tempCriteria.preference.second != 0) {
             tempCriteria.expandRange();
             generateSRecursion();
         } else {
@@ -242,7 +250,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
         int index = 0;
 
-        System.out.println("innertorso set: "+outfits.inner_torso);
+        System.out.println("innertorso set: " + outfits.inner_torso);
 
         /*
         // Needs optimising
