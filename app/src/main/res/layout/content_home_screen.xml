@@ -166,6 +166,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="32dp"
         android:background="@drawable/next"
         android:contentDescription="@string/todo"
         android:onClick="nextClothing"
@@ -173,6 +174,7 @@
         android:tag="Torso"
         android:tint="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="@+id/outerTorso"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/outerTorso"
         app:layout_constraintTop_toTopOf="@+id/outerTorso"
         app:srcCompat="@drawable/next" />
@@ -182,6 +184,7 @@
         style="@android:style/Widget.Material.Light.ImageButton"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginStart="32dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/next_2"
         android:contentDescription="@string/todo"
@@ -191,6 +194,7 @@
         android:tint="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="@+id/innerTorso"
         app:layout_constraintEnd_toStartOf="@+id/innerTorso"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/innerTorso"
         app:srcCompat="@drawable/next_2" />
 
@@ -393,9 +397,12 @@
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="694dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintGuide_end="207dp"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

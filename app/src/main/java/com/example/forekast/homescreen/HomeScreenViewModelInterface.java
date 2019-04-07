@@ -72,6 +72,8 @@ abstract class HomeScreenViewModelInterface extends ViewModel {
      */
     abstract void previousClothing(String clothing_location);
 
+    abstract void refreshClothing();
+
     /**
      * Send a request for the weather to be fetched. Will update the livedata weather object, so nothing
      * else should have to be done.

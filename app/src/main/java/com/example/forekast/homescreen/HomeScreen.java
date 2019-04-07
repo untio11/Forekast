@@ -49,12 +49,12 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     private Weather weather;
     private Outfit outfit;
 
-    private MutablePair<Integer, Integer> warmth = new MutablePair<>(3, 3);
-    private MutablePair<Integer, Integer> formality = new MutablePair<>(3, 3);
-    private MutablePair<Integer, Integer> comfort = new MutablePair<>(3, 3);
-    private MutablePair<Integer, Integer> preference = new MutablePair<>(0, 10);
+    private MutablePair<Integer, Integer> warmth = new MutablePair<>(5, 5);
+    private MutablePair<Integer, Integer> formality = new MutablePair<>(5, 5);
+    private MutablePair<Integer, Integer> comfort = new MutablePair<>(5, 5);
+    private MutablePair<Integer, Integer> preference = new MutablePair<>(10, 10);
 
-    private ClothingCriteria criteria = new ClothingCriteria();
+    private ClothingCriteria criteria = new ClothingCriteria(warmth, formality, comfort, preference, "General");;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +81,6 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
 
         init(savedInstanceState);
         vm.updateWeather();
-        //vm.newOutfit();
     }
 
     private void init(Bundle savedInstance) {
@@ -92,9 +91,11 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         vm.getLiveWeather().observe(
                 this,
                 newWeather -> initWeather(newWeather));
-        vm.getLiveOutfit().observe(
-                this,
-                newOutfit -> initOutfit(newOutfit));
+        if (weather != null) {
+            vm.getLiveOutfit().observe(
+                    this,
+                    newOutfit -> initOutfit(newOutfit));
+        }
 
         if (savedInstance != null) {
             vm.setComfort(savedInstance.getInt("Comfortsl"));
@@ -126,8 +127,8 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     }
 
     private void initOutfit(Outfit newOutfit) {
-        //vm.sugg.setCurrentCriteria(criteria, weather);
         Log.d("ClothingUpdate", (newOutfit != null ? newOutfit.toString() : "No clothes"));
+
         if (newOutfit != null) {
             this.outfit = newOutfit;
             System.out.println(outfit.inner_torso);
@@ -136,6 +137,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
             System.out.println(outfit.shoes);
             setOutfit();
         }
+        accessories();
     }
 
     public void setOutfit(){
@@ -211,9 +213,8 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     }
 
     public void refreshClothing(View v) {
-        vm.updateWeather();
-        vm.newOutfit();
-        accessories();
+        vm.refreshClothing();
+        Log.d("Refresh", v.getTag().toString());
     }
 
     public void nextClothing(View v) {
@@ -228,7 +229,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -302,11 +303,12 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
             warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
             formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
             comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
-            preference = new MutablePair<>(10, 10);
 
-            criteria = new ClothingCriteria(warmth, formality, comfort, preference, "General");
             vm.sugg.setCurrentCriteria(criteria, weather);
-            vm.newOutfit();
+
+            if (criteria != null && weather != null) {
+                vm.newOutfit();
+            }
         }
     }
 }

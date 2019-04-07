@@ -18,7 +18,9 @@ public abstract class SuggestionModuleInterface {
 
     abstract void generateOutfit();
 
-    abstract Outfit getRandomOutfit();
+    abstract Outfit setOutfit();
+
+    public abstract Outfit refresh();
 
     public abstract Outfit next(String location);
 

@@ -1,6 +1,7 @@
 package com.example.forekast.homescreen;
 
 import android.os.AsyncTask;
+import android.view.View;
 
 import com.example.forekast.Suggestion.Outfit;
 import com.example.forekast.clothing.Clothing;
@@ -65,6 +66,9 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
     @Override
     void previousClothing(String clothing_type) { currentOutfit.postValue(sugg.previous(clothing_type));
     }
+
+    @Override
+    void refreshClothing() { currentOutfit.postValue(sugg.refresh());}
 
     @Override
     void updateWeather() {
