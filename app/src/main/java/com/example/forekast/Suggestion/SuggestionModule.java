@@ -168,7 +168,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
         List<Clothing> repoIT = Repository.getClothing("Torso", tempCriteria);
 
         for (Clothing clothing : repoIT) {
-            if (clothing.underwearable && !inner_torso.contains(clothing)) {
+            if (clothing.underwearable) {
                 inner_torso.add(clothing);
             }
         }
@@ -184,7 +184,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
     private void generateOTRecursion() {
         List<Clothing> repoOT = Repository.getClothing("Torso", tempCriteria);
         for (Clothing clothing : repoOT) {
-            if (clothing.overwearable && !outer_torso.contains(clothing)) {
+            if (clothing.overwearable) {
                 outer_torso.add(clothing);
             }
         }
@@ -204,14 +204,6 @@ public class SuggestionModule extends SuggestionModuleInterface {
         if (bottoms.size() > 5 || tempCriteria.preference.second < 0) {
             resetRange();
         } else {
-        System.out.println("Based on criteria: " + tempCriteria);
-        System.out.println(repoB);
-        for (Clothing clothing : repoB) {
-            if (!bottoms.contains(clothing)) {
-                bottoms.add(clothing);
-            }
-        }
-        if (bottoms.size() < 5 && tempCriteria.preference.second != 0) {
             tempCriteria.expandRange();
             generateBRecursion();
         }
@@ -223,12 +215,6 @@ public class SuggestionModule extends SuggestionModuleInterface {
         if (shoes.size() > 5 || tempCriteria.preference.second < 0) {
             resetRange();
         } else {
-        for (Clothing clothing : repoS) {
-            if (!shoes.contains(clothing)) {
-                shoes.add(clothing);
-            }
-        }
-        if (shoes.size() < 5 && tempCriteria.preference.second != 0) {
             tempCriteria.expandRange();
             generateSRecursion();
         }
@@ -239,7 +225,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
     @Override
     public Outfit setOutfit(){
 
-        System.out.println("innertorso set: " + outfits.inner_torso);
+        System.out.println("innertorso set: "+outfits.inner_torso);
 
         // Need to get the inner_torso and outer_torso values to relate somewhere
         if (outfits.inner_torso.size() > 0) {
