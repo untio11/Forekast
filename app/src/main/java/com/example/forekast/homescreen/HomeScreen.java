@@ -97,6 +97,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
                 this, newWeather -> initWeather(newWeather));
         vm.getLiveOutfit().observe(
                 this, newOutfit -> initOutfit(newOutfit));
+
         if (savedInstance != null) {
             vm.setComfort(savedInstance.getInt("Comfortsl"));
             vm.setFormality(savedInstance.getInt("Formalsl"));
@@ -122,12 +123,22 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         outerTorso = findViewById(R.id.outerTorso);
         bottoms = findViewById(R.id.bottoms);
         shoes = findViewById(R.id.shoes);
+
+        warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
+        formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
+        comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
+        preference = new MutablePair<>(10, 10);
+        criteria = new ClothingCriteria(warmth, formality, comfort, preference, "General");
     }
 
     private void initWeather(Weather newWeather) {
         Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather"));
         if (newWeather != null) {
             this.weather = newWeather;
+            if (criteria != null) {
+                vm.sugg.setCurrentCriteria(criteria, weather);
+                vm.newOutfit();
+            }
         }
     }
 
