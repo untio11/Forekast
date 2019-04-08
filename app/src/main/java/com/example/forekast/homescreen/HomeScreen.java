@@ -45,7 +45,7 @@ import android.widget.ImageView;
 
 public class HomeScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private HomeScreenViewModelInterface vm;
+    private static HomeScreenViewModelInterface vm;
     private Weather weather;
     private Outfit outfit;
 
@@ -137,7 +137,8 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
             this.weather = newWeather;
             if (criteria != null) {
                 vm.sugg.setCurrentCriteria(criteria, weather);
-                vm.newOutfit();
+                vm.newOutfit(); // Delete this when asynctask used!!
+                //accessories();
             }
         }
     }
@@ -154,7 +155,6 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
             System.out.println(outfit.shoes);
             setOutfit();
         }
-        accessories();
     }
 
     public void setOutfit(){
@@ -224,6 +224,10 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         else {
             leggingsView.setColorFilter(Color.LTGRAY);
         }
+    }
+
+    public static void newOutfit() {
+        vm.newOutfit();
     }
 
     public void refreshClothing(View v) {
@@ -323,9 +327,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
             vm.sugg.setCurrentCriteria(criteria, weather);
             System.out.println(criteria);
             System.out.println(weather);
-            if (criteria != null && weather != null) {
-                vm.newOutfit();
-            }
+            vm.newOutfit(); // Delete this when asynctask used!!
         }
     }
 }
