@@ -54,6 +54,11 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     private MutablePair<Integer, Integer> comfort = new MutablePair<>(5, 5);
     private MutablePair<Integer, Integer> preference = new MutablePair<>(10, 10);
 
+    private ImageView innerTorso;
+    private ImageView outerTorso;
+    private ImageView bottoms;
+    private ImageView shoes;
+
     private ClothingCriteria criteria = new ClothingCriteria(warmth, formality, comfort, preference, "General");;
 
     @Override
@@ -89,14 +94,9 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         vm.getLiveWeather().observe(
-                this,
-                newWeather -> initWeather(newWeather));
-        if (weather != null) {
-            vm.getLiveOutfit().observe(
-                    this,
-                    newOutfit -> initOutfit(newOutfit));
-        }
-
+                this, newWeather -> initWeather(newWeather));
+        vm.getLiveOutfit().observe(
+                this, newOutfit -> initOutfit(newOutfit));
         if (savedInstance != null) {
             vm.setComfort(savedInstance.getInt("Comfortsl"));
             vm.setFormality(savedInstance.getInt("Formalsl"));
@@ -117,6 +117,11 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         formality_slider.setMax(10);
         formality_slider.setProgress(vm.getFormality());
         formality_slider.setOnSeekBarChangeListener(new updateCriteriaSeekbar());
+
+        innerTorso = findViewById(R.id.innerTorso);
+        outerTorso = findViewById(R.id.outerTorso);
+        bottoms = findViewById(R.id.bottoms);
+        shoes = findViewById(R.id.shoes);
     }
 
     private void initWeather(Weather newWeather) {
@@ -131,6 +136,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
 
         if (newOutfit != null) {
             this.outfit = newOutfit;
+            System.out.println("outfits:");
             System.out.println(outfit.inner_torso);
             System.out.println(outfit.outer_torso);
             System.out.println(outfit.pants);
@@ -141,15 +147,12 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     }
 
     public void setOutfit(){
-        ImageView innerTorso = findViewById(R.id.innerTorso);
-        ImageView outerTorso = findViewById(R.id.outerTorso);
-        ImageView bottoms = findViewById(R.id.bottoms);
-        ImageView shoes = findViewById(R.id.shoes);
-
         Bitmap bitmapIT;
         Bitmap bitmapOT;
         Bitmap bitmapP;
         Bitmap bitmapS;
+
+        System.out.println(outfit.inner_torso);
 
         if (outfit.inner_torso != null){
             bitmapIT = BitmapFactory.decodeByteArray(outfit.inner_torso.picture, 0, outfit.inner_torso.picture.length);
@@ -303,7 +306,9 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
             warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
             formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
             comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
+            preference = new MutablePair<>(10, 10);
 
+            criteria = new ClothingCriteria(warmth, formality, comfort, preference, "General");
             vm.sugg.setCurrentCriteria(criteria, weather);
             System.out.println(criteria);
             System.out.println(weather);

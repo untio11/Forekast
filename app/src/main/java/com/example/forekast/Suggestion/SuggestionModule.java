@@ -19,11 +19,11 @@ public class SuggestionModule extends SuggestionModuleInterface {
     static OutfitPowerset outfits = new OutfitPowerset();
 
     /** Slider Criteria */
-    private MutablePair<Integer, Integer> warmth;
-    private MutablePair<Integer, Integer> formality;
-    private MutablePair<Integer, Integer> comfort;
-    private MutablePair<Integer, Integer> preference;
-    private String owner;
+    //private MutablePair<Integer, Integer> warmth;
+    //private MutablePair<Integer, Integer> formality;
+    //private MutablePair<Integer, Integer> comfort;
+    //private MutablePair<Integer, Integer> preference;
+    //private String owner;
 
     /** Weather Criteria */
     private float temp;
@@ -57,16 +57,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
     /** First establish the criteria */
     @Override
     public void setCurrentCriteria(ClothingCriteria criteria, Weather weather) {
-        this.criteria = criteria;
-        this.tempCriteria = criteria;
         this.weather = weather;
-
-        /* Slider Criteria */
-        this.warmth = criteria.warmth;
-        this.formality = criteria.formality;
-        this.comfort = criteria.comfort;
-        this.preference = criteria.preference;
-        this.owner = criteria.owner;
 
         /* Weather Criteria */
         this.temp = weather.temp;
@@ -75,9 +66,20 @@ public class SuggestionModule extends SuggestionModuleInterface {
         this.feels_like = weather.feels_like;
         this.wind = weather.wind;
 
-        int tempRatio =  (int) temp / 3;
+        int tempRatio = (int) temp / 3;
+        criteria.warmth.second = (tempRatio + criteria.warmth.second) / 2;
+
+        this.criteria = criteria;
+        this.tempCriteria = criteria;
+
+        /* Slider Criteria */
+        //this.warmth = criteria.warmth;
+        //this.formality = criteria.formality;
+        //this.comfort = criteria.comfort;
+        //this.preference = criteria.preference;
+        //this.owner = criteria.owner;
+
         //System.out.println(warmth.second);
-        warmth.second = (tempRatio + warmth.second) / 2;
         //System.out.println(temp);
         //System.out.println(tempRatio);
 
@@ -125,7 +127,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
         /** When to suggest leggings */
         // If the clothes need to be warmer than 5 and the bottoms are a skirt or a dress
-        if (warmth.second > 5 && (currentBottoms.type.equals("Skirt") || currentInnerTorso.type.equals("Dress"))){
+        if (criteria.warmth.second > 5 && (currentBottoms.type.equals("Skirt") || currentInnerTorso.type.equals("Dress"))){
             leggings = true;
         }
     }
@@ -168,17 +170,16 @@ public class SuggestionModule extends SuggestionModuleInterface {
         List<Clothing> repoIT = Repository.getClothing("Torso", tempCriteria);
         if (repoIT.size() > 0) {
             for (Clothing clothing : repoIT) {
-                if (clothing.underwearable) {
+                if (clothing.underwearable && !inner_torso.contains(clothing)) {
                     inner_torso.add(clothing);
                 }
             }
-
-            if (inner_torso.size() > 5 || tempCriteria.preference.second < 0) {
-                resetRange();
-            } else {
-                tempCriteria.expandRange();
-                generateITRecursion();
-            }
+        }
+        if (inner_torso.size() > 5 || tempCriteria.preference.second < 0) {
+            resetRange();
+        } else {
+            tempCriteria.expandRange();
+            generateITRecursion();
         }
     }
 
@@ -186,16 +187,16 @@ public class SuggestionModule extends SuggestionModuleInterface {
         List<Clothing> repoOT = Repository.getClothing("Torso", tempCriteria);
         if (repoOT.size() > 0) {
             for (Clothing clothing : repoOT) {
-                if (clothing.overwearable) {
+                if (clothing.overwearable && !outer_torso.contains(clothing)) {
                     outer_torso.add(clothing);
                 }
             }
-            if (outer_torso.size() > 5 || tempCriteria.preference.second < 0) {
-                resetRange();
-            } else {
-                tempCriteria.expandRange();
-                generateOTRecursion();
-            }
+        }
+        if (outer_torso.size() > 5 || tempCriteria.preference.second < 0) {
+            resetRange();
+        } else {
+            tempCriteria.expandRange();
+            generateOTRecursion();
         }
     }
 
@@ -204,26 +205,34 @@ public class SuggestionModule extends SuggestionModuleInterface {
         //System.out.println("Based on criteria: " + tempCriteria);
         //System.out.println(repoB);
         if (repoB.size() > 0) {
-            bottoms.addAll(repoB);
-            if (bottoms.size() > 5 || tempCriteria.preference.second < 0) {
-                resetRange();
-            } else {
-                tempCriteria.expandRange();
-                generateBRecursion();
+            for (Clothing clothing : repoB) {
+                if (!bottoms.contains(clothing)) {
+                    bottoms.add(clothing);
+                }
             }
+        }
+        if (bottoms.size() > 5 || tempCriteria.preference.second < 0) {
+            resetRange();
+        } else {
+            tempCriteria.expandRange();
+            generateBRecursion();
         }
     }
 
     private void generateSRecursion() {
         List<Clothing> repoS = Repository.getClothing("Feet", tempCriteria);
         if (repoS.size() > 0) {
-            shoes.addAll(repoS);
-            if (shoes.size() > 5 || tempCriteria.preference.second < 0) {
-                resetRange();
-            } else {
-                tempCriteria.expandRange();
-                generateSRecursion();
+            for (Clothing clothing : repoS) {
+                if (!shoes.contains(clothing)) {
+                    shoes.add(clothing);
+                }
             }
+        }
+        if (shoes.size() > 5 || tempCriteria.preference.second < 0) {
+            resetRange();
+        } else {
+            tempCriteria.expandRange();
+            generateSRecursion();
         }
     }
 
@@ -232,7 +241,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
     @Override
     public Outfit setOutfit(){
 
-        System.out.println("innertorso set: "+outfits.inner_torso);
+        System.out.println("innertorso set: " + outfits.inner_torso);
 
         // Need to get the inner_torso and outer_torso values to relate somewhere
         if (outfits.inner_torso.size() > 0) {
