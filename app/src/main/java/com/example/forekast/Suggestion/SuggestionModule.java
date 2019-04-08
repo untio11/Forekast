@@ -152,9 +152,9 @@ public class SuggestionModule extends SuggestionModuleInterface {
     @Override
     public void generateOutfit() {
         generateITRecursion();
-        generateOTRecursion();
-        generateBRecursion();
-        generateSRecursion();
+        //generateOTRecursion();
+        //generateBRecursion();
+        //generateSRecursion();
 
         // Communicate with OutfitPowerset
         outfits.inner_torso = inner_torso;
@@ -179,6 +179,10 @@ public class SuggestionModule extends SuggestionModuleInterface {
                 tempCriteria.expandRange();
                 generateITRecursion();
             }
+        }
+        else {
+            tempCriteria.expandRange();
+            generateITRecursion();
         }
     }
 

@@ -24,65 +24,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/innerTorso"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="8dp"
+        android:id="@+id/imageView3"
+        android:layout_width="50dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="2dp"
         android:contentDescription="@string/todo"
-        android:scaleType="fitCenter"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/divider"
-        app:srcCompat="@drawable/def_clothing" />
-
-    <ImageView
-        android:id="@+id/outerTorso"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="44dp"
-        android:contentDescription="@string/todo"
-        android:scaleType="fitCenter"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/home"
-        app:srcCompat="@drawable/def_clothing" />
-
-    <ImageView
-        android:id="@+id/bottoms"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="168dp"
-        android:layout_marginEnd="8dp"
-        android:contentDescription="@string/todo"
-        android:scaleType="fitCenter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home"
-        app:srcCompat="@drawable/def_clothing" />
-
-    <ImageView
-        android:id="@+id/shoes"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
-        android:contentDescription="@string/todo"
-        android:scaleType="fitCenter"
-        app:layout_constraintEnd_toEndOf="@+id/bottoms"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="@+id/bottoms"
-        app:layout_constraintTop_toBottomOf="@+id/bottoms"
-        app:srcCompat="@drawable/def_clothing" />
+        app:layout_constraintEnd_toStartOf="@+id/home"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_home_icon" />
 
     <View
         android:id="@+id/divider"
         android:layout_width="395dp"
         android:layout_height="2dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:background="?android:attr/listDivider"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
@@ -107,231 +61,11 @@
         app:layout_constraintTop_toBottomOf="@+id/home"
         tools:text="Today's Recommendation" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="50dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="2dp"
-        android:contentDescription="@string/todo"
-        app:layout_constraintEnd_toStartOf="@+id/home"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_home_icon" />
-
-    <SeekBar
-        android:id="@+id/slider_comfort"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="140dp"
-        android:layout_height="18dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="8dp"
-        android:max="10"
-        android:tag="comfort"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shoes" />
-
-    <SeekBar
-        android:id="@+id/slider_warmth"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="140dp"
-        android:layout_height="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:max="10"
-        android:tag="warmth"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-    <SeekBar
-        android:id="@+id/slider_formality"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="140dp"
-        android:layout_height="21dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:max="10"
-        android:tag="formality"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-    <ImageButton
-        android:id="@+id/next_torso"
-        style="@android:style/Widget.Material.Light.ImageButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="32dp"
-        android:background="@drawable/next"
-        android:contentDescription="@string/todo"
-        android:onClick="nextClothing"
-        android:scaleType="centerInside"
-        android:tag="Torso"
-        android:tint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@+id/outerTorso"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/outerTorso"
-        app:layout_constraintTop_toTopOf="@+id/outerTorso"
-        app:srcCompat="@drawable/next" />
-
-    <ImageButton
-        android:id="@+id/prev_torso"
-        style="@android:style/Widget.Material.Light.ImageButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/next_2"
-        android:contentDescription="@string/todo"
-        android:onClick="prevClothing"
-        android:scaleType="centerInside"
-        android:tag="Torso"
-        android:tint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@+id/innerTorso"
-        app:layout_constraintEnd_toStartOf="@+id/innerTorso"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/innerTorso"
-        app:srcCompat="@drawable/next_2" />
-
-    <ImageButton
-        android:id="@+id/prev_legs"
-        style="@android:style/Widget.Material.Light.ImageButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/next_2"
-        android:contentDescription="@string/todo"
-        android:onClick="prevClothing"
-        android:scaleType="centerInside"
-        android:tag="Legs"
-        android:tint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@+id/bottoms"
-        app:layout_constraintEnd_toStartOf="@+id/bottoms"
-        app:layout_constraintTop_toTopOf="@+id/bottoms"
-        app:srcCompat="@drawable/next_2" />
-
-    <ImageButton
-        android:id="@+id/prev_feet"
-        style="@android:style/Widget.Material.Light.ImageButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/next_2"
-        android:contentDescription="@string/todo"
-        android:onClick="prevClothing"
-        android:scaleType="centerInside"
-        android:tag="Feet"
-        android:tint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@+id/shoes"
-        app:layout_constraintEnd_toStartOf="@+id/shoes"
-        app:layout_constraintTop_toTopOf="@+id/shoes"
-        app:srcCompat="@drawable/next_2" />
-
-    <ImageButton
-        android:id="@+id/next_legs"
-        style="@android:style/Widget.Material.Light.ImageButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/next"
-        android:contentDescription="@string/todo"
-        android:onClick="nextClothing"
-        android:scaleType="centerInside"
-        android:tag="Legs"
-        android:tint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@+id/bottoms"
-        app:layout_constraintStart_toEndOf="@+id/bottoms"
-        app:layout_constraintTop_toTopOf="@+id/bottoms"
-        app:srcCompat="@drawable/next" />
-
-    <ImageButton
-        android:id="@+id/next_feet"
-        style="@android:style/Widget.Material.Light.ImageButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/next"
-        android:contentDescription="@string/todo"
-        android:onClick="nextClothing"
-        android:scaleType="centerInside"
-        android:tag="Feet"
-        android:tint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@+id/shoes"
-        app:layout_constraintStart_toEndOf="@+id/shoes"
-        app:layout_constraintTop_toTopOf="@+id/shoes"
-        app:srcCompat="@drawable/next" />
-
-    <ImageView
-        android:id="@+id/noti_coat"
-        android:layout_width="50dp"
-        android:layout_height="49dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="4dp"
-        android:contentDescription="@string/todo"
-        app:layout_constraintEnd_toStartOf="@+id/noti_gloves"
-        app:layout_constraintTop_toBottomOf="@+id/slider_formality"
-        app:srcCompat="@drawable/women_long_coat" />
-
-    <ImageView
-        android:id="@+id/noti_sunglasses"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="16dp"
-        android:contentDescription="@string/todo"
-        app:layout_constraintStart_toEndOf="@+id/noti_umbrella"
-        app:layout_constraintTop_toBottomOf="@+id/slider_formality"
-        app:srcCompat="@drawable/sunglasses" />
-
-    <ImageView
-        android:id="@+id/noti_leggings"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:contentDescription="@string/todo"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/slider_formality"
-        app:srcCompat="@drawable/socks" />
-
-    <ImageView
-        android:id="@+id/noti_umbrella"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="4dp"
-        android:contentDescription="@string/todo"
-        app:layout_constraintEnd_toStartOf="@+id/noti_sunglasses"
-        app:layout_constraintStart_toEndOf="@+id/noti_leggings"
-        app:layout_constraintTop_toBottomOf="@+id/slider_formality"
-        app:srcCompat="@drawable/umbrella" />
-
-    <ImageView
-        android:id="@+id/noti_gloves"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="4dp"
-        android:contentDescription="@string/todo"
-        app:layout_constraintEnd_toStartOf="@+id/noti_leggings"
-        app:layout_constraintTop_toBottomOf="@+id/slider_formality"
-        app:srcCompat="@drawable/knitted_mittens" />
-
     <ImageButton
         android:id="@+id/refresh"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="28dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/todo"
         android:onClick="refreshClothing"
@@ -343,66 +77,394 @@
         app:layout_constraintTop_toBottomOf="@+id/home"
         app:srcCompat="@drawable/loading" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="18dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/comfort"
-        android:textAllCaps="false"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@+id/slider_comfort"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="Comfort" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="18dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/warmth"
-        android:textAllCaps="false"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/slider_comfort" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="18dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/formality"
-        android:textAllCaps="false"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@+id/slider_formality"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center|fill_vertical"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/slider_warmth"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="694dp"
+        <ImageButton
+            android:id="@+id/prev_torso"
+            style="@android:style/Widget.Material.Light.ImageButton"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/next_2"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/todo"
+            android:onClick="prevClothing"
+            android:scaleType="centerInside"
+            android:tag="Torso"
+            android:tint="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/innerTorso"
+            app:layout_constraintEnd_toStartOf="@+id/innerTorso"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/innerTorso"
+            app:srcCompat="@drawable/next_2" />
+
+        <ImageView
+            android:id="@+id/innerTorso"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginTop="44dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/todo"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/divider"
+            app:srcCompat="@drawable/def_clothing" />
+
+        <ImageView
+            android:id="@+id/outerTorso"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="44dp"
+            android:contentDescription="@string/todo"
+            android:scaleType="fitCenter"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/home"
+            app:srcCompat="@drawable/def_clothing" />
+
+        <ImageButton
+            android:id="@+id/next_torso"
+            style="@android:style/Widget.Material.Light.ImageButton"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/next"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/todo"
+            android:onClick="nextClothing"
+            android:scaleType="centerInside"
+            android:tag="Torso"
+            android:tint="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/outerTorso"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/outerTorso"
+            app:layout_constraintTop_toTopOf="@+id/outerTorso"
+            app:srcCompat="@drawable/next" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="0dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center|fill_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+        <ImageButton
+            android:id="@+id/prev_legs"
+            style="@android:style/Widget.Material.Light.ImageButton"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/next_2"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/todo"
+            android:onClick="prevClothing"
+            android:scaleType="centerInside"
+            android:tag="Legs"
+            android:tint="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/bottoms"
+            app:layout_constraintEnd_toStartOf="@+id/bottoms"
+            app:layout_constraintTop_toTopOf="@+id/bottoms"
+            app:srcCompat="@drawable/next_2" />
+
+        <ImageView
+            android:id="@+id/bottoms"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="168dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/todo"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home"
+            app:srcCompat="@drawable/def_clothing" />
+
+        <ImageButton
+            android:id="@+id/next_legs"
+            style="@android:style/Widget.Material.Light.ImageButton"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/next"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/todo"
+            android:onClick="nextClothing"
+            android:scaleType="centerInside"
+            android:tag="Legs"
+            android:tint="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/bottoms"
+            app:layout_constraintStart_toEndOf="@+id/bottoms"
+            app:layout_constraintTop_toTopOf="@+id/bottoms"
+            app:srcCompat="@drawable/next" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="0dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center|fill_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <ImageButton
+            android:id="@+id/prev_feet"
+            style="@android:style/Widget.Material.Light.ImageButton"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/next_2"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/todo"
+            android:onClick="prevClothing"
+            android:scaleType="centerInside"
+            android:tag="Feet"
+            android:tint="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/shoes"
+            app:layout_constraintEnd_toStartOf="@+id/shoes"
+            app:layout_constraintTop_toTopOf="@+id/shoes"
+            app:srcCompat="@drawable/next_2" />
+
+        <ImageView
+            android:id="@+id/shoes"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/todo"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toEndOf="@+id/bottoms"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="@+id/bottoms"
+            app:layout_constraintTop_toBottomOf="@+id/bottoms"
+            app:srcCompat="@drawable/def_clothing" />
+
+        <ImageButton
+            android:id="@+id/next_feet"
+            style="@android:style/Widget.Material.Light.ImageButton"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/next"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/todo"
+            android:onClick="nextClothing"
+            android:scaleType="centerInside"
+            android:tag="Feet"
+            android:tint="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/shoes"
+            app:layout_constraintStart_toEndOf="@+id/shoes"
+            app:layout_constraintTop_toTopOf="@+id/shoes"
+            app:srcCompat="@drawable/next" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="174dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/comfort"
+                android:textAllCaps="false"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toTopOf="@+id/slider_comfort"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.501"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="Comfort" />
+
+            <SeekBar
+                android:id="@+id/slider_comfort"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="140dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:max="10"
+                android:tag="comfort"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.555"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/warmth"
+                android:textAllCaps="false"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/slider_comfort" />
+
+            <SeekBar
+                android:id="@+id/slider_warmth"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="140dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:max="10"
+                android:tag="warmth"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.444"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/formality"
+                android:textAllCaps="false"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toTopOf="@+id/slider_formality"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/slider_warmth"
+                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <SeekBar
+                android:id="@+id/slider_formality"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="140dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:max="10"
+                android:tag="formality"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.444"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="0dp"
+        android:layout_height="98dp"
+        android:layout_marginBottom="4dp"
+        android:gravity="center|center_vertical"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_end="207dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/noti_coat"
+            android:layout_width="50dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
+            android:contentDescription="@string/todo"
+            app:layout_constraintEnd_toStartOf="@+id/noti_gloves"
+            app:layout_constraintTop_toBottomOf="@+id/slider_formality"
+            app:srcCompat="@drawable/women_long_coat" />
+
+        <ImageView
+            android:id="@+id/noti_umbrella"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
+            android:contentDescription="@string/todo"
+            app:layout_constraintEnd_toStartOf="@+id/noti_sunglasses"
+            app:layout_constraintStart_toEndOf="@+id/noti_leggings"
+            app:layout_constraintTop_toBottomOf="@+id/slider_formality"
+            app:srcCompat="@drawable/umbrella" />
+
+        <ImageView
+            android:id="@+id/noti_gloves"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
+            android:contentDescription="@string/todo"
+            app:layout_constraintEnd_toStartOf="@+id/noti_leggings"
+            app:layout_constraintTop_toBottomOf="@+id/slider_formality"
+            app:srcCompat="@drawable/knitted_mittens" />
+
+        <ImageView
+            android:id="@+id/noti_leggings"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/todo"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/slider_formality"
+            app:srcCompat="@drawable/socks" />
+
+        <ImageView
+            android:id="@+id/noti_sunglasses"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/todo"
+            app:layout_constraintStart_toEndOf="@+id/noti_umbrella"
+            app:layout_constraintTop_toBottomOf="@+id/slider_formality"
+            app:srcCompat="@drawable/sunglasses" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

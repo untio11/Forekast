@@ -91,11 +91,11 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         vm.getLiveWeather().observe(
                 this,
                 newWeather -> initWeather(newWeather));
-        if (weather != null) {
-            vm.getLiveOutfit().observe(
-                    this,
-                    newOutfit -> initOutfit(newOutfit));
-        }
+
+        vm.getLiveOutfit().observe(
+                this,
+                newOutfit -> initOutfit(newOutfit));
+        
 
         if (savedInstance != null) {
             vm.setComfort(savedInstance.getInt("Comfortsl"));
