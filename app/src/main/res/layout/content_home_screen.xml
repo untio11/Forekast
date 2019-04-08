@@ -336,7 +336,7 @@
         android:contentDescription="@string/todo"
         android:onClick="refreshClothing"
         android:scaleType="centerInside"
-        android:tag="refreshbuttontagfortest"
+        android:tag="refresh"
         android:tint="@color/colorPrimaryDark"
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"

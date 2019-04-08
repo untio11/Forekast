@@ -305,7 +305,8 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
             comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
 
             vm.sugg.setCurrentCriteria(criteria, weather);
-
+            System.out.println(criteria);
+            System.out.println(weather);
             if (criteria != null && weather != null) {
                 vm.newOutfit();
             }

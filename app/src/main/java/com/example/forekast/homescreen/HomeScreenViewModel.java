@@ -54,9 +54,7 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
     }
 
     @Override
-    int getFormality() {
-        return (clothingCriteria.formality.second == Integer.MAX_VALUE ? 3 : clothingCriteria.formality.second);
-    }
+    int getFormality() { return (clothingCriteria.formality.second == Integer.MAX_VALUE ? 3 : clothingCriteria.formality.second); }
 
     @Override
     void nextClothing(String clothing_type) {
@@ -64,21 +62,16 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
     }
 
     @Override
-    void previousClothing(String clothing_type) { currentOutfit.postValue(sugg.previous(clothing_type));
-    }
+    void previousClothing(String clothing_type) { currentOutfit.postValue(sugg.previous(clothing_type)); }
 
     @Override
     void refreshClothing() { currentOutfit.postValue(sugg.refresh());}
 
     @Override
-    void updateWeather() {
-        Repository.getWeather("Eindhoven", currentWeather);
-    }
+    void updateWeather() { Repository.getWeather("Eindhoven", currentWeather); }
 
     @Override
-    void newOutfit() {
-        currentOutfit.postValue(sugg.getRandomOutfit());
-    }
+    void newOutfit() { currentOutfit.postValue(sugg.setOutfit());}
 
     @Override
     boolean[] getAccessories() {

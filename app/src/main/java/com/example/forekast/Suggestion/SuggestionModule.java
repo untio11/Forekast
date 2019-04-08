@@ -166,33 +166,36 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
     private void generateITRecursion() {
         List<Clothing> repoIT = Repository.getClothing("Torso", tempCriteria);
-
-        for (Clothing clothing : repoIT) {
-            if (clothing.underwearable) {
-                inner_torso.add(clothing);
+        if (repoIT.size() > 0) {
+            for (Clothing clothing : repoIT) {
+                if (clothing.underwearable) {
+                    inner_torso.add(clothing);
+                }
             }
-        }
 
-        if (inner_torso.size() > 5 || tempCriteria.preference.second < 0) {
-            resetRange();
-        } else {
-            tempCriteria.expandRange();
-            generateITRecursion();
+            if (inner_torso.size() > 5 || tempCriteria.preference.second < 0) {
+                resetRange();
+            } else {
+                tempCriteria.expandRange();
+                generateITRecursion();
+            }
         }
     }
 
     private void generateOTRecursion() {
         List<Clothing> repoOT = Repository.getClothing("Torso", tempCriteria);
-        for (Clothing clothing : repoOT) {
-            if (clothing.overwearable) {
-                outer_torso.add(clothing);
+        if (repoOT.size() > 0) {
+            for (Clothing clothing : repoOT) {
+                if (clothing.overwearable) {
+                    outer_torso.add(clothing);
+                }
             }
-        }
-        if (outer_torso.size() > 5 || tempCriteria.preference.second < 0) {
-            resetRange();
-        } else {
-            tempCriteria.expandRange();
-            generateOTRecursion();
+            if (outer_torso.size() > 5 || tempCriteria.preference.second < 0) {
+                resetRange();
+            } else {
+                tempCriteria.expandRange();
+                generateOTRecursion();
+            }
         }
     }
 
@@ -200,23 +203,27 @@ public class SuggestionModule extends SuggestionModuleInterface {
         List<Clothing> repoB = Repository.getClothing("Legs", tempCriteria);
         //System.out.println("Based on criteria: " + tempCriteria);
         //System.out.println(repoB);
-        bottoms.addAll(repoB);
-        if (bottoms.size() > 5 || tempCriteria.preference.second < 0) {
-            resetRange();
-        } else {
-            tempCriteria.expandRange();
-            generateBRecursion();
+        if (repoB.size() > 0) {
+            bottoms.addAll(repoB);
+            if (bottoms.size() > 5 || tempCriteria.preference.second < 0) {
+                resetRange();
+            } else {
+                tempCriteria.expandRange();
+                generateBRecursion();
+            }
         }
     }
 
     private void generateSRecursion() {
         List<Clothing> repoS = Repository.getClothing("Feet", tempCriteria);
-        shoes.addAll(repoS);
-        if (shoes.size() > 5 || tempCriteria.preference.second < 0) {
-            resetRange();
-        } else {
-            tempCriteria.expandRange();
-            generateSRecursion();
+        if (repoS.size() > 0) {
+            shoes.addAll(repoS);
+            if (shoes.size() > 5 || tempCriteria.preference.second < 0) {
+                resetRange();
+            } else {
+                tempCriteria.expandRange();
+                generateSRecursion();
+            }
         }
     }
 
@@ -252,6 +259,8 @@ public class SuggestionModule extends SuggestionModuleInterface {
         indexCalculator("Legs", 1);
         indexCalculator("Feet", 1);
 
+        System.out.println("Hello, you refreshed!");
+
         if (outfits.inner_torso.size() > 0){
             // Inner Torso
             if (currentIndIT == outfits.inner_torso.size()){
@@ -283,6 +292,11 @@ public class SuggestionModule extends SuggestionModuleInterface {
         }
 
         outfit = new Outfit(currentInnerTorso, currentOuterTorso, currentBottoms, currentShoes);
+        System.out.println(outfit);
+        System.out.println(currentInnerTorso);
+        System.out.println(currentOuterTorso);
+        System.out.println(currentBottoms);
+        System.out.println(currentShoes);
         return outfit;
     }
 
