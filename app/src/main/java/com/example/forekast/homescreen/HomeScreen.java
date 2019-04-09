@@ -137,8 +137,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
             this.weather = newWeather;
             if (criteria != null) {
                 vm.sugg.setCurrentCriteria(criteria, weather);
-                vm.newOutfit(); // Delete this when asynctask used!!
-                //accessories();
+                accessories();
             }
         }
     }
@@ -327,7 +326,6 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
             vm.sugg.setCurrentCriteria(criteria, weather);
             System.out.println(criteria);
             System.out.println(weather);
-            vm.newOutfit(); // Delete this when asynctask used!!
         }
     }
 }

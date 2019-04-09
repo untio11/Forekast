@@ -158,93 +158,10 @@ public class SuggestionModule extends SuggestionModuleInterface {
         shoes = new ArrayList<>();
         asyncCounter = 0;
 
-        //ClothingCriteria criteriaEmpty = new ClothingCriteria();
-        //criteriaEmpty.owner = criteria.owner;
-        //if (Repository.getClothing("Torso", criteriaEmpty).size() > 0) {
-        //new AgentAsyncTask("Torso", criteria).execute(inner_torso);
-        //new AgentAsyncTask("Legs", criteria).execute(bottoms);
-        //new AgentAsyncTask("Feet", criteria).execute(shoes);
-
-        generateITRecursion();
-        generateOTRecursion();
-        generateBRecursion();
-        generateSRecursion();
-        // Communicate with OutfitPowerset
-        outfits.inner_torso = inner_torso;
-        outfits.outer_torso = outer_torso;
-        outfits.bottoms = bottoms;
-        outfits.shoes = shoes;
-        outfits.set();
-    }
-
-    private void generateITRecursion() {
-        List<Clothing> repoIT = Repository.getClothing("Torso", tempCriteria);
-        if (repoIT.size() > 0) {
-            for (Clothing clothing : repoIT) {
-                if (clothing.underwearable && !inner_torso.contains(clothing)) {
-                    inner_torso.add(clothing);
-                }
-            }
-        }
-        if (inner_torso.size() > 5 || tempCriteria.preference.first < 0) {
-            resetRange();
-        } else {
-            tempCriteria.expandRange();
-            generateITRecursion();
-        }
-    }
-
-    private void generateOTRecursion() {
-        List<Clothing> repoOT = Repository.getClothing("Torso", tempCriteria);
-        if (repoOT.size() > 0) {
-            for (Clothing clothing : repoOT) {
-                if (clothing.overwearable && !outer_torso.contains(clothing)) {
-                    outer_torso.add(clothing);
-                }
-            }
-        }
-        if (outer_torso.size() > 5 || tempCriteria.preference.first < 0) {
-            resetRange();
-        } else {
-            tempCriteria.expandRange();
-            generateOTRecursion();
-        }
-    }
-
-    private void generateBRecursion() {
-        List<Clothing> repoB = Repository.getClothing("Legs", tempCriteria);
-        //System.out.println("Based on criteria: " + tempCriteria);
-        //System.out.println(repoB);
-        if (repoB.size() > 0) {
-            for (Clothing clothing : repoB) {
-                if (!bottoms.contains(clothing)) {
-                    bottoms.add(clothing);
-                }
-            }
-        }
-        if (bottoms.size() > 5 || tempCriteria.preference.first < 0) {
-            resetRange();
-        } else {
-            tempCriteria.expandRange();
-            generateBRecursion();
-        }
-    }
-
-    private void generateSRecursion() {
-        List<Clothing> repoS = Repository.getClothing("Feet", tempCriteria);
-        if (repoS.size() > 0) {
-            for (Clothing clothing : repoS) {
-                if (!shoes.contains(clothing)) {
-                    shoes.add(clothing);
-                }
-            }
-        }
-        if (shoes.size() > 5 || tempCriteria.preference.first < 0) {
-            resetRange();
-        } else {
-            tempCriteria.expandRange();
-            generateSRecursion();
-        }
+        new AgentAsyncTask("innerTorso", criteria).execute();
+        new AgentAsyncTask("outerTorso", criteria).execute();
+        new AgentAsyncTask("Legs", criteria).execute();
+        new AgentAsyncTask("Feet", criteria).execute();
     }
 
     /** Draw from the local powerset */
@@ -408,31 +325,42 @@ public class SuggestionModule extends SuggestionModuleInterface {
         }
     }
 
-    private class AgentAsyncTask extends AsyncTask<List<Clothing>, Void, Void> {
+    private class AgentAsyncTask extends AsyncTask<Void, Void, Void> {
         List<Clothing> clothingList = new ArrayList<>();
         private String location;
+        private String repoLocation;
         private ClothingCriteria criteria;
 
         AgentAsyncTask(String location, ClothingCriteria criteria) {
             this.location = location;
+            this.repoLocation = location;
+            if (repoLocation == "innerTorso" || repoLocation == "outerTorso") {
+                repoLocation = "Torso";
+            }
             this.criteria = criteria;
         }
 
         @Override
-        protected Void doInBackground(List<Clothing> ...  lists) {
+        protected Void doInBackground(Void ... voids) {
             System.out.println("Iteration!");
-            List<Clothing> repo = Repository.getClothing(location, criteria);
+            List<Clothing> repo = Repository.getClothing(repoLocation, criteria);
             if (repo.size() > 0) {
                 for (Clothing clothing : repo) {
                     if (!clothingList.contains(clothing)) {
-                        clothingList.add(clothing);
+                        if ((location != "innerTorso" || clothing.underwearable) &&
+                                (location != "outerTorso" || clothing.overwearable)) {
+                            clothingList.add(clothing);
+                        }
                     }
                 }
             }
             if (clothingList.size() > 5 || criteria.preference.first < 0) {
                 switch (location) {
-                    case "Torso":
+                    case "innerTorso":
                         inner_torso = clothingList;
+                        break;
+                    case "outerTorso":
+                        outer_torso = clothingList;
                         break;
                     case "Legs":
                         bottoms = clothingList;
@@ -444,7 +372,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
                 return null;
             } else {
                 criteria.expandRange();
-                doInBackground(lists);
+                doInBackground(voids);
             }
             return null;
         }
@@ -454,7 +382,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
             super.onPostExecute(aVoid);
 
             asyncCounter++;
-            if (asyncCounter == 3) {
+            if (asyncCounter == 4) {
 
                 // Communicate with OutfitPowerset
                 outfits.inner_torso = inner_torso;
