@@ -146,8 +146,6 @@ public class SuggestionModule extends SuggestionModuleInterface {
     private List<Clothing> shoes;
     private int asyncCounter;
 
-    private void resetRange() { tempCriteria = criteria; }
-
     /** Local clothing Powerset from which the other classes derive outfits*/
     // OutfitPowerset contains lists of appropriate clothing
     @Override
@@ -169,7 +167,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
     @Override
     public Outfit setOutfit(){
 
-        System.out.println("innertorso set: " + outfits.inner_torso);
+        System.out.println("outertorso set: " + outfits.outer_torso);
 
         // Need to get the inner_torso and outer_torso values to relate somewhere
         if (outfits.inner_torso.size() > 0) {
@@ -326,12 +324,13 @@ public class SuggestionModule extends SuggestionModuleInterface {
     }
 
     private class AgentAsyncTask extends AsyncTask<Void, Void, Void> {
-        List<Clothing> clothingList = new ArrayList<>();
+        List<Clothing> clothingList;
         private String location;
         private String repoLocation;
         private ClothingCriteria criteria;
 
         AgentAsyncTask(String location, ClothingCriteria criteria) {
+            clothingList = new ArrayList<>();
             this.location = location;
             this.repoLocation = location;
             if (repoLocation == "innerTorso" || repoLocation == "outerTorso") {

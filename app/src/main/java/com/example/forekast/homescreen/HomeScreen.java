@@ -162,8 +162,6 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         Bitmap bitmapP;
         Bitmap bitmapS;
 
-        System.out.println(outfit.inner_torso);
-
         if (outfit.inner_torso != null){
             bitmapIT = BitmapFactory.decodeByteArray(outfit.inner_torso.picture, 0, outfit.inner_torso.picture.length);
             innerTorso.setImageBitmap(bitmapIT);

@@ -146,9 +146,47 @@ public class Clothing {
      * Presets the comfort, warmth and formality attributes when adding a piece of clothing,
      * as well as the over- and underwearable values for the Torso clothing
      * @throws IllegalArgumentException if not the right instance of Torso, Legs or Feet was created
+     * or if the type that was given is not defined in the Torso class.
      */
     public void preSet() throws IllegalArgumentException {
         throw new IllegalArgumentException("Location was not defined");
+    }
+
+    /**
+     * Resets the underwearable and overwearable attributes when an torso type was changed
+     * Does nothing for Legs or Feet.
+     * @throws IllegalArgumentException if the type that was given is not defined in the Torso class.
+     */
+    public void setWearable() throws IllegalArgumentException {
+        System.out.println("Changing clothing type");
+        switch(type) {
+            case "T-Shirt":
+                underwearable = true;
+                overwearable = false;
+                break;
+            case "Dress":
+                underwearable = true;
+                overwearable = false;
+                break;
+            case "Jacket":
+                underwearable = false;
+                overwearable = true;
+                break;
+            case "Shirt":
+                underwearable = true;
+                overwearable = true;
+                break;
+            case "Sweater":
+                underwearable = false;
+                overwearable = true;
+                break;
+            case "Tanktop":
+                underwearable = true;
+                overwearable = false;
+                break;
+            default:
+                throw new IllegalArgumentException("This type is not defined in Torso class");
+        }
     }
 
 
