@@ -54,7 +54,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     private MutablePair<Integer, Integer> comfort = new MutablePair<>(5, 5);
     private MutablePair<Integer, Integer> preference = new MutablePair<>(10, 10);
 
-    private ClothingCriteria criteria = new ClothingCriteria(warmth, formality, comfort, preference, "General");;
+    private ClothingCriteria criteria;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +123,10 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather"));
         if (newWeather != null) {
             this.weather = newWeather;
+            if (criteria != null) {
+                vm.sugg.setCurrentCriteria(criteria, weather);
+                vm.newOutfit();
+            }
         }
     }
 
@@ -303,8 +307,10 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
             warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
             formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
             comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
+            criteria = new ClothingCriteria(warmth, formality, comfort, preference, "General");
 
             vm.sugg.setCurrentCriteria(criteria, weather);
+
             System.out.println(criteria);
             System.out.println(weather);
             if (criteria != null && weather != null) {
