@@ -142,8 +142,8 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather"));
         if (newWeather != null) {
             this.weather = newWeather;
-            weatherText.setText("Description");
-            cityText.setText(Math.round(weather.getTemp()) + "°C " + weather.getCity());
+            weatherText.setText(weather.getWeather_desc() + ", " + Math.round(weather.getTemp()) + "°C ");
+            cityText.setText(weather.getCity());
             if (criteria != null) {
                 vm.sugg.setCurrentCriteria(criteria, weather);
             }

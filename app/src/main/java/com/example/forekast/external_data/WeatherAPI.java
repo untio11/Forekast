@@ -174,7 +174,8 @@ class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
      * @return A short description of the weather
      */
     private String getDescription(JsonArray data) {
-        return data.get(0).getAsJsonObject().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString();
+        String description = data.get(0).getAsJsonObject().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString();
+        return description.substring(0, 1).toUpperCase() + description.substring(1);
     }
 
     /**

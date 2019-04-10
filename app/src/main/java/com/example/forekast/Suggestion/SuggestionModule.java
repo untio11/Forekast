@@ -102,7 +102,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
         /** When to suggest umbrella vs a coat */
         // If there is -any- rain and the wind is calm enough
-        if (precipitation > 0 && wind < 25) {
+        if (precipitation > 5 && wind < 25) {
             umbrella = true;
         }
         else if (wind >= 25) { // If it's too windy for an umbrella
@@ -121,7 +121,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
         /** When to suggest gloves & scarf */
         // if it feels cold
-        if (feels_like <= 5) {
+        if (feels_like <= 0) {
             gloves = true;
         }
 
