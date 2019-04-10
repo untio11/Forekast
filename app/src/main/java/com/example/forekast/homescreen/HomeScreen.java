@@ -42,6 +42,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SeekBar;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class HomeScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -53,6 +54,9 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     private MutablePair<Integer, Integer> formality = new MutablePair<>(5, 5);
     private MutablePair<Integer, Integer> comfort = new MutablePair<>(5, 5);
     private MutablePair<Integer, Integer> preference = new MutablePair<>(10, 10);
+
+    private TextView weatherText;
+    private TextView cityText;
 
     private ImageView innerTorso;
     private ImageView outerTorso;
@@ -119,6 +123,9 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         formality_slider.setProgress(vm.getFormality());
         formality_slider.setOnSeekBarChangeListener(new updateCriteriaSeekbar());
 
+        weatherText = findViewById(R.id.weatherText);
+        cityText = findViewById(R.id.weatherCity);
+
         innerTorso = findViewById(R.id.innerTorso);
         outerTorso = findViewById(R.id.outerTorso);
         bottoms = findViewById(R.id.bottoms);
@@ -135,9 +142,10 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather"));
         if (newWeather != null) {
             this.weather = newWeather;
+            weatherText.setText("Description");
+            cityText.setText(Math.round(weather.getTemp()) + "°C " + weather.getCity());
             if (criteria != null) {
                 vm.sugg.setCurrentCriteria(criteria, weather);
-                accessories();
             }
         }
     }
@@ -153,6 +161,8 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
             System.out.println(outfit.pants);
             System.out.println(outfit.shoes);
             setOutfit();
+            accessories(); //New accessories every time we have a clothing update,
+                            // Since we have leggings right?
         }
     }
 
@@ -315,12 +325,13 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
                 default:
                     break;
             }
+
+            // Set the new clothing criteria from seekbars
             warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
             formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
             comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
-            preference = new MutablePair<>(10, 10);
-
             criteria = new ClothingCriteria(warmth, formality, comfort, preference, "General");
+
             vm.sugg.setCurrentCriteria(criteria, weather);
             System.out.println(criteria);
             System.out.println(weather);
