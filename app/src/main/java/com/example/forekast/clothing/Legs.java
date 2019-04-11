@@ -14,7 +14,7 @@ public class Legs extends Clothing {
                 break;
             case "Shorts":
                 warmth = 2;
-                formality = 0;
+                formality = 2;
                 break;
             case "Skirt":
                 comfort = 4;
@@ -24,6 +24,11 @@ public class Legs extends Clothing {
             case "Trousers":
                 warmth = 7;
                 formality = 8;
+                break;
+            case "Sweatpants":
+                comfort = 10;
+                warmth = 7;
+                formality = 0;
                 break;
             default:
                 throw new IllegalArgumentException("This type is not defined in Legs class");

@@ -19,8 +19,12 @@ public class Feet extends Clothing {
                 formality = 2;
                 break;
             case "Formal":
-                comfort = 3;
+                comfort = 2;
                 formality = 8;
+                break;
+            case "Boots":
+                comfort = 6;
+                warmth = 8;
                 break;
             default:
                 throw new IllegalArgumentException("This type is not defined in Feet class");

@@ -67,11 +67,11 @@ public class WardrobeFragment extends Fragment {
     public static final String[] getTypes(String location) {
         switch (location) {
             case "Torso":
-                return new String[]{"T-Shirt", "Dress", "Jacket", "Shirt", "Sweater", "Tanktop"};
+                return new String[]{"T-Shirt", "Sweater", "Jacket", "Shirt", "Dress", "Tanktop"};
             case "Legs":
-                return new String[]{"Jeans", "Shorts", "Skirt", "Trousers"};
+                return new String[]{"Jeans", "Shorts", "Skirt", "Trousers", "Sweatpants"};
             case "Feet":
-                return new String[]{"Shoes", "Sandals", "Sneakers", "Formal"};
+                return new String[]{"Shoes", "Sandals", "Sneakers", "Formal", "Boots"};
             default:
                 return null;
         }

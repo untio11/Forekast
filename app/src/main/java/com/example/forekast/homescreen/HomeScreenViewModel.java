@@ -35,7 +35,7 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
 
     @Override
     int getWarmth() {
-        return (clothingCriteria.warmth.second == Integer.MAX_VALUE ? 3 : clothingCriteria.warmth.second);
+        return (clothingCriteria.warmth.second == Integer.MAX_VALUE ? 5 : clothingCriteria.warmth.second);
     }
 
     @Override
@@ -45,7 +45,7 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
 
     @Override
     int getComfort() {
-        return (clothingCriteria.comfort.second == Integer.MAX_VALUE ? 3 : clothingCriteria.comfort.second);
+        return (clothingCriteria.comfort.second == Integer.MAX_VALUE ? 5 : clothingCriteria.comfort.second);
     }
 
     @Override
@@ -54,7 +54,7 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
     }
 
     @Override
-    int getFormality() { return (clothingCriteria.formality.second == Integer.MAX_VALUE ? 3 : clothingCriteria.formality.second); }
+    int getFormality() { return (clothingCriteria.formality.second == Integer.MAX_VALUE ? 5 : clothingCriteria.formality.second); }
 
     @Override
     void nextClothing(String clothing_type) {

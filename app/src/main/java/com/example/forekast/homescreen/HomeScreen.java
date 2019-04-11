@@ -66,6 +66,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     private ImageView outerTorso;
     private ImageView bottoms;
     private ImageView shoes;
+    private LinearLayout bottomsLayout;
 
     private ClothingCriteria criteria = new ClothingCriteria(warmth, formality, comfort, preference, "General");;
 
@@ -110,6 +111,10 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
             vm.setComfort(savedInstance.getInt("Comfortsl"));
             vm.setFormality(savedInstance.getInt("Formalsl"));
             vm.setWarmth(savedInstance.getInt("Warmthsl"));
+        } else {
+            vm.setComfort(5);
+            vm.setFormality(5);
+            vm.setWarmth(5);
         }
 
         SeekBar comfort_slider = findViewById(R.id.slider_comfort);
@@ -134,6 +139,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         outerTorso = findViewById(R.id.outerTorso);
         bottoms = findViewById(R.id.bottoms);
         shoes = findViewById(R.id.shoes);
+        bottomsLayout = findViewById(R.id.bottomsLayout);
 
         warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
         formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
@@ -174,14 +180,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         }
     }
 
-    public void setOutfit(){
-        ImageView innerTorso = findViewById(R.id.innerTorso);
-        ImageView outerTorso = findViewById(R.id.outerTorso);
-        ImageView bottoms = findViewById(R.id.bottoms);
-        ImageView shoes = findViewById(R.id.shoes);
-
-        LinearLayout bottomsLayout = findViewById(R.id.bottomsLayout);
-
+    public void setOutfit() {
         Bitmap bitmapIT;
         Bitmap bitmapOT;
         Bitmap bitmapP;
@@ -190,21 +189,37 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         if (outfit.torso != null){
             if (outfit.torso.torso != null) {
                 if (outfit.torso.torso.underwearable) {
-                    bitmapIT = BitmapFactory.decodeByteArray(outfit.torso.torso.picture, 0, outfit.torso.torso.picture.length);
-                    innerTorso.setImageBitmap(bitmapIT);
+                    if (outfit.torso.torso.picture != null) {
+                        bitmapIT = BitmapFactory.decodeByteArray(outfit.torso.torso.picture, 0, outfit.torso.torso.picture.length);
+                        innerTorso.setImageBitmap(bitmapIT);
+                    } else {
+                        innerTorso.setImageResource(R.drawable.shirt);
+                    }
                     outerTorso.setVisibility(View.GONE);
                 }
                 else {
-                    bitmapOT = BitmapFactory.decodeByteArray(outfit.torso.torso.picture, 0, outfit.torso.torso.picture.length);
-                    outerTorso.setImageBitmap(bitmapOT);
+                    if (outfit.torso.picture != null) {
+                        bitmapOT = BitmapFactory.decodeByteArray(outfit.torso.torso.picture, 0, outfit.torso.torso.picture.length);
+                        outerTorso.setImageBitmap(bitmapOT);
+                    } else {
+                        outerTorso.setImageResource(R.drawable.sweater);
+                    }
                     innerTorso.setVisibility(View.GONE);
                 }
             }
             else { //if (outfit.torso.inner != null && outfit.torso.outer != null) {
-                bitmapIT = BitmapFactory.decodeByteArray(outfit.torso.inner.picture, 0, outfit.torso.inner.picture.length);
-                innerTorso.setImageBitmap(bitmapIT);
-                bitmapOT = BitmapFactory.decodeByteArray(outfit.torso.outer.picture, 0, outfit.torso.outer.picture.length);
-                outerTorso.setImageBitmap(bitmapOT);
+                if (outfit.torso.inner.picture != null) {
+                    bitmapIT = BitmapFactory.decodeByteArray(outfit.torso.inner.picture, 0, outfit.torso.inner.picture.length);
+                    innerTorso.setImageBitmap(bitmapIT);
+                } else {
+                    innerTorso.setImageResource(R.drawable.shirt);
+                }
+                if (outfit.torso.outer.picture != null) {
+                    bitmapOT = BitmapFactory.decodeByteArray(outfit.torso.outer.picture, 0, outfit.torso.outer.picture.length);
+                    outerTorso.setImageBitmap(bitmapOT);
+                } else {
+                    outerTorso.setImageResource(R.drawable.sweater);
+                }
             }
         }
         /*
@@ -222,13 +237,22 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
                 bottomsLayout.setVisibility(View.GONE);
             }
             else {
-                bitmapP = BitmapFactory.decodeByteArray(outfit.pants.picture, 0, outfit.pants.picture.length);
-                bottoms.setImageBitmap(bitmapP);
+                if (outfit.pants.picture != null) {
+                    bitmapP = BitmapFactory.decodeByteArray(outfit.pants.picture, 0, outfit.pants.picture.length);
+                    bottoms.setImageBitmap(bitmapP);
+                }
+                else {
+                    bottoms.setImageResource(R.drawable.pants);
+                }
             }
         }
         if (outfit.shoes != null){
-            bitmapS = BitmapFactory.decodeByteArray(outfit.shoes.picture, 0, outfit.shoes.picture.length);
-            shoes.setImageBitmap(bitmapS);
+            if (outfit.shoes.picture != null) {
+                bitmapS = BitmapFactory.decodeByteArray(outfit.shoes.picture, 0, outfit.shoes.picture.length);
+                shoes.setImageBitmap(bitmapS);
+            } else {
+                shoes.setImageResource(R.drawable.shoe);
+            }
         }
     }
 
