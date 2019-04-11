@@ -213,8 +213,10 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
             outerTorso.setImageBitmap(bitmapOT);
         }*/
         if (outfit.pants != null){
-            if (outfit.torso.torso != null && outfit.torso.torso.type.equals("Dress")){
-                bottomsLayout.setVisibility(View.GONE);
+            if (outfit.torso.torso != null){
+                if(outfit.torso.torso.type.equals("Dress")) {
+                    bottomsLayout.setVisibility(View.GONE);
+                }
             }
             else if (outfit.torso.inner.type.equals("Dress")){
                 bottomsLayout.setVisibility(View.GONE);
