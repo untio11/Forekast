@@ -7,10 +7,10 @@ import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
 import com.example.forekast.clothing.TorsoClothing;
 import com.example.forekast.homescreen.HomeScreen;
+import com.example.forekast.clothing.ClothingCriteriaInterface.MutablePair;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class SuggestionModule extends SuggestionModuleInterface {
 
@@ -77,14 +77,14 @@ public class SuggestionModule extends SuggestionModuleInterface {
         this.tempCriteria = criteria;
 
         /* Slider Criteria */
-        this.warmth = criteria.warmth;
+        //this.warmth = criteria.warmth;
         //this.formality = criteria.formality;
         //this.comfort = criteria.comfort;
         //this.preference = criteria.preference;
         //this.owner = criteria.owner;
 
         //System.out.println(warmth.second);
-        warmth = new MutablePair<>((tempRatio + warmth.first) / 2, (tempRatio + warmth.second) / 2);
+        criteria.warmth = new MutablePair<>((tempRatio + criteria.warmth.first) / 2, (tempRatio + criteria.warmth.second) / 2);
         //System.out.println(temp);
         //System.out.println(tempRatio);
 
@@ -132,16 +132,16 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
         /** When to suggest leggings */
         // If the clothes need to be warmer than 5 and the bottoms are a skirt or a dress
-        if (warmth.second > 5){
-            if (currentBottoms.type.equals("Skirt")) {
-                leggings = true;
-            }
-            else if (currentTorso.torso != null && currentTorso.torso.type.equals("Dress")){
-                leggings = true;
-            }
-            else {
-                if (currentTorso.inner.type.equals("Dress")){
+        if (criteria.warmth.second > 5){
+            if (currentBottoms != null) {
+                if (currentBottoms.type.equals("Skirt")) {
                     leggings = true;
+                } else if (currentTorso.torso != null && currentTorso.torso.type.equals("Dress")) {
+                    leggings = true;
+                } else {
+                    if (currentTorso.inner.type.equals("Dress")) {
+                        leggings = true;
+                    }
                 }
             }
         }
@@ -156,10 +156,12 @@ public class SuggestionModule extends SuggestionModuleInterface {
         return accessories;
     }
 
+    /*
     List<Clothing> inner_torso = new ArrayList<>();
     List<Clothing> outer_torso = new ArrayList<>();
     List<Clothing> bottoms = new ArrayList<>();
     List<Clothing> shoes = new ArrayList<>();
+    */
 
     List<TorsoClothing> torsos = new ArrayList<>();
     //List<List<Clothing>> torsos = new ArrayList<>();
@@ -224,9 +226,9 @@ public class SuggestionModule extends SuggestionModuleInterface {
         System.out.println(outfits.outer_torso.size());
         System.out.println(torsos.size());
 
-        System.out.println(torsos.get(0).torso);
-        System.out.println(torsos.get(0).inner);
-        System.out.println(torsos.get(0).outer);
+        //System.out.println(torsos.get(0).torso);
+        //System.out.println(torsos.get(0).inner);
+        //System.out.println(torsos.get(0).outer);
     }
     /** Draw from the local powerset */
     // Set clothing from the powerset
