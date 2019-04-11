@@ -19,7 +19,7 @@ public class ClothingCriteria extends ClothingCriteriaInterface{
     @Override
     public String toString() {
         return warmth.first + "+" + warmth.second + ", "+ formality.first + "+" + formality.second +
-                ", " + comfort.first + "+" + comfort.second + ", " + preference.second + ", " + owner;
+                ", " + comfort.first + "+" + comfort.second + ", " + preference.first + "+" + preference.second + ", " + owner;
     }
 
     public void expandRange() {

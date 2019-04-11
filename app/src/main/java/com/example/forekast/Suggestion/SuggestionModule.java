@@ -362,7 +362,13 @@ public class SuggestionModule extends SuggestionModuleInterface {
             List<Clothing> repo = Repository.getClothing(repoLocation, criteria);
             if (repo.size() > 0) {
                 for (Clothing clothing : repo) {
-                    if (!clothingList.contains(clothing)) {
+                    Boolean add = true;
+                    for (Clothing savedClothing : clothingList) {
+                        if (savedClothing.ID == clothing.ID) {
+                            add = false;
+                        }
+                    }
+                    if (add) {
                         if ((!location.equals("innerTorso") || clothing.underwearable) &&
                                 (!location.equals("outerTorso") || clothing.overwearable)) {
                             clothingList.add(clothing);
@@ -384,6 +390,8 @@ public class SuggestionModule extends SuggestionModuleInterface {
                     case "Feet":
                         shoes = clothingList;
                         break;
+                    default:
+                        throw new IllegalArgumentException("Something went wrong in the async task");
                 }
                 return null;
             } else {
