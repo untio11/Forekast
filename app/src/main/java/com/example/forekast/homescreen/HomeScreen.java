@@ -222,11 +222,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
                 }
             }
         }
-        /*
-        if (outfit.outer_torso != null){
-            bitmapOT = BitmapFactory.decodeByteArray(outfit.outer_torso.picture, 0, outfit.outer_torso.picture.length);
-            outerTorso.setImageBitmap(bitmapOT);
-        }*/
+
         if (outfit.pants != null){
             if (outfit.torso.torso != null){
                 if(outfit.torso.torso.type.equals("Dress")) {
@@ -246,6 +242,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
                 }
             }
         }
+
         if (outfit.shoes != null){
             if (outfit.shoes.picture != null) {
                 bitmapS = BitmapFactory.decodeByteArray(outfit.shoes.picture, 0, outfit.shoes.picture.length);
