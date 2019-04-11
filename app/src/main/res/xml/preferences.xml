@@ -41,12 +41,6 @@
 
     <EditTextPreference
         android:key="add_wardrobe"
-        android:title="Add New Wardrobe"
-        android:summary="Does This work?"/>
-
-    <EditTextPreference
-        android:key="storage"
-        android:title="storage_preference"
-        app:isPreferenceVisible="false"/>
+        android:title="Add New Wardrobe"/>
 
 </PreferenceScreen>
