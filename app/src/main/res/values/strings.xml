@@ -1,4 +1,9 @@
 <resources>
+    <string-array name="wardrobe_user_names">
+        <item>Default</item>
+    </string-array>
+    
+    
     <string name="app_name">Forekast</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

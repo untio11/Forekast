@@ -75,7 +75,7 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             //Inflate our xml cell to the convertView
-            convertView = inflater.inflate(R.layout.fragment_wardrobe, null);
+            convertView = inflater.inflate(R.layout.wardrobe_entry, null);
 
             //Get xml components into our holder class
             holder.imageView = (ImageView) convertView.findViewById(R.id.clothingimage);
@@ -129,7 +129,8 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
                 // Clicking on item will navigate to editscreen with the current clothing item
                 Fragment fragment = EditScreen.newInstance(clothing, false);
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.wardrobefragment, fragment).commit();
+                fragmentManager.popBackStack("wardrobe", 0);
+                transaction.replace(R.id.content_area, fragment).addToBackStack("editscreen").commit();
             }
         });
 
@@ -137,7 +138,7 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
     }
 
     /**
-     * This holder must replicate the components in the fragment_wardrobe.xml
+     * This holder must replicate the components in the wardrobe_entry
      * We have an imageview for the picture and a progressBar to show progress
      */
     private class Holder {

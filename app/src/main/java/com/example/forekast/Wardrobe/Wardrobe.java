@@ -1,92 +1,206 @@
+
 package com.example.forekast.Wardrobe;
 
-import androidx.fragment.app.FragmentTransaction;
-
-import android.content.Intent;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.example.forekast.homescreen.HomeScreen;
-import com.example.forekast.R;
-import com.example.forekast.Settings.Settings;
-import com.example.forekast.Settings.SwitchWardrobe;
-
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.material.navigation.NavigationView;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
 
-import android.view.MenuItem;
+import com.example.forekast.EditScreen.EditScreen;
+import com.example.forekast.Forekast;
+import com.example.forekast.R;
+import com.example.forekast.clothing.Clothing;
+import com.example.forekast.clothing.Feet;
+import com.example.forekast.clothing.Legs;
+import com.example.forekast.clothing.Torso;
 
-public class Wardrobe extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, WardrobeFragment.OnFragmentInteractionListener {
+import java.util.List;
+
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link Wardrobe.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link Wardrobe#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class Wardrobe extends Fragment {
+
+    private OnFragmentInteractionListener mListener;
+    private WardrobeViewModel vm;
+
+    public Wardrobe() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment Wardrobe.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static Wardrobe newInstance() {
+        Wardrobe fragment = new Wardrobe();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+    public static final String[] getTypes(String location) {
+        switch (location) {
+            case "Torso":
+                return new String[]{"T-Shirt", "Sweater", "Jacket", "Shirt", "Dress", "Tanktop"};
+            case "Legs":
+                return new String[]{"Jeans", "Shorts", "Skirt", "Trousers", "Sweatpants"};
+            case "Feet":
+                return new String[]{"Shoes", "Sandals", "Sneakers", "Formal", "Boots"};
+            default:
+                return null;
+        }
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wardrobe);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        if (savedInstanceState == null) {
-            Fragment fragment = WardrobeFragment.newInstance();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.wardrobefragment, fragment).commit();
-        }
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.wardrobe_overview, container, false);
+
+        // Viewmodel stuff
+        vm = ViewModelProviders.of(this).get(WardrobeViewModel.class);
+
+        ImageButton addTorso = (ImageButton) view.findViewById(R.id.addTorso);
+        ImageButton addLegs = (ImageButton)  view.findViewById(R.id.addBottom);
+        ImageButton addFeet = (ImageButton)  view.findViewById(R.id.addShoes);
+
+        CheckBox showWashing = (CheckBox) view.findViewById(R.id.showWashing);
+        showWashing.setChecked(vm.getWashing());
+
+        // The add torso button will add a new clothing of type torso
+        addTorso.setOnClickListener(v -> {
+            Clothing torso = new Torso();
+            // Navigate to edit screen
+            navigateEditscreen(torso);
+        });
+
+        // The add bottom button will add a new clothing of type bottom
+        addLegs.setOnClickListener(v -> {
+            Clothing legs = new Legs();
+            // Navigate to edit screen
+            navigateEditscreen(legs);
+        });
+
+        // The add shoes button will add a new clothing of type shoes
+        addFeet.setOnClickListener(v -> {
+            Clothing feet = new Feet();
+            // Navigate to edit screen
+            navigateEditscreen(feet);
+        });
+
+        // Execute loading of database in background
+        Observer<List<Clothing>> torsoObs = torsoList -> setLists(view, torsoList, (CustomGridView) view.findViewById(R.id.Torso));
+        Observer<List<Clothing>> legsObs = legsList -> setLists(view, legsList, (CustomGridView) view.findViewById(R.id.Bottom));
+        Observer<List<Clothing>> feetObs = feetList -> setLists(view, feetList, (CustomGridView) view.findViewById(R.id.Shoes));
+
+        vm.getTorsoList().observe(this, torsoObs);
+        vm.getLegsList().observe(this, legsObs);
+        vm.getFeetList().observe(this, feetObs);
+
+        vm.getLists(showWashing.isChecked());
+
+        // Check if checkbox for showing items in washingMachine is checked off.
+        showWashing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                vm.getLists(isChecked);
+            }
+        });
+
+        // return view
+        return view;
+    }
+
+    private void navigateEditscreen(Clothing clothing) {
+        String[] types = getTypes(clothing.location);
+        // Pop up
+        new android.app.AlertDialog.Builder(getContext())
+                .setTitle("What do you want to add?")
+                .setItems(types,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // The 'which' argument contains the index position
+                                // of the selected item
+                                clothing.type = types[which];
+                                // Navigate to the editscreen and pass the clothing objects
+                                Fragment fragment = EditScreen.newInstance(clothing, true);
+                                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                getFragmentManager().popBackStack("wardrobe", 0);
+                                transaction.replace(R.id.content_area, fragment).addToBackStack("editscreen").commit();
+                            }
+                        }).show();
+    }
+
+    public void setLists(View view, List<Clothing> list, CustomGridView listView) {
+        list.sort((c1, c2) -> c1.type.compareTo(c2.type));
+        WardrobeAdapter adapter = new WardrobeAdapter(view.getContext(), R.layout.wardrobe_entry, list);
+        listView.setAdapter(adapter);
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
         } else {
-            super.onBackPressed();
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        item.setChecked(true);
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-
-        if (id == R.id.nav_home) {
-            //Intent start_homescreen = new Intent(getApplicationContext(), HomeScreen.class);
-            //start_homescreen.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            //startActivity(start_homescreen);
-            super.onBackPressed();
-        } else if (id == R.id.nav_settings) {
-            Intent start_settings = new Intent(getApplicationContext(), Settings.class);
-            start_settings.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(start_settings);
-        } else if (id == R.id.nav_switchwardrobe) {
-            Intent start_wardrobeswitch = new Intent(getApplicationContext(), SwitchWardrobe.class);
-            start_wardrobeswitch.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(start_wardrobeswitch);
-        }
-
-        return true;
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
     }
 }

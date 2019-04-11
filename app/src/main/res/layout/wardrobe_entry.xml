@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/clothingimage"
-        android:layout_width="@dimen/app_bar_height"
+        android:layout_width="0dp"
         android:layout_height="@dimen/app_bar_height"
         android:layout_weight="1"
         android:scaleType="fitCenter"
