@@ -41,6 +41,7 @@
 
     <EditTextPreference
         android:key="add_wardrobe"
-        android:title="Add New Wardrobe"/>
+        android:title="Add New Wardrobe"
+        android:summary="Does This work?"/>
 
 </PreferenceScreen>

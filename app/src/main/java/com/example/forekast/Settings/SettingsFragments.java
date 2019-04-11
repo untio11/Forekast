@@ -4,10 +4,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import com.example.forekast.R;
 
-import java.util.List;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SettingsFragments extends PreferenceFragment {
     private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
@@ -17,6 +20,7 @@ public class SettingsFragments extends PreferenceFragment {
     public static final String EMPTY_STRING = "";
     private CharSequence[] wardrobe_entries = { "Default" };
     private String currentValue = "Default";
+    private static final Set<String> DEFAULT_STRING_SET = new HashSet<>(Arrays.asList("a", "b"));
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,16 +36,17 @@ public class SettingsFragments extends PreferenceFragment {
                     // Get relevant preferences
                     EditTextPreference new_wardrobe = (EditTextPreference) findPreference(key);
                     ListPreference wardrobes = (ListPreference) findPreference(WARDROBE_LIST);
+                    new_wardrobe.setSummary(sharedPreferences.getString(key, DEFAULT_STRING));
 
                     // Initialize, copy and add new entry to entries of list preference
                     CharSequence[] entries = new CharSequence[wardrobes.getEntries().length +1];
                     entries = copyOldSequence(entries, wardrobes);
                     entries[wardrobes.getEntries().length] = sharedPreferences.getString(key, DEFAULT_STRING);
 
-                    // Set entries and input text to desired entries
-                    new_wardrobe.setText(EMPTY_STRING);
+                    //// Set entries and input text to desired entries
+                    //new_wardrobe.setText(EMPTY_STRING);
                     setNewEntries(entries, wardrobes);
-
+//
                     wardrobe_entries = entries;
                     currentValue = wardrobes.getValue();
                 }
@@ -68,11 +73,35 @@ public class SettingsFragments extends PreferenceFragment {
         list.setEntryValues(entries);
     }
 
+    public CharSequence[] stringSetToCharSequence (Set<String> set){
+        CharSequence[] entries = new CharSequence[set.size()];
+        String[] stringArray = new String[set.size()];
+        set.toArray(stringArray);
+        for (int i = 0; i < set.size(); i++) {
+            entries[i] = stringArray[i];
+        }
+        return entries;
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        resetWardrobeList();
+
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(preferenceChangeListener);
+        Preference new_wardrobe = findPreference(NEW_WARDROBE);
+        new_wardrobe.setSummary(getPreferenceScreen().getSharedPreferences().getString(NEW_WARDROBE, DEFAULT_STRING));
+
+
+        ListPreference wardrobes = (ListPreference) findPreference(WARDROBE_LIST);
+        //CharSequence[] entries = stringSetToCharSequence(getPreferenceScreen().getSharedPreferences().getStringSet(WARDROBE_LIST, DEFAULT_STRING_SET));
+        Set<> derpSet = getPreferenceScreen().getSharedPreferences().getStringSet(WARDROBE_LIST, DEFAULT_STRING_SET);
+
+
+        //setNewEntries(stringSetToCharSequence(getPreferenceScreen().getSharedPreferences().getStringSet(WARDROBE_LIST, DEFAULT_STRING_SET)), wardrobes);
+        //wardrobes.setEntries(stringSetToCharSequence(getPreferenceScreen().getSharedPreferences().getStringSet(WARDROBE_LIST, DEFAULT_STRING_SET)));
+        //wardrobes.setEntryValues(stringSetToCharSequence(getPreferenceScreen().getSharedPreferences().getStringSet(WARDROBE_LIST, DEFAULT_STRING_SET)));
+
+        //String[] GPXFILES1 = myset.toArray(new String[myset.size()]);
     }
 
     @Override
