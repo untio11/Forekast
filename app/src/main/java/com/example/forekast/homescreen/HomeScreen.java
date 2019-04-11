@@ -1,5 +1,6 @@
 package com.example.forekast.homescreen;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -12,6 +13,7 @@ import com.example.forekast.clothing.ClothingCriteriaInterface.*;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,14 +66,14 @@ public class HomeScreen extends Fragment {
     }
 
     private void init(Bundle savedInstance) {
-        vm = ViewModelProviders.of(this).get(HomeScreenViewModel.class);
-        Repository.initDB(this.getActivity().getApplicationContext());
+        vm = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
+        Repository.initDB(getActivity().getApplicationContext());
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         vm.getLiveWeather().observe(
-                this, newWeather -> initWeather(newWeather));
+                getActivity(), this::initWeather);
         vm.getLiveOutfit().observe(
-                this, newOutfit -> initOutfit(newOutfit));
+                getActivity(), this::initOutfit);
 
         if (savedInstance != null) {
             vm.setComfort(savedInstance.getInt("Comfortsl"));
@@ -98,8 +100,6 @@ public class HomeScreen extends Fragment {
         formality_slider.setProgress(vm.getFormality());
         formality_slider.setOnSeekBarChangeListener(new updateCriteriaSeekBar());
 
-        weatherText = view.findViewById(R.id.weatherText);
-        cityText = view.findViewById(R.id.weatherCity);
 
         innerTorso = view.findViewById(R.id.innerTorso);
         outerTorso = view.findViewById(R.id.outerTorso);
@@ -111,15 +111,15 @@ public class HomeScreen extends Fragment {
         formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
         comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
         preference = new MutablePair<>(10, 10);
-        criteria = new ClothingCriteria(warmth, formality, comfort, preference, "General");
+        criteria = new ClothingCriteria(warmth, formality, comfort, preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
     }
 
     private void initWeather(Weather newWeather) {
         Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather"));
         if (newWeather != null) {
             this.weather = newWeather;
-            weatherText.setText(weather.getWeather_desc() + ", " + Math.round(weather.getTemp()) + "°C ");
-            cityText.setText(weather.getCity());
+            ((TextView) getActivity().findViewById(R.id.weatherText)).setText(weather.getWeather_desc() + ", " + Math.round(weather.getTemp()) + "°C ");
+            ((TextView) getActivity().findViewById(R.id.weatherCity)).setText(weather.getCity());
             if (criteria != null) {
                 vm.sugg.setCurrentCriteria(criteria, weather);
             }
