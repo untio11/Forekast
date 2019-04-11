@@ -2,17 +2,21 @@ package com.example.forekast.Settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import com.example.forekast.R;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SettingsFragments extends PreferenceFragment {
+import java.util.Objects;
+
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
+
+public class SettingsFragments extends PreferenceFragmentCompat {
     private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
     public static final String NEW_WARDROBE = "add_wardrobe";
     public static final String WARDROBE_LIST = "user_list";
@@ -23,10 +27,11 @@ public class SettingsFragments extends PreferenceFragment {
     private static final Set<String> DEFAULT_STRING_SET = new HashSet<>(Arrays.asList("a", "b"));
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preferences);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.preferences, rootKey);
+        PreferenceManager.getDefaultSharedPreferences(Objects.requireNonNull(getActivity()).getApplicationContext()).registerOnSharedPreferenceChangeListener(preferenceChangeListener);
         resetWardrobeList();
+
 
         preferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
@@ -94,7 +99,7 @@ public class SettingsFragments extends PreferenceFragment {
 
         ListPreference wardrobes = (ListPreference) findPreference(WARDROBE_LIST);
         //CharSequence[] entries = stringSetToCharSequence(getPreferenceScreen().getSharedPreferences().getStringSet(WARDROBE_LIST, DEFAULT_STRING_SET));
-        Set<> derpSet = getPreferenceScreen().getSharedPreferences().getStringSet(WARDROBE_LIST, DEFAULT_STRING_SET);
+        //Set<> derpSet = getPreferenceScreen().getSharedPreferences().getStringSet(WARDROBE_LIST, DEFAULT_STRING_SET);
 
 
         //setNewEntries(stringSetToCharSequence(getPreferenceScreen().getSharedPreferences().getStringSet(WARDROBE_LIST, DEFAULT_STRING_SET)), wardrobes);
