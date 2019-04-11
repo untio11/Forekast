@@ -8,9 +8,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-
-
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -21,29 +19,22 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:appComponentFactory">
+        tools:replace="android:appComponentFactory"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".Settings.SwitchWardrobe"
-            android:label="@string/title_activity_switch_wardrobe"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Wardrobe.Wardrobe"
-            android:label="@string/title_activity_wardrobe"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
-            android:name=".Settings.Settings"
-            android:label="@string/title_activity_settings"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".homescreen.HomeScreen"
-            android:label="@string/title_activity_home_screen"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".Forekast"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Settings.Settings"
+            android:label="@string/Settings"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

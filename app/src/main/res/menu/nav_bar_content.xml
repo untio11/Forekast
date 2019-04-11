@@ -7,6 +7,7 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_icon"
+            android:checked="true"
             android:title="@string/home" />
         <item
             android:id="@+id/nav_wardrobe"
@@ -16,10 +17,6 @@
             android:id="@+id/nav_settings"
             android:icon="@android:drawable/ic_menu_manage"
             android:title="@string/Settings" />
-        <item
-            android:id="@+id/nav_switchwardrobe"
-            android:icon="@android:drawable/stat_notify_sync_noanim"
-            android:title="@string/SwitchWardrobe" />
     </group>
 
 </menu>

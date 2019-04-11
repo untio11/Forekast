@@ -2,8 +2,6 @@ package com.example.forekast.clothing;
 
 import android.util.Pair;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -49,7 +47,6 @@ public abstract class ClothingCriteriaInterface implements Iterable<Pair<String,
      * Return the iterator for the criteria
      * @return A nested pair such that (criterium_name, (lower_bound, upper_bound))
      */
-    @NotNull
     @Override
     public Iterator<Pair<String, MutablePair<Integer, Integer>>> iterator() {
         return all.iterator();
