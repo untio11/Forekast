@@ -51,12 +51,14 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
     private static boolean addBool;
     private static String[] items;
     private static boolean preWashingState;
+    private static String preType;
 
     public static EditScreen newInstance(Clothing clothing, Boolean add) {
         addBool = add;
         if (addBool) {
             clothing.preSet();
         }
+        preType = clothing.type;
         preWashingState = clothing.washing_machine;
         editClothing = clothing;
         items = WardrobeFragment.getTypes(editClothing.location);
@@ -158,6 +160,10 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
                 editClothing.comfort = seekComfort.getProgress();
                 editClothing.preference = seekPreference.getProgress();
                 editClothing.type = (String) spinner.getSelectedItem();
+                // If the clothing type for Torso was changed, change the wearable attributes:
+                if (editClothing.location.equals("Torso") && !editClothing.type.equals(preType)) {
+                    editClothing.setWearable();
+                }
                 editClothing.owner = "General"; // GET THIS VARIABLE FROM SETTINGS!
                 editClothing.washing_machine = checkBox.isChecked();
                 setWashingTime();

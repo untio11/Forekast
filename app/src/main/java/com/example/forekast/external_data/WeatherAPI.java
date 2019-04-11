@@ -109,6 +109,7 @@ class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
         weather.setWind((float) (wind_speed * 3.6)); // To convert from m/s to km/h
         weather.setFeels_like((float) feels_like);
         weather.setUv_index(uv_json.get("value").getAsFloat());
+        weather.setWeather_desc(getDescription(weather_data));
     }
 
     /**
@@ -165,6 +166,16 @@ class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
         }
 
         return result;
+    }
+
+    /**
+     * Get the weather description of the current weather (first element in the weather array)
+     * @param data The array containing the 3 hour weather data
+     * @return A short description of the weather
+     */
+    private String getDescription(JsonArray data) {
+        String description = data.get(0).getAsJsonObject().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString();
+        return description.substring(0, 1).toUpperCase() + description.substring(1);
     }
 
     /**

@@ -126,4 +126,5 @@
     <string name="preference">Preference</string>
     <string name="type">Type</string>
     <string name="Return">Return to Wardrobe</string>
+    <string name="weather">Weather updating...</string>
 </resources>

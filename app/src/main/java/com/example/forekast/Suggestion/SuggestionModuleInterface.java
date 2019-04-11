@@ -5,6 +5,7 @@ import com.example.forekast.clothing.ClothingCriteria;
 import com.example.forekast.external_data.Weather;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public abstract class SuggestionModuleInterface {
 
