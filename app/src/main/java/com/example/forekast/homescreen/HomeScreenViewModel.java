@@ -35,7 +35,7 @@ public class HomeScreenViewModel extends HomeScreenViewModelInterface {
     }
 
     @Override
-    void setOwner(String new_owner) {
+    public void setOwner(String new_owner) {
         clothingCriteria.owner = new_owner;
     }
 

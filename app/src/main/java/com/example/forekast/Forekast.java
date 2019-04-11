@@ -59,9 +59,8 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
                     fl.removeLocationUpdates(locationCallback);
                     Forekast.this.startStaticWeather();
                 }
-            } else if (key.equals("manual_weather")) {
-                static_weather_timer.cancel();
-                Forekast.this.startStaticWeather();
+            } else if (key.equals("user_list")) { // Update the current wardrobe
+                vm.setOwner(sharedPreferences.getString("user_list", "default_user"));
             }
         }
     };
@@ -202,22 +201,16 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
     }
 
     @Override
-    public void onBackPressed() { // TODO: fix the bug where you have to press back twice on the home screen to exit the app
+    public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            int index = getSupportFragmentManager().getBackStackEntryCount() - 2;
-            FragmentManager.BackStackEntry backEntry = getSupportFragmentManager().getBackStackEntryAt(index);
-            String tag = backEntry.getName();
-
-            if (onBackStack(tag)) {
-                getSupportFragmentManager().popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            }
-
-            FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().replace(R.id.content_area, new HomeScreen()).addToBackStack("home").commit();
+        } else if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            getSupportFragmentManager().popBackStack("home", 0);
             navigationView.getMenu().getItem(0).setChecked(true);
+        } else {
+            this.finish();
         }
     }
 
@@ -271,9 +264,9 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
                     tag = "home";
                     break;
                 case (R.id.nav_wardrobe):
+                    // Switch to wardrobe fragment
                     fragment = Wardrobe.newInstance();
                     tag = "wardrobe";
-                    // Switch to wardrobe fragment
                     break;
                 case (R.id.nav_settings):
                     fragment = new SettingsFragments();
@@ -283,10 +276,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
 
             if (fragment != null) {
                 FragmentTransaction transaction = Forekast.this.getSupportFragmentManager().beginTransaction();
-                if (onBackStack(tag)) {
-                    getSupportFragmentManager().popBackStack(fragment.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-
+                getSupportFragmentManager().popBackStack("home", 0);
                 transaction.replace(R.id.content_area, fragment).addToBackStack(tag).commit();
             }
 
