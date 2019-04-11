@@ -16,13 +16,16 @@ import com.example.forekast.Settings.Settings;
 import com.example.forekast.Settings.SwitchWardrobe;
 import com.example.forekast.Suggestion.Outfit;
 import com.example.forekast.Wardrobe.Wardrobe;
+import com.example.forekast.clothing.Clothing;
 import com.example.forekast.clothing.ClothingCriteria;
 import com.example.forekast.clothing.ClothingCriteriaInterface;
 import com.example.forekast.clothing.ClothingCriteriaInterface.*;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
+import com.example.forekast.clothing.Torso;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
 
 import android.util.Log;
 import android.util.Pair;
@@ -40,6 +43,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.ImageView;
 
@@ -54,7 +58,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     private MutablePair<Integer, Integer> comfort = new MutablePair<>(5, 5);
     private MutablePair<Integer, Integer> preference = new MutablePair<>(10, 10);
 
-    private ClothingCriteria criteria;;
+    private ClothingCriteria criteria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,8 +139,13 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
 
         if (newOutfit != null) {
             this.outfit = newOutfit;
-            System.out.println(outfit.inner_torso);
-            System.out.println(outfit.outer_torso);
+            if (outfit.torso.torso != null) {
+                System.out.println(outfit.torso.torso);
+            }
+            else {
+                System.out.println(outfit.torso.inner);
+                System.out.println(outfit.torso.outer);
+            }
             System.out.println(outfit.pants);
             System.out.println(outfit.shoes);
             setOutfit();
@@ -150,22 +159,49 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         ImageView bottoms = findViewById(R.id.bottoms);
         ImageView shoes = findViewById(R.id.shoes);
 
+        LinearLayout bottomsLayout = findViewById(R.id.bottomsLayout);
+
         Bitmap bitmapIT;
         Bitmap bitmapOT;
         Bitmap bitmapP;
         Bitmap bitmapS;
 
-        if (outfit.inner_torso != null){
-            bitmapIT = BitmapFactory.decodeByteArray(outfit.inner_torso.picture, 0, outfit.inner_torso.picture.length);
-            innerTorso.setImageBitmap(bitmapIT);
+        if (outfit.torso != null){
+            if (outfit.torso.torso != null) {
+                if (outfit.torso.torso.underwearable) {
+                    bitmapIT = BitmapFactory.decodeByteArray(outfit.torso.torso.picture, 0, outfit.torso.torso.picture.length);
+                    innerTorso.setImageBitmap(bitmapIT);
+                    outerTorso.setVisibility(View.GONE);
+                }
+                else {
+                    bitmapOT = BitmapFactory.decodeByteArray(outfit.torso.torso.picture, 0, outfit.torso.torso.picture.length);
+                    outerTorso.setImageBitmap(bitmapOT);
+                    innerTorso.setVisibility(View.GONE);
+                }
+            }
+            else { //if (outfit.torso.inner != null && outfit.torso.outer != null) {
+                bitmapIT = BitmapFactory.decodeByteArray(outfit.torso.inner.picture, 0, outfit.torso.inner.picture.length);
+                innerTorso.setImageBitmap(bitmapIT);
+                bitmapOT = BitmapFactory.decodeByteArray(outfit.torso.outer.picture, 0, outfit.torso.outer.picture.length);
+                outerTorso.setImageBitmap(bitmapOT);
+            }
         }
+        /*
         if (outfit.outer_torso != null){
             bitmapOT = BitmapFactory.decodeByteArray(outfit.outer_torso.picture, 0, outfit.outer_torso.picture.length);
             outerTorso.setImageBitmap(bitmapOT);
-        }
+        }*/
         if (outfit.pants != null){
-            bitmapP = BitmapFactory.decodeByteArray(outfit.pants.picture, 0, outfit.pants.picture.length);
-            bottoms.setImageBitmap(bitmapP);
+            if (outfit.torso.torso != null && outfit.torso.torso.type.equals("Dress")){
+                bottomsLayout.setVisibility(View.GONE);
+            }
+            else if (outfit.torso.inner.type.equals("Dress")){
+                bottomsLayout.setVisibility(View.GONE);
+            }
+            else {
+                bitmapP = BitmapFactory.decodeByteArray(outfit.pants.picture, 0, outfit.pants.picture.length);
+                bottoms.setImageBitmap(bitmapP);
+            }
         }
         if (outfit.shoes != null){
             bitmapS = BitmapFactory.decodeByteArray(outfit.shoes.picture, 0, outfit.shoes.picture.length);

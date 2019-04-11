@@ -45,5 +45,4 @@ public class Torso extends Clothing {
                 throw new IllegalArgumentException("This type is not defined in Torso class");
         }
     }
-
 }

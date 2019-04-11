@@ -7,10 +7,12 @@ import com.example.forekast.clothing.ClothingCriteriaInterface;
 import com.example.forekast.clothing.ClothingCriteriaInterface.MutablePair;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
+import com.example.forekast.clothing.Torso;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class SuggestionModule extends SuggestionModuleInterface {
 
@@ -42,15 +44,17 @@ public class SuggestionModule extends SuggestionModuleInterface {
     private boolean leggings = false;
 
     /** Clothing */
-    private Clothing currentInnerTorso;
-    private Clothing currentOuterTorso;
+    private TorsoClothing currentTorso;
+    //private Clothing currentInnerTorso;
+    //private Clothing currentOuterTorso;
     private Clothing currentBottoms;
     private Clothing currentShoes;
     private Outfit outfit;
 
     /** Other */
-    private static int currentIndOT = 0;
-    private static int currentIndIT = 0;
+    private static int currentIndT = 0;
+    //private static int currentIndOT = 0;
+    //private static int currentIndIT = 0;
     private static int currentIndB = 0;
     private static int currentIndS = 0;
 
@@ -77,7 +81,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
         int tempRatio =  (int) temp / 3;
         //System.out.println(warmth.second);
-        warmth.second = (tempRatio + warmth.second) / 2;
+        warmth = new MutablePair<>((tempRatio + warmth.first) / 2, (tempRatio + warmth.second) / 2);
         //System.out.println(temp);
         //System.out.println(tempRatio);
 
@@ -125,9 +129,20 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
         /** When to suggest leggings */
         // If the clothes need to be warmer than 5 and the bottoms are a skirt or a dress
-        if (warmth.second > 5 && (currentBottoms.type.equals("Skirt") || currentInnerTorso.type.equals("Dress"))){
-            leggings = true;
+        if (warmth.second > 5){
+            if (currentBottoms.type.equals("Skirt")) {
+                leggings = true;
+            }
+            else if (currentTorso.torso != null && currentTorso.torso.type.equals("Dress")){
+                leggings = true;
+            }
+            else {
+                if (currentTorso.inner.type.equals("Dress")){
+                    leggings = true;
+                }
+            }
         }
+
     }
 
     public boolean[] getAccessories(){
@@ -142,6 +157,9 @@ public class SuggestionModule extends SuggestionModuleInterface {
     List<Clothing> outer_torso = new ArrayList<>();
     List<Clothing> bottoms = new ArrayList<>();
     List<Clothing> shoes = new ArrayList<>();
+
+    List<TorsoClothing> torsos = new ArrayList<>();
+    //List<List<Clothing>> torsos = new ArrayList<>();
 
     private void resetRange() {
         tempCriteria = criteria;
@@ -173,7 +191,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
                 }
             }
 
-            if (inner_torso.size() > 5 || tempCriteria.preference.first < 0) {
+            if (inner_torso.size() > 10 || tempCriteria.preference.first < 0) {
                 resetRange();
             } else {
                 tempCriteria.expandRange();
@@ -188,7 +206,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
                 outer_torso.add(clothing);
             }
         }
-        if (outer_torso.size() > 5 || tempCriteria.preference.first < 0) {
+        if (outer_torso.size() > 10 || tempCriteria.preference.first < 0) {
             resetRange();
         } else {
             tempCriteria.expandRange();
@@ -206,7 +224,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
             }
         }
 
-        if (bottoms.size() > 5 || tempCriteria.preference.first < 0) {
+        if (bottoms.size() > 10 || tempCriteria.preference.first < 0) {
             resetRange();
         } else {
             tempCriteria.expandRange();
@@ -221,7 +239,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
                 shoes.add(clothing);
             }
         }
-        if (shoes.size() > 5 || tempCriteria.preference.first < 0) {
+        if (shoes.size() > 10 || tempCriteria.preference.first < 0) {
             resetRange();
         } else {
             tempCriteria.expandRange();
@@ -229,19 +247,65 @@ public class SuggestionModule extends SuggestionModuleInterface {
         }
     }
 
+    public void setTorso(){
+        System.out.println("innertorso set: "+outfits.inner_torso);
+        System.out.println("outertorso set: "+outfits.outer_torso);
+
+        //List<Clothing> innies = new ArrayList<>();
+        //List<Clothing> outies = new ArrayList<>();
+        //List<Clothing> bothies = new ArrayList<>();
+
+        // Create Torso object from inner torso clothing and add to the torso list
+
+        for (Clothing clothing : outfits.inner_torso){
+            System.out.println("adding inner item");
+            TorsoClothing newTorso = new TorsoClothing(clothing);
+            System.out.println(newTorso.torso);
+            torsos.add(new TorsoClothing(clothing));
+        }
+
+        // Create Torso object from outer torso clothing and add to the torso list
+        for (Clothing clothing : outfits.outer_torso){
+            System.out.println("adding outer item");
+            torsos.add(new TorsoClothing(clothing));
+        }
+
+        // Create Torso object from both inner and outer torso clothing and add to the torso list
+        for (int i = 0; i < outfits.inner_torso.size(); i++){
+            for (int j = 0; j < outfits.outer_torso.size(); j++) {
+                if ((outfits.inner_torso.get(i).warmth + outfits.outer_torso.get(j).warmth) / 2 >=
+                        criteria.warmth.first){ // Use original criteria to fit the slider
+                    torsos.add(new TorsoClothing (outfits.inner_torso.get(i), outfits.outer_torso.get(j)));
+                    System.out.println("adding both item");
+                }
+            }
+        }
+
+        System.out.println(outfits.inner_torso.size());
+        System.out.println(outfits.outer_torso.size());
+        System.out.println(torsos.size());
+
+        System.out.println(torsos.get(0).torso);
+        System.out.println(torsos.get(0).inner);
+        System.out.println(torsos.get(0).outer);
+
+    }
+
     /** Draw from the local powerset */
     // Set clothing from the powerset
     @Override
     public Outfit setOutfit(){
 
-        System.out.println("innertorso set: "+outfits.inner_torso);
+        //System.out.println("innertorso set: "+outfits.inner_torso);
+        //System.out.println("outertorso set: "+outfits.outer_torso);
 
         // Need to get the inner_torso and outer_torso values to relate somewhere
-        if (outfits.inner_torso.size() > 0) {
-            currentInnerTorso = outfits.inner_torso.get(0);
-        }
-        if (outfits.outer_torso.size() > 0) {
-            currentOuterTorso = outfits.outer_torso.get(0);
+        setTorso();
+
+        System.out.println("torsos set: "+torsos);
+
+        if (torsos.size() > 0){
+            currentTorso = torsos.get(0);
         }
         if (outfits.bottoms.size() > 0) {
             currentBottoms = outfits.bottoms.get(0);
@@ -250,33 +314,88 @@ public class SuggestionModule extends SuggestionModuleInterface {
             currentShoes = outfits.shoes.get(0);
         }
 
-        outfit = new Outfit(currentInnerTorso, currentOuterTorso, currentBottoms, currentShoes);
+        outfit = new Outfit(currentTorso, currentBottoms, currentShoes);
+        return outfit;
+    }
+
+    /** Next & Previous button functions (connected to button in the homescreen view model */
+    @Override
+    public Outfit next(String location) {
+        indexCalculator(location, 1); // Increment the index of a clothing item by 1
+
+        if (location.equals("Torso") && torsos.size() > 0){
+            // Inner Torso
+            if (currentIndT >= torsos.size()){
+                currentIndT = 0;
+            }
+            currentTorso = torsos.get(currentIndT);
+        }
+
+        // Bottoms
+        else if (location.equals("Legs") && outfits.bottoms.size() > 0){
+            if (currentIndB >= outfits.bottoms.size()){
+                currentIndB = 0;
+            }
+            currentBottoms = outfits.bottoms.get(currentIndB);
+        }
+
+        // Shoes
+        else if (location.equals("Feet") && outfits.shoes.size() > 0){
+            if (currentIndS >= outfits.shoes.size()){
+                currentIndS = 0;
+            }
+            currentShoes = outfits.shoes.get(currentIndS);
+        }
+
+        outfit = new Outfit(currentTorso, currentBottoms, currentShoes);
+        return outfit;
+    }
+
+    @Override
+    public Outfit previous(String location) {
+        indexCalculator(location, -1); // Decrement the index of a clothing item by 1
+
+        //Torso
+        if (location.equals("Torso") && torsos.size() > 0){
+            // Inner
+            if (currentIndT < 0){ // If the index has been decremented below 0 (gone all the way to the start)
+                currentIndT = torsos.size() - 1; // then set the index to the end of the list
+            }
+            currentTorso = torsos.get(currentIndT);
+        }
+        // Bottoms
+        else if (location.equals("Legs") && outfits.bottoms.size() > 0){
+            if (currentIndB < 0){
+                currentIndB = outfits.bottoms.size() - 1;
+            }
+            currentBottoms = outfits.inner_torso.get(currentIndB);
+        }
+        // Shoes
+        else if (location.equals("Feet") && outfits.shoes.size() > 0){
+            if (currentIndS < 0){
+                currentIndS = outfits.shoes.size() - 1;
+            }
+            currentShoes = outfits.shoes.get(currentIndS);
+        }
+
+        outfit = new Outfit(currentTorso, currentBottoms, currentShoes);
         return outfit;
     }
 
     /** Refresh button function (connected to button in the homescreen view model */
     @Override
     public Outfit refresh(){
+        /** Increment each of the clothing items by 1*/
         indexCalculator("Torso", 1);
         indexCalculator("Legs", 1);
         indexCalculator("Feet", 1);
 
-        System.out.println("Hello, you refreshed!");
-
-        if (outfits.inner_torso.size() > 0){
+        if (torsos.size() > 0){
             // Inner Torso
-            if (currentIndIT >= outfits.inner_torso.size()){
-                currentIndIT = 0;
+            if (currentIndT >= torsos.size()){
+                currentIndT = 0;
             }
-            currentInnerTorso = outfits.inner_torso.get(currentIndIT);
-
-            if (outfits.outer_torso.size() > 0) {
-                // Outer Torso
-                if (currentIndOT >= outfits.outer_torso.size()) {
-                    currentIndOT = 0;
-                }
-                currentOuterTorso = outfits.outer_torso.get(currentIndOT);
-            }
+            currentTorso = torsos.get(currentIndT);
         }
 
         // Bottoms
@@ -295,99 +414,17 @@ public class SuggestionModule extends SuggestionModuleInterface {
             currentShoes = outfits.shoes.get(currentIndS);
         }
 
-        outfit = new Outfit(currentInnerTorso, currentOuterTorso, currentBottoms, currentShoes);
+        outfit = new Outfit(currentTorso, currentBottoms, currentShoes);
         System.out.println(outfit);
-        System.out.println(currentInnerTorso);
-        System.out.println(currentOuterTorso);
+        System.out.println(currentTorso);
         System.out.println(currentBottoms);
         System.out.println(currentShoes);
         return outfit;
     }
 
-    /** Next & Previous button functions (connected to button in the homescreen view model */
-    @Override
-    public Outfit next(String location) {
-        indexCalculator(location, 1);
-
-        if (location.equals("Torso") && outfits.inner_torso.size() > 0){
-            // Inner Torso
-            if (currentIndIT >= outfits.inner_torso.size()){
-                currentIndIT = 0;
-            }
-            currentInnerTorso = outfits.inner_torso.get(currentIndIT);
-
-            if (outfits.outer_torso.size() > 0) {
-                // Outer Torso
-                if (currentIndOT >= outfits.outer_torso.size()) {
-                    currentIndOT = 0;
-                }
-                currentOuterTorso = outfits.outer_torso.get(currentIndOT);
-            }
-        }
-
-        // Bottoms
-        else if (location.equals("Legs") && outfits.bottoms.size() > 0){
-            if (currentIndB >= outfits.bottoms.size()){
-                currentIndB = 0;
-            }
-            currentBottoms = outfits.bottoms.get(currentIndB);
-        }
-
-        // Shoes
-        else if (location.equals("Feet") && outfits.shoes.size() > 0){
-            if (currentIndS >= outfits.shoes.size()){
-                currentIndS = 0;
-            }
-            currentShoes = outfits.shoes.get(currentIndS);
-        }
-
-        outfit = new Outfit(currentInnerTorso, currentOuterTorso, currentBottoms, currentShoes);
-        return outfit;
-    }
-
-    @Override
-    public Outfit previous(String location) {
-        indexCalculator(location, -1);
-
-        //Torso
-        if (location.equals("Torso") && outfits.inner_torso.size() > 0){
-            // Inner
-            if (currentIndIT < 0){
-                currentIndIT = outfits.inner_torso.size() - 1;
-            }
-            currentInnerTorso = outfits.inner_torso.get(currentIndIT);
-
-            if (outfits.outer_torso.size() > 0) {
-                // Outer
-                if (currentIndOT < 0) {
-                    currentIndOT = outfits.outer_torso.size() - 1;
-                }
-                currentOuterTorso = outfits.inner_torso.get(currentIndOT);
-            }
-        }
-        // Bottoms
-        else if (location.equals("Legs") && outfits.bottoms.size() > 0){
-            if (currentIndB < 0){
-                currentIndB = outfits.bottoms.size() - 1;
-            }
-            currentBottoms = outfits.inner_torso.get(currentIndB);
-        }
-        // Shoes
-        else if (location.equals("Feet") && outfits.shoes.size() > 0){
-            if (currentIndS < 0){
-                currentIndS = outfits.shoes.size() - 1;
-            }
-            currentShoes = outfits.shoes.get(currentIndS);
-        }
-
-        outfit = new Outfit(currentInnerTorso, currentOuterTorso, currentBottoms, currentShoes);
-        return outfit;
-    }
-
     private void indexCalculator(String location, int x){
         if (location.equals("Torso")){
-            currentIndIT = currentIndIT + x;
-            currentIndOT = currentIndOT + x;
+            currentIndT = currentIndT + x;
         }
         else if (location.equals("Legs")) {
             currentIndB = currentIndB + x;

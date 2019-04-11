@@ -164,6 +164,7 @@ public class Clothing {
      * @param washing_time How long this piece of clothing is gone for
      * @param picture Bitmap converted to array of bytes
      */
+
     /*
     @Ignore
     public Clothing(String owner, int warmth, int formality, int comfort, int preference, int[] color, boolean washing_machine, int washing_time, byte[] picture) {
@@ -184,4 +185,5 @@ public class Clothing {
         this.location = location;
     }
     */
+
 }

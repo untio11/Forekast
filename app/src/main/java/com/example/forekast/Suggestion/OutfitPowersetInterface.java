@@ -11,10 +11,10 @@ abstract class OutfitPowersetInterface implements Iterable<List<Clothing>> {
 
     //SuggestionModule sm = new SuggestionModule();
 
-    public List<Clothing> inner_torso;// = sm.getClothing("torso");;
-    public List<Clothing> outer_torso;// = sm.getClothing("torso");;
-    public List<Clothing> bottoms;// = sm.getClothing("legs");
-    public List<Clothing> shoes;// = sm.getClothing("feet");
+    public List<Clothing> inner_torso;
+    public List<Clothing> outer_torso;
+    public List<Clothing> bottoms;
+    public List<Clothing> shoes;
 
 
     private List<List<Clothing>> all = new ArrayList<>();
