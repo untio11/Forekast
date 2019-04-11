@@ -19,6 +19,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 
 import com.example.forekast.EditScreen.EditScreen;
+import com.example.forekast.Forekast;
 import com.example.forekast.R;
 import com.example.forekast.clothing.Clothing;
 import com.example.forekast.clothing.Feet;
@@ -63,11 +64,11 @@ public class Wardrobe extends Fragment {
     public static final String[] getTypes(String location) {
         switch (location) {
             case "Torso":
-                return new String[]{"T-Shirt", "Dress", "Jacket", "Shirt", "Sweater", "Tanktop"};
+                return new String[]{"T-Shirt", "Sweater", "Jacket", "Shirt", "Dress", "Tanktop"};
             case "Legs":
-                return new String[]{"Jeans", "Shorts", "Skirt", "Trousers"};
+                return new String[]{"Jeans", "Shorts", "Skirt", "Trousers", "Sweatpants"};
             case "Feet":
-                return new String[]{"Shoes", "Sandals", "Sneakers", "Formal"};
+                return new String[]{"Shoes", "Sandals", "Sneakers", "Formal", "Boots"};
             default:
                 return null;
         }
@@ -152,7 +153,8 @@ public class Wardrobe extends Fragment {
                                 // Navigate to the editscreen and pass the clothing objects
                                 Fragment fragment = EditScreen.newInstance(clothing, true);
                                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                                transaction.replace(R.id.wardrobe_container, fragment).commit();
+                                getFragmentManager().popBackStack("wardrobe", 0);
+                                transaction.replace(R.id.content_area, fragment).addToBackStack("editscreen").commit();
                             }
                         }).show();
     }

@@ -41,9 +41,6 @@ public class HomeScreen extends Fragment {
     private MutablePair<Integer, Integer> comfort = new MutablePair<>(5, 5);
     private MutablePair<Integer, Integer> preference = new MutablePair<>(10, 10);
 
-    private TextView weatherText;
-    private TextView cityText;
-
     private ImageView innerTorso;
     private ImageView outerTorso;
     private ImageView bottoms;
@@ -100,13 +97,6 @@ public class HomeScreen extends Fragment {
         formality_slider.setProgress(vm.getFormality());
         formality_slider.setOnSeekBarChangeListener(new updateCriteriaSeekBar());
 
-
-        innerTorso = view.findViewById(R.id.innerTorso);
-        outerTorso = view.findViewById(R.id.outerTorso);
-        bottoms = view.findViewById(R.id.bottoms);
-        shoes = view.findViewById(R.id.shoes);
-        bottomsLayout = view.findViewById(R.id.bottomsLayout);
-
         warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
         formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
         comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
@@ -147,6 +137,12 @@ public class HomeScreen extends Fragment {
     }
 
     public void setOutfit() {
+        innerTorso = view.findViewById(R.id.innerTorso);
+        outerTorso = view.findViewById(R.id.outerTorso);
+        bottoms = view.findViewById(R.id.bottoms);
+        shoes = view.findViewById(R.id.shoes);
+        bottomsLayout = view.findViewById(R.id.bottomsLayout);
+
         Bitmap bitmapIT;
         Bitmap bitmapOT;
         Bitmap bitmapP;

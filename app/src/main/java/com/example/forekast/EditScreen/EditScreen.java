@@ -24,6 +24,7 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.forekast.Forekast;
 import com.example.forekast.R;
 import com.example.forekast.Wardrobe.Wardrobe;
 import com.example.forekast.clothing.Clothing;
@@ -237,7 +238,8 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         // Navigate to the wardrobe
         Fragment fragment = Wardrobe.newInstance();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.wardrobe_container, fragment).commit();
+        getFragmentManager().popBackStack("editscreen", 0);
+        transaction.replace(R.id.content_area, fragment).addToBackStack("wardrobe").commit();
     }
 
     @Override
