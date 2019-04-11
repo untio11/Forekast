@@ -1,13 +1,11 @@
 package com.example.forekast.homescreen;
 
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import com.example.forekast.R;
 import com.example.forekast.Suggestion.Outfit;
 
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -136,7 +134,7 @@ public class HomeScreen extends Fragment {
         );
     }
 
-    void refreshClothing(View v) {
+    public void refreshClothing(View v) {
         vm.newOutfit();
     }
 

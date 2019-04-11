@@ -283,4 +283,25 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
             return true;
         });
     }
+
+    public void refreshClothing(View v) {
+        HomeScreen home = (HomeScreen) Forekast.this.getSupportFragmentManager().findFragmentByTag("home");
+        if (home != null) {
+            home.refreshClothing(v);
+        }
+    }
+
+    public void nextClothing(View v) {
+        HomeScreen home = (HomeScreen) Forekast.this.getSupportFragmentManager().findFragmentByTag("home");
+        if (home != null) {
+            home.nextClothing(v);
+        }
+    }
+
+    public void prevClothing(View v) {
+        HomeScreen home = (HomeScreen) Forekast.this.getSupportFragmentManager().findFragmentByTag("home");
+        if (home != null) {
+            home.prevClothing(v);
+        }
+    }
 }
