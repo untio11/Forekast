@@ -37,10 +37,7 @@
     <ListPreference
         android:key="user_list"
         android:title="Wardrobe"
-        android:summary="Switch between wardrobes"
-        android:entries="@array/wardrobe_user_names"
-        android:entryValues="@array/wardrobe_user_names"
-        android:defaultValue="Default"/>
+        android:summary="Switch between wardrobes"/>
 
     <EditTextPreference
         android:key="add_wardrobe"

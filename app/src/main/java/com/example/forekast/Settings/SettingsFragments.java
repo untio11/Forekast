@@ -15,13 +15,14 @@ public class SettingsFragments extends PreferenceFragment {
     public static final String WARDROBE_LIST = "user_list";
     public static final String DEFAULT_STRING = "fuck_my_life";
     public static final String EMPTY_STRING = "";
-    private CharSequence[] wardrobe_entries;
-    private String currentValue;
+    private CharSequence[] wardrobe_entries = { "Default" };
+    private String currentValue = "Default";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+        resetWardrobeList();
 
         preferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
@@ -62,15 +63,15 @@ public class SettingsFragments extends PreferenceFragment {
     }
 
     public void setNewEntries(CharSequence[] entries, ListPreference list){
+        list.setPersistent(true);
         list.setEntries(entries);
         list.setEntryValues(entries);
-        list.setPersistent(true);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
+        resetWardrobeList();
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(preferenceChangeListener);
     }
 
