@@ -6,6 +6,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,7 +16,7 @@ import java.net.URL;
 
 import androidx.lifecycle.MutableLiveData;
 
-class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
+public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
     // URL constants
     private static final String apikey = "APPID=0b9abbd80c094690566a12c404593543";
     private static final String baseurl = "http://api.openweathermap.org/data/2.5/";
@@ -36,7 +38,7 @@ class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
      * Use this constructor if the weather data should be fetched by city name (no gps)
      * @param cityname name of the city, as entered by the user
      */
-    WeatherAPI(String cityname) {
+    public WeatherAPI(String cityname) {
         city_name = cityname;
         using_coordinates = false;
     }
@@ -46,7 +48,7 @@ class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
      * @param latitude latitude as string
      * @param longitude longitude as string
      */
-    WeatherAPI(String latitude, String longitude) {
+    public WeatherAPI(String latitude, String longitude) {
         current_latitude = latitude;
         current_longitude = longitude;
         using_coordinates = true;
@@ -68,6 +70,7 @@ class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
         if (target.getValue() == null || !target.getValue().toString().equals(last_weather.toString())) {
             target.postValue(last_weather);
         }
+
 
         try {
             setWeatherProperties(result);
@@ -93,12 +96,18 @@ class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
 
         JsonArray weather_data = forecast_json.getAsJsonArray("list"); // For the weather data
 
-        HttpURLConnection uv_con = openCon(getUvURL(coordinates.get("lat").getAsString(), coordinates.get("lon").getAsString()));
+        HttpURLConnection uv_con;
+        if (current_latitude != null) {
+            uv_con = openCon(getUvURL(current_latitude, current_longitude));
+        } else {
+            uv_con = openCon(getUvURL(coordinates.get("lat").getAsString(), coordinates.get("lon").getAsString()));
+        }
+
         JsonObject uv_json = readResponse(uv_con);
 
 
         double temp =       getAvg("main", "temp", weather_data);
-        double wind_speed = getAvg("wind", "speed", weather_data); // m/s, taken care of later
+        double wind_speed =  getAvg("wind", "speed", weather_data); // m/s, taken care of later
         double humidity =   getAvg("main", "humidity", weather_data) / 100.0; // so it's in [0,1]
         // Slightly tweaked approximation from https://www.abc.net.au/news/2018-08-10/weather-feels-like-temperatures/10050622
         double feels_like =  temp + 0.33 * humidity - 0.6 * wind_speed - 3.0;
@@ -184,9 +193,11 @@ class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
      * @return URL to the api
      */
     private String getForecastURL() {
-        return baseurl + forecast +
-                (using_coordinates ? "lat=" + current_latitude + "&lon=" + current_longitude : "q=" + city_name)
-                + "&" + apikey + "&units=metric";
+        if (using_coordinates) {
+            return baseurl + forecast + "lat=" + current_latitude + "&lon=" + current_longitude + "&" + apikey + "&units=metric";
+        } else {
+            return baseurl + forecast + "q=" + city_name + "&" + apikey + "&units=metric";
+        }
     }
 
     /**

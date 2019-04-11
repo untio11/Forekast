@@ -1,20 +1,15 @@
 package com.example.forekast.homescreen;
 
-import android.os.AsyncTask;
-import android.view.View;
+import android.location.Location;
 
 import com.example.forekast.Suggestion.Outfit;
-import com.example.forekast.clothing.Clothing;
 import com.example.forekast.clothing.ClothingCriteria;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
 
-import java.util.List;
-
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
-class HomeScreenViewModel extends HomeScreenViewModelInterface {
+public class HomeScreenViewModel extends HomeScreenViewModelInterface {
     @Override
     LiveData<Outfit> getLiveOutfit() {
         return currentOutfit;
@@ -35,7 +30,12 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
 
     @Override
     int getWarmth() {
-        return (clothingCriteria.warmth.second == Integer.MAX_VALUE ? 5 : clothingCriteria.warmth.second);
+        return clothingCriteria.warmth.second;
+    }
+
+    @Override
+    public void setOwner(String new_owner) {
+        clothingCriteria.owner = new_owner;
     }
 
     @Override
@@ -45,7 +45,7 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
 
     @Override
     int getComfort() {
-        return (clothingCriteria.comfort.second == Integer.MAX_VALUE ? 5 : clothingCriteria.comfort.second);
+        return clothingCriteria.comfort.second;
     }
 
     @Override
@@ -54,7 +54,9 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
     }
 
     @Override
-    int getFormality() { return (clothingCriteria.formality.second == Integer.MAX_VALUE ? 5 : clothingCriteria.formality.second); }
+    int getFormality() {
+        return clothingCriteria.formality.second;
+    }
 
     @Override
     void nextClothing(String clothing_type) {
@@ -68,14 +70,19 @@ class HomeScreenViewModel extends HomeScreenViewModelInterface {
     void refreshClothing() { currentOutfit.postValue(sugg.refresh());}
 
     @Override
-    void updateWeather() { Repository.getWeather("Eindhoven", currentWeather); }
+    void newOutfit() { currentOutfit.postValue(sugg.setOutfit());}
+
+    public void updateWeather(Location location) {
+        Repository.getWeather(Double.toString(location.getLatitude()), Double.toString(location.getLongitude()), currentWeather);
+    }
 
     @Override
-    void newOutfit() { currentOutfit.postValue(sugg.setOutfit());}
+    public void updateWeather(String name) {
+        Repository.getWeather(name, currentWeather);
+    }
 
     @Override
     boolean[] getAccessories() {
-        boolean[] accessories = sugg.getAccessories();
-        return accessories;
+        return sugg.getAccessories();
     }
 }

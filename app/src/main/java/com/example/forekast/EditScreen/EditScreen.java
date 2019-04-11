@@ -25,7 +25,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.forekast.R;
-import com.example.forekast.Wardrobe.WardrobeFragment;
+import com.example.forekast.Wardrobe.Wardrobe;
 import com.example.forekast.clothing.Clothing;
 import com.example.forekast.external_data.Repository;
 
@@ -61,7 +61,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         preType = clothing.type;
         preWashingState = clothing.washing_machine;
         editClothing = clothing;
-        items = WardrobeFragment.getTypes(editClothing.location);
+        items = Wardrobe.getTypes(editClothing.location);
         bitmap = null;
         return new EditScreen();
     }
@@ -235,9 +235,9 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
 
     private void navigateWardrobe() {
         // Navigate to the wardrobe
-        Fragment fragment = WardrobeFragment.newInstance();
+        Fragment fragment = Wardrobe.newInstance();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.wardrobefragment, fragment).commit();
+        transaction.replace(R.id.wardrobe_container, fragment).commit();
     }
 
     @Override
