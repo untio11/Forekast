@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
+import androidx.preference.MultiSelectListPreference;
 import androidx.preference.Preference;
 import com.example.forekast.R;
 
@@ -21,6 +22,7 @@ public class SettingsFragments extends PreferenceFragmentCompat {
     public static final String NEW_WARDROBE = "add_wardrobe";
     public static final String WARDROBE_LIST = "user_list";
     public static final String DEFAULT_STRING = "fuck_my_life";
+    public static final String STORAGE = "storage";
     public static final String EMPTY_STRING = "";
     private CharSequence[] wardrobe_entries = { "Default" };
     private String currentValue = "Default";
@@ -41,6 +43,7 @@ public class SettingsFragments extends PreferenceFragmentCompat {
                     // Get relevant preferences
                     EditTextPreference new_wardrobe = (EditTextPreference) findPreference(key);
                     ListPreference wardrobes = (ListPreference) findPreference(WARDROBE_LIST);
+                    MultiSelectListPreference storage = (MultiSelectListPreference) findPreference(STORAGE);
                     new_wardrobe.setSummary(sharedPreferences.getString(key, DEFAULT_STRING));
 
                     // Initialize, copy and add new entry to entries of list preference
@@ -51,6 +54,7 @@ public class SettingsFragments extends PreferenceFragmentCompat {
                     //// Set entries and input text to desired entries
                     //new_wardrobe.setText(EMPTY_STRING);
                     setNewEntries(entries, wardrobes);
+                    setNewEntries(entries, storage);
 //
                     wardrobe_entries = entries;
                     currentValue = wardrobes.getValue();
@@ -73,7 +77,11 @@ public class SettingsFragments extends PreferenceFragmentCompat {
     }
 
     public void setNewEntries(CharSequence[] entries, ListPreference list){
-        list.setPersistent(true);
+        list.setEntries(entries);
+        list.setEntryValues(entries);
+    }
+
+    public void setNewEntries(CharSequence[] entries, MultiSelectListPreference list){
         list.setEntries(entries);
         list.setEntryValues(entries);
     }
@@ -102,7 +110,7 @@ public class SettingsFragments extends PreferenceFragmentCompat {
         //Set<> derpSet = getPreferenceScreen().getSharedPreferences().getStringSet(WARDROBE_LIST, DEFAULT_STRING_SET);
 
 
-        //setNewEntries(stringSetToCharSequence(getPreferenceScreen().getSharedPreferences().getStringSet(WARDROBE_LIST, DEFAULT_STRING_SET)), wardrobes);
+        setNewEntries(stringSetToCharSequence(getPreferenceScreen().getSharedPreferences().getStringSet(STORAGE, DEFAULT_STRING_SET)), wardrobes);
         //wardrobes.setEntries(stringSetToCharSequence(getPreferenceScreen().getSharedPreferences().getStringSet(WARDROBE_LIST, DEFAULT_STRING_SET)));
         //wardrobes.setEntryValues(stringSetToCharSequence(getPreferenceScreen().getSharedPreferences().getStringSet(WARDROBE_LIST, DEFAULT_STRING_SET)));
 

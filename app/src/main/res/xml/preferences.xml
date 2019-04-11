@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -43,5 +43,10 @@
         android:key="add_wardrobe"
         android:title="Add New Wardrobe"
         android:summary="Does This work?"/>
+
+    <EditTextPreference
+        android:key="storage"
+        android:title="storage_preference"
+        app:isPreferenceVisible="false"/>
 
 </PreferenceScreen>
