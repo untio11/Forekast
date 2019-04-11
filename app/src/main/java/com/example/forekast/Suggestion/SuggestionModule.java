@@ -383,7 +383,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
             clothingList = new ArrayList<>();
             this.location = location;
             this.repoLocation = location;
-            if (repoLocation == "innerTorso" || repoLocation == "outerTorso") {
+            if (repoLocation.equals("innerTorso") || repoLocation.equals("outerTorso")) {
                 repoLocation = "Torso";
             }
             this.criteria = criteria;
@@ -396,8 +396,8 @@ public class SuggestionModule extends SuggestionModuleInterface {
             if (repo.size() > 0) {
                 for (Clothing clothing : repo) {
                     if (!clothingList.contains(clothing)) {
-                        if ((location != "innerTorso" || clothing.underwearable) &&
-                                (location != "outerTorso" || clothing.overwearable)) {
+                        if ((!location.equals("innerTorso") || clothing.underwearable) &&
+                                (!location.equals("outerTorso") || clothing.overwearable)) {
                             clothingList.add(clothing);
                         }
                     }
