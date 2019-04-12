@@ -242,10 +242,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
     }
 
     private void navigateWardrobe() {
-        // Navigate to the wardrobe
-        Fragment fragment = Wardrobe.newInstance();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.wardrobe_container, fragment).commit();
+        getActivity().onBackPressed();
     }
 
     @Override
