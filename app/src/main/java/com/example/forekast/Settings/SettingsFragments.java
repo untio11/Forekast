@@ -34,6 +34,10 @@ public class SettingsFragments extends PreferenceFragmentCompat {
                 String new_wardrobe = name_field.getText();
 
                 Set<String> wardrobes = sharedPreferences.getStringSet(WARDROBES, new HashSet<>());
+                if (wardrobes.isEmpty()) {
+                    wardrobes.add("Tester");
+                }
+
                 wardrobes.add(new_wardrobe);
 
                 shedit.putStringSet(WARDROBES, wardrobes);
@@ -54,6 +58,9 @@ public class SettingsFragments extends PreferenceFragmentCompat {
     private void updateWardrobeList() {
         ListPreference wardrobes = (ListPreference) SettingsFragments.this.findPreference(WARDROBE_LIST);
         Set<String> names = getPreferenceScreen().getSharedPreferences().getStringSet(WARDROBES, new HashSet<>());
+        if (names.isEmpty()) {
+            names.add("Tester"); // To make sure that it is initialized with at least one name
+        }
 
         CharSequence[] entries = new CharSequence[names.size()];
         int i = 0;
@@ -64,6 +71,9 @@ public class SettingsFragments extends PreferenceFragmentCompat {
 
         wardrobes.setEntryValues(entries);
         wardrobes.setEntries(entries);
+        if (names.size() == 1) { // Initialize to select "Tester"
+            wardrobes.setValueIndex(0);
+        }
     }
 
     @Override
