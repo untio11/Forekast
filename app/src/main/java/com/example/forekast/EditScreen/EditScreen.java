@@ -196,7 +196,13 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         redoImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectPicture();
+                if (ContextCompat.checkSelfPermission(getActivity(),
+                        Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, 0);
+                } else {
+                    Toast.makeText(getActivity(),"Please give camera permission in your phone's settings.",Toast.LENGTH_LONG).show();
+                }
             }
         });
         return view;
