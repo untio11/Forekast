@@ -1,38 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <CheckBoxPreference
         android:id="@+id/live_location_checkbox"
-        android:key="live_location"
-        android:title="Location"
-        android:summary="Use GPS to track location"
+        android:defaultValue="true"
         android:disableDependentsState="true"
-        android:defaultValue="true"/>
+        android:key="live_location"
+        android:summary="Use GPS to track location"
+        android:title="Location" />
 
     <EditTextPreference
-        android:dependency="live_location"
-        android:key="manual_location"
-        android:title="Set Location"
-        android:inputType="text"
         android:defaultValue="Eindhoven"
-        android:summary="Set manual location"/>
+        android:dependency="live_location"
+        android:inputType="text"
+        android:key="manual_location"
+        android:summary="Set manual location"
+        android:title="Set Location" />
 
     <CheckBoxPreference
+        android:defaultValue="true"
         android:key="availability_system"
-        android:title="Availability"
         android:summary="Clothes become unavailable when in washing machine"
-        android:defaultValue="true"/>
+        android:title="Availability" />
 
     <EditTextPreference
-        android:key="unavailability_duration"
-        android:title="Unavailability Duration"
-        android:summary="Set unavailability duration in days"
-        android:inputType="number"
         android:defaultValue="14"
-        android:dependency="availability_system"/>
+        android:dependency="availability_system"
+        android:inputType="number"
+        android:key="unavailability_duration"
+        android:summary="Set unavailability duration in days"
+        android:title="Unavailability Duration" />
 
     <ListPreference
         android:defaultValue="Default"
@@ -44,6 +43,6 @@
 
     <EditTextPreference
         android:key="add_wardrobe"
-        android:title="Add New Wardrobe"/>
+        android:title="Add New Wardrobe" />
 
 </PreferenceScreen>

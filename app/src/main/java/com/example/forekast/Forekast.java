@@ -2,6 +2,9 @@ package com.example.forekast;
 
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -46,6 +49,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
     private FusedLocationProviderClient fl;
     private LocationRequest req;
     private HomeScreenViewModelInterface vm;
+    private ActionBarDrawerToggle toggle;
     private Timer static_weather_timer;
     private SharedPreferences.OnSharedPreferenceChangeListener pref_change = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
@@ -151,6 +155,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
     @Override
     public void onResume() {
         super.onResume();
+        toggle.syncState();
     }
 
     @Override
@@ -207,11 +212,14 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (getSupportFragmentManager().getBackStackEntryCount() > 2) {
+            setNormalIcon();
             super.onBackPressed();
         } else if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            setNormalIcon();
             getSupportFragmentManager().popBackStack("home", 0);
             navigationView.getMenu().getItem(0).setChecked(true);
         } else {
+            setNormalIcon();
             this.finish();
         }
     }
@@ -224,7 +232,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close) {
             @Override
@@ -232,6 +240,8 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
                 drawerView.bringToFront();
             }
         };
+
+
 
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -252,15 +262,18 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
                     // Switch to home screen fragment
                     fragment = HomeScreen.newInstance();
                     tag = "home";
+                    setNormalIcon();
                     break;
                 case (R.id.nav_wardrobe):
                     // Switch to wardrobe fragment
                     fragment = Wardrobe.newInstance();
                     tag = "wardrobe";
+                    setNormalIcon();
                     break;
                 case (R.id.nav_settings):
                     fragment = new SettingsFragments();
                     tag = "settings";
+                    setArrowIcon();
                     break;
             }
 
@@ -272,6 +285,31 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
 
             return true;
         });
+    }
+
+    private void setArrowIcon() {
+        toggle.setDrawerIndicatorEnabled(false);
+        Drawable dr = getResources().getDrawable(R.drawable.previous);
+        Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
+        Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 30, 30, true));
+        toggle.setHomeAsUpIndicator(d);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (drawer.isDrawerVisible(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                } else {
+                    drawer.openDrawer(GravityCompat.START);
+                }
+            }
+        });
+
+    }
+
+    private void setNormalIcon() {
+        toggle.setDrawerIndicatorEnabled(true);
+
     }
 
     public void refreshClothing(View v) {
