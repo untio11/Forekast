@@ -94,6 +94,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         //create clothing type spinner, along with the choice of type, and the adapter it needs with it
         Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
         spinner.setOnItemSelectedListener(this);
+        ((ImageButton)view.findViewById(R.id.drop_down_butt)).setOnClickListener(v -> spinner.performClick());
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);

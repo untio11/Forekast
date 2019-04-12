@@ -68,7 +68,7 @@ public class Wardrobe extends Fragment {
             case "Legs":
                 return new String[]{"Jeans", "Shorts", "Skirt", "Trousers"};
             case "Feet":
-                return new String[]{"Shoes", "Sandals", "Sneakers", "Formal"};
+                return new String[]{"Shoes", "Sandals", "Sneakers", "Formal", "Boots"};
             default:
                 return null;
         }

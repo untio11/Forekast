@@ -124,12 +124,12 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="torso">Torso </string>
-    <string name="legs">Legs </string>
-    <string name="feet">Feet </string>
+    <string name="torso">Tops </string>
+    <string name="legs">Bottoms </string>
+    <string name="feet">Shoes </string>
     <string name="washing_items_show">Show items in washing machine</string>
     <string name="preference">Preference</string>
     <string name="type">Type</string>
     <string name="Return">Return to Wardrobe</string>
-    <string name="weather">Weather updating...</string>
+    <string name="weather">Weather updating…</string>
 </resources>
