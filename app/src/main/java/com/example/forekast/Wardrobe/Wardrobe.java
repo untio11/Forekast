@@ -93,7 +93,7 @@ public class Wardrobe extends Fragment {
         ImageButton addFeet = (ImageButton)  view.findViewById(R.id.addShoes);
 
         CheckBox showWashing = (CheckBox) view.findViewById(R.id.showWashing);
-        showWashing.setChecked(vm.getWashing());
+        //showWashing.setChecked(vm.getWashing());
 
         // The add torso button will add a new clothing of type torso
         addTorso.setOnClickListener(v -> {
