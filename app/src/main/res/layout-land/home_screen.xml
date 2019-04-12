@@ -74,9 +74,7 @@
         android:layout_height="72dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/bottomsLayout"
         app:layout_constraintTop_toBottomOf="@+id/bottomsLayout">
 
         <TextView
