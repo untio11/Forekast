@@ -10,6 +10,7 @@ import com.example.forekast.R;
 import com.example.forekast.Suggestion.Outfit;
 import com.example.forekast.clothing.ClothingCriteria;
 import com.example.forekast.clothing.ClothingCriteriaInterface.*;
+import com.example.forekast.clothing.TorsoClothing;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
 
@@ -40,15 +41,6 @@ public class HomeScreen extends Fragment {
     private MutablePair<Integer, Integer> formality = new MutablePair<>(5, 5);
     private MutablePair<Integer, Integer> comfort = new MutablePair<>(5, 5);
     private MutablePair<Integer, Integer> preference = new MutablePair<>(10, 10);
-
-    private TextView weatherText;
-    private TextView cityText;
-
-    private ImageView innerTorso;
-    private ImageView outerTorso;
-    private ImageView bottoms;
-    private ImageView shoes;
-    private LinearLayout bottomsLayout;
 
     private ClothingCriteria criteria;
 
@@ -102,13 +94,6 @@ public class HomeScreen extends Fragment {
         formality_slider.setProgress(vm.getFormality());
         formality_slider.setOnSeekBarChangeListener(new updateCriteriaSeekBar());
 
-
-        innerTorso = view.findViewById(R.id.innerTorso);
-        outerTorso = view.findViewById(R.id.outerTorso);
-        bottoms = view.findViewById(R.id.bottoms);
-        shoes = view.findViewById(R.id.shoes);
-        bottomsLayout = view.findViewById(R.id.bottomsLayout);
-
         warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
         formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
         comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
@@ -153,11 +138,16 @@ public class HomeScreen extends Fragment {
         Bitmap bitmapOT;
         Bitmap bitmapP;
         Bitmap bitmapS;
+        ImageView innerTorso = view.findViewById(R.id.innerTorso);
+        ImageView outerTorso = view.findViewById(R.id.outerTorso);
+        ImageView bottoms = view.findViewById(R.id.bottoms);
+        ImageView shoes = view.findViewById(R.id.shoes);
+        LinearLayout bottomsLayout = view.findViewById(R.id.bottomsLayout);
 
         if (outfit.torso != null){
-            if (outfit.torso.torso != null) {
-                if (outfit.torso.torso.underwearable) {
-                    if (outfit.torso.torso.picture != null) {
+            if (TorsoClothing.torso != null) {
+                if (TorsoClothing.torso.underwearable) {
+                    if (TorsoClothing.torso.picture != null) {
                         bitmapIT = BitmapFactory.decodeByteArray(outfit.torso.torso.picture, 0, outfit.torso.torso.picture.length);
                         innerTorso.setImageBitmap(bitmapIT);
                     } else {
