@@ -53,22 +53,22 @@ public class SuggestionModule extends SuggestionModuleInterface {
     @Override
     public void setCurrentCriteria(ClothingCriteria criteria, Weather weather) {
         this.weather = weather;
-
-        /** Weather Criteria */
-        this.temp = weather.temp;
-        this.uv_index = weather.uv_index;
-        this.precipitation = weather.precipitation;
-        this.feels_like = weather.feels_like;
-        this.wind = weather.wind;
-
-        int tempRatio = (int) temp / 3;
-        criteria.warmth.second = (tempRatio + criteria.warmth.second) / 2;
-
         this.criteria = criteria;
         this.tempCriteria = criteria;
 
-        // Setting warmth to include a subjective ratio of temperature in the suggestion
-        criteria.warmth = new MutablePair<>((tempRatio + criteria.warmth.first) / 2, (tempRatio + criteria.warmth.second) / 2);
+        if (this.weather != null) {
+            /** Weather Criteria */
+            this.temp = weather.temp;
+            this.uv_index = weather.uv_index;
+            this.precipitation = weather.precipitation;
+            this.feels_like = weather.feels_like;
+            this.wind = weather.wind;
+
+            // Setting warmth to include a subjective ratio of temperature in the suggestion
+            int tempRatio = (int) temp / 3;
+            criteria.warmth.second = (tempRatio + criteria.warmth.second) / 2;
+            criteria.warmth = new MutablePair<>((tempRatio + criteria.warmth.first) / 2, (tempRatio + criteria.warmth.second) / 2);
+        }
 
         // Produce clothing for the outfit
         generateOutfit();
@@ -138,7 +138,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
         return accessories;
     }
 
-    List<TorsoClothing> torsos = new ArrayList<>();
+    public List<TorsoClothing> torsos;
 
     private List<Clothing> inner_torso;
     private List<Clothing> outer_torso;
@@ -166,6 +166,8 @@ public class SuggestionModule extends SuggestionModuleInterface {
         System.out.println("innertorso set: "+outfits.inner_torso);
         System.out.println("outertorso set: "+outfits.outer_torso);
 
+        torsos = new ArrayList<>();
+
         // Create Torso object from inner torso clothing and add to the torso list
         for (Clothing clothing : outfits.inner_torso){
             System.out.println("adding inner item");
@@ -191,8 +193,8 @@ public class SuggestionModule extends SuggestionModuleInterface {
                         && (outfits.inner_torso.get(i) != outfits.outer_torso.get(j))
                         && (outfits.inner_torso.get(i).type.equals("Dress") && (!outfits.outer_torso.get(j).equals("Jacket") || !outfits.outer_torso.get(j).equals("Sweater")))) {
 
-                        torsos.add(new TorsoClothing (outfits.inner_torso.get(i), outfits.outer_torso.get(j)));
-                        System.out.println("adding both item");
+                    torsos.add(new TorsoClothing (outfits.inner_torso.get(i), outfits.outer_torso.get(j)));
+                    System.out.println("adding both item");
                 }
             }
         }
@@ -206,9 +208,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
     @Override
     public Outfit setOutfit(){
 
-        setTorso(); // Special suggestion system for inner & outer torso
-
-        System.out.println("torsos set: "+torsos);
+        setTorso(); // Special suggestion system for inner & outer torso+
 
         if (torsos.size() > 0){
             currentTorso = torsos.get(0);

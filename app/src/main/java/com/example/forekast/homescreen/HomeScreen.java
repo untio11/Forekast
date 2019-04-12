@@ -268,12 +268,23 @@ public class HomeScreen extends Fragment {
         Log.d("Refresh", v.getTag().toString());
     }
 
+    public void nextClothing(View v) {
+        vm.nextClothing(v.getTag().toString());
+        Log.d("Next", v.getTag().toString());
+    }
+
+    public void prevClothing(View v) {
+        vm.previousClothing(v.getTag().toString());
+        Log.d("Prev", v.getTag().toString());
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
      * @return A new instance of fragment Wardrobe.
      */
+
     public static HomeScreen newInstance() {
         HomeScreen fragment = new HomeScreen();
         Bundle args = new Bundle();
@@ -290,16 +301,6 @@ public class HomeScreen extends Fragment {
         savedInstanceState.putInt("Warmthsl", vm.getWarmth());
         savedInstanceState.putInt("Comfortsl", vm.getComfort());
         savedInstanceState.putInt("Formalsl", vm.getFormality());
-    }
-
-    public void nextClothing(View v) {
-        vm.nextClothing(v.getTag().toString());
-        Log.d("Next", v.getTag().toString());
-    }
-
-    public void prevClothing(View v) {
-        vm.previousClothing(v.getTag().toString());
-        Log.d("Prev", v.getTag().toString());
     }
 
     private class updateCriteriaSeekBar implements SeekBar.OnSeekBarChangeListener {
