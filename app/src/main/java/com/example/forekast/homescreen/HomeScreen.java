@@ -22,6 +22,7 @@ import android.view.View;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
@@ -93,6 +94,14 @@ public class HomeScreen extends Fragment {
         formality_slider.setMax(10);
         formality_slider.setProgress(vm.getFormality());
         formality_slider.setOnSeekBarChangeListener(new updateCriteriaSeekBar());
+
+        view.findViewById(R.id.refresh).setOnClickListener(this::refreshClothing);
+        view.findViewById(R.id.next_feet).setOnClickListener(this::nextClothing);
+        view.findViewById(R.id.next_legs).setOnClickListener(this::nextClothing);
+        view.findViewById(R.id.next_torso).setOnClickListener(this::nextClothing);
+        view.findViewById(R.id.prev_feet).setOnClickListener(this::prevClothing);
+        view.findViewById(R.id.prev_legs).setOnClickListener(this::prevClothing);
+        view.findViewById(R.id.prev_torso).setOnClickListener(this::prevClothing);
 
         warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
         formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
