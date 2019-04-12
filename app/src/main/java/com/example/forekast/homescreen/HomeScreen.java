@@ -50,7 +50,7 @@ public class HomeScreen extends Fragment {
     private ImageView shoes;
     private LinearLayout bottomsLayout;
 
-    private ClothingCriteria criteria = new ClothingCriteria(warmth, formality, comfort, preference, "General");;
+    private ClothingCriteria criteria;
 
 
     private static HomeScreenViewModelInterface vm;
@@ -68,6 +68,8 @@ public class HomeScreen extends Fragment {
     private void init(Bundle savedInstance) {
         vm = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
         Repository.initDB(getActivity().getApplicationContext());
+
+        criteria = new ClothingCriteria(warmth, formality, comfort, preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         vm.getLiveWeather().observe(
@@ -340,7 +342,7 @@ public class HomeScreen extends Fragment {
             warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
             formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
             comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
-            criteria = new ClothingCriteria(warmth, formality, comfort, preference, "General");
+            criteria = new ClothingCriteria(warmth, formality, comfort, preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
 
             vm.sugg.setCurrentCriteria(criteria, weather);
 

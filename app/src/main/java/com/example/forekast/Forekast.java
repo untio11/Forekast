@@ -206,6 +206,8 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (getSupportFragmentManager().getBackStackEntryCount() > 2) {
+            super.onBackPressed();
         } else if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             getSupportFragmentManager().popBackStack("home", 0);
             navigationView.getMenu().getItem(0).setChecked(true);

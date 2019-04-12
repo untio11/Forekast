@@ -5,7 +5,8 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditScreen.EditScreen" >
+    android:background="@color/common_google_signin_btn_text_dark_default"
+    tools:context=".EditScreen.EditScreen">
 
     <TextView
         android:id="@+id/textView10"
@@ -149,8 +150,8 @@
         android:layout_height="23dp"
         android:layout_marginTop="8dp"
         android:background="#00ff0000"
-        android:gravity="center"
         android:dropDownWidth="wrap_content"
+        android:gravity="center"
         android:spinnerMode="dropdown"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="@+id/textView11"
@@ -195,12 +196,12 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/todo"
             android:scaleType="fitCenter"
-            app:srcCompat="@android:drawable/ic_menu_delete"
             android:tint="@android:color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.356"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/seekFormality" />
+            app:layout_constraintTop_toBottomOf="@+id/seekFormality"
+            app:srcCompat="@android:drawable/ic_menu_delete" />
 
         <ImageButton
             android:id="@+id/save"
@@ -209,8 +210,8 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            app:srcCompat="@android:drawable/ic_menu_save"
-            android:tint="@android:color/background_dark" />
+            android:tint="@android:color/background_dark"
+            app:srcCompat="@android:drawable/ic_menu_save" />
     </LinearLayout>
 
     <SeekBar

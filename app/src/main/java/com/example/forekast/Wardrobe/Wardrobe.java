@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,13 +125,13 @@ public class Wardrobe extends Fragment {
         vm.getLegsList().observe(this, legsObs);
         vm.getFeetList().observe(this, feetObs);
 
-        vm.getLists(showWashing.isChecked());
+        vm.getLists(showWashing.isChecked(), PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
 
         // Check if checkbox for showing items in washingMachine is checked off.
         showWashing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                vm.getLists(isChecked);
+                vm.getLists(isChecked, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
             }
         });
 

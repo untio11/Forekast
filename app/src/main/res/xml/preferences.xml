@@ -7,7 +7,7 @@
     <CheckBoxPreference
         android:id="@+id/live_location_checkbox"
         android:key="live_location"
-        android:title="Live Location"
+        android:title="Location"
         android:summary="Use GPS to track location"
         android:disableDependentsState="true"
         android:defaultValue="true"/>
@@ -22,7 +22,7 @@
 
     <CheckBoxPreference
         android:key="availability_system"
-        android:title="Availability System"
+        android:title="Availability"
         android:summary="Clothes become unavailable when in washing machine"
         android:defaultValue="true"/>
 

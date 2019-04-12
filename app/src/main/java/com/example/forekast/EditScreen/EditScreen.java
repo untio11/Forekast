@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -164,7 +165,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
                 if (editClothing.location.equals("Torso") && !editClothing.type.equals(preType)) {
                     editClothing.setWearable();
                 }
-                editClothing.owner = "General"; // GET THIS VARIABLE FROM SETTINGS!
+                editClothing.owner = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general");
                 editClothing.washing_machine = checkBox.isChecked();
                 setWashingTime();
                 // save the picture if there is one

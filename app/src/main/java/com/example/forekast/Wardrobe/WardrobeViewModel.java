@@ -2,6 +2,7 @@
 package com.example.forekast.Wardrobe;
 
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 
 import com.example.forekast.clothing.Clothing;
 import com.example.forekast.clothing.ClothingCriteria;
@@ -21,11 +22,11 @@ public class WardrobeViewModel extends ViewModel {
 
     private static boolean washingState = true;
 
-    public void getLists(boolean washingMachine) {
+    public void getLists(boolean washingMachine, String owner) {
         washingState = washingMachine;
-        new AgentAsyncTask("Torso").execute(torsoList);
-        new AgentAsyncTask("Legs").execute(legsList);
-        new AgentAsyncTask("Feet").execute(feetList);
+        new AgentAsyncTask("Torso", owner).execute(torsoList);
+        new AgentAsyncTask("Legs", owner).execute(legsList);
+        new AgentAsyncTask("Feet", owner).execute(feetList);
     }
 
     public boolean getWashing() {
@@ -46,16 +47,18 @@ public class WardrobeViewModel extends ViewModel {
 
     private static class AgentAsyncTask extends AsyncTask<MutableLiveData<List<Clothing>>, Void, Void> {
         private String location;
+        private String owner;
         private MutableLiveData<List<Clothing>> clothingList;
 
-        AgentAsyncTask(String location) {
+        AgentAsyncTask(String location, String owner) {
             this.location = location;
+            this.owner = owner;
         }
 
         @Override
         protected Void doInBackground(MutableLiveData<List<Clothing>> ... lists) {
             ClothingCriteria criteria = new ClothingCriteria();
-            criteria.owner = "General";
+            criteria.owner = owner;
             criteria.washingMachine = washingState;
 
             clothingList = lists[0];
