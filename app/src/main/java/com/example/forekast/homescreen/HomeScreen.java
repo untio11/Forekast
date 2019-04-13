@@ -10,6 +10,7 @@ import com.example.forekast.R;
 import com.example.forekast.Suggestion.Outfit;
 import com.example.forekast.clothing.ClothingCriteria;
 import com.example.forekast.clothing.ClothingCriteriaInterface.*;
+import com.example.forekast.clothing.TorsoClothing;
 import com.example.forekast.external_data.Repository;
 import com.example.forekast.external_data.Weather;
 
@@ -21,6 +22,7 @@ import android.view.View;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
@@ -66,6 +68,8 @@ public class HomeScreen extends Fragment {
         vm = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
         Repository.initDB(getActivity().getApplicationContext());
 
+        criteria = new ClothingCriteria(warmth, formality, comfort, preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
+
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         vm.getLiveWeather().observe(
                 getActivity(), this::initWeather);
@@ -96,6 +100,14 @@ public class HomeScreen extends Fragment {
         formality_slider.setMax(10);
         formality_slider.setProgress(vm.getFormality());
         formality_slider.setOnSeekBarChangeListener(new updateCriteriaSeekBar());
+
+        view.findViewById(R.id.refresh).setOnClickListener(this::refreshClothing);
+        view.findViewById(R.id.next_feet).setOnClickListener(this::nextClothing);
+        view.findViewById(R.id.next_legs).setOnClickListener(this::nextClothing);
+        view.findViewById(R.id.next_torso).setOnClickListener(this::nextClothing);
+        view.findViewById(R.id.prev_feet).setOnClickListener(this::prevClothing);
+        view.findViewById(R.id.prev_legs).setOnClickListener(this::prevClothing);
+        view.findViewById(R.id.prev_torso).setOnClickListener(this::prevClothing);
 
         warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
         formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
@@ -147,11 +159,16 @@ public class HomeScreen extends Fragment {
         Bitmap bitmapOT;
         Bitmap bitmapP;
         Bitmap bitmapS;
+        ImageView innerTorso = view.findViewById(R.id.innerTorso);
+        ImageView outerTorso = view.findViewById(R.id.outerTorso);
+        ImageView bottoms = view.findViewById(R.id.bottoms);
+        ImageView shoes = view.findViewById(R.id.shoes);
+        LinearLayout bottomsLayout = view.findViewById(R.id.bottomsLayout);
 
         if (outfit.torso != null){
-            if (outfit.torso.torso != null) {
-                if (outfit.torso.torso.underwearable) {
-                    if (outfit.torso.torso.picture != null) {
+            if (TorsoClothing.torso != null) {
+                if (TorsoClothing.torso.underwearable) {
+                    if (TorsoClothing.torso.picture != null) {
                         bitmapIT = BitmapFactory.decodeByteArray(outfit.torso.torso.picture, 0, outfit.torso.torso.picture.length);
                         innerTorso.setImageBitmap(bitmapIT);
                     } else {
@@ -335,7 +352,7 @@ public class HomeScreen extends Fragment {
             formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
             comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
             preference = new MutablePair<>(10, 10);
-            criteria = new ClothingCriteria(warmth, formality, comfort, preference, "General");
+            criteria = new ClothingCriteria(warmth, formality, comfort, preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
 
             vm.sugg.setCurrentCriteria(criteria, weather);
 

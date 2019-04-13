@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,6 +95,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         //create clothing type spinner, along with the choice of type, and the adapter it needs with it
         Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
         spinner.setOnItemSelectedListener(this);
+        ((ImageButton)view.findViewById(R.id.drop_down_butt)).setOnClickListener(v -> spinner.performClick());
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -165,7 +167,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
                 if (editClothing.location.equals("Torso") && !editClothing.type.equals(preType)) {
                     editClothing.setWearable();
                 }
-                editClothing.owner = "General"; // GET THIS VARIABLE FROM SETTINGS!
+                editClothing.owner = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general");
                 editClothing.washing_machine = checkBox.isChecked();
                 setWashingTime();
                 // save the picture if there is one
@@ -178,8 +180,8 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
                 // Perform the saving to the database
                 new AgentAsyncTask().execute();
 
-                // Navigate to the wardrobe
-                navigateWardrobe();
+                // Navigate to the wardrobe -> We don't want this for the acceptance test!
+                // navigateWardrobe();
 
             }
         });
@@ -195,7 +197,13 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         redoImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectPicture();
+                if (ContextCompat.checkSelfPermission(getActivity(),
+                        Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, 0);
+                } else {
+                    Toast.makeText(getActivity(),"Please give camera permission in your phone's settings.",Toast.LENGTH_LONG).show();
+                }
             }
         });
         return view;
@@ -235,11 +243,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
     }
 
     private void navigateWardrobe() {
-        // Navigate to the wardrobe
-        Fragment fragment = Wardrobe.newInstance();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        getFragmentManager().popBackStack("editscreen", 0);
-        transaction.replace(R.id.content_area, fragment).addToBackStack("wardrobe").commit();
+        getActivity().onBackPressed();
     }
 
     @Override

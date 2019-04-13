@@ -7,10 +7,12 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +77,12 @@ public class Wardrobe extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        vm.getLists(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -125,13 +133,24 @@ public class Wardrobe extends Fragment {
         vm.getLegsList().observe(this, legsObs);
         vm.getFeetList().observe(this, feetObs);
 
-        vm.getLists(showWashing.isChecked());
+        vm.getLists(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
 
         // Check if checkbox for showing items in washingMachine is checked off.
         showWashing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                vm.getLists(isChecked);
+                vm.setWashing(isChecked);
+                vm.getLists(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
+            }
+        });
+
+        getFragmentManager().addOnBackStackChangedListener(() -> { // Ensure the wardrobe overview is reloaded upon entry by pressing back
+            FragmentManager fm = getFragmentManager();
+
+            if (fm == null) return;
+            List<Fragment> fragments = fm.getFragments();
+            if (fragments.size() > 0 && fragments.get(fragments.size() - 1) instanceof Wardrobe){
+                vm.getLists(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
             }
         });
 
@@ -153,8 +172,7 @@ public class Wardrobe extends Fragment {
                                 // Navigate to the editscreen and pass the clothing objects
                                 Fragment fragment = EditScreen.newInstance(clothing, true);
                                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                                getFragmentManager().popBackStack("wardrobe", 0);
-                                transaction.replace(R.id.content_area, fragment).addToBackStack("editscreen").commit();
+                                transaction.replace(R.id.wardrobe_container, fragment).addToBackStack("edit").commit();
                             }
                         }).show();
     }

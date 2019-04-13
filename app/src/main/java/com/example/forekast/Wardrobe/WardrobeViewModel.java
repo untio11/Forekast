@@ -2,6 +2,7 @@
 package com.example.forekast.Wardrobe;
 
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 
 import com.example.forekast.clothing.Clothing;
 import com.example.forekast.clothing.ClothingCriteria;
@@ -19,43 +20,48 @@ public class WardrobeViewModel extends ViewModel {
     private MutableLiveData<List<Clothing>> legsList = new MutableLiveData<>();
     private MutableLiveData<List<Clothing>> feetList = new MutableLiveData<>();
 
-    private static boolean washingState = true;
+    private static boolean washingState = false;
 
-    public void getLists(boolean washingMachine) {
-        washingState = washingMachine;
-        new AgentAsyncTask("Torso").execute(torsoList);
-        new AgentAsyncTask("Legs").execute(legsList);
-        new AgentAsyncTask("Feet").execute(feetList);
+    void getLists(String owner) {
+        new AgentAsyncTask("Torso", owner).execute(torsoList);
+        new AgentAsyncTask("Legs", owner).execute(legsList);
+        new AgentAsyncTask("Feet", owner).execute(feetList);
     }
 
-    public boolean getWashing() {
+    boolean getWashing() {
         return washingState;
     }
 
-    public LiveData<List<Clothing>> getTorsoList() {
+    void setWashing(boolean new_washing) {
+        washingState = new_washing;
+    }
+
+    LiveData<List<Clothing>> getTorsoList() {
         return torsoList;
     }
 
-    public LiveData<List<Clothing>> getLegsList() {
+    LiveData<List<Clothing>> getLegsList() {
         return legsList;
     }
 
-    public LiveData<List<Clothing>> getFeetList() {
+    LiveData<List<Clothing>> getFeetList() {
         return feetList;
     }
 
     private static class AgentAsyncTask extends AsyncTask<MutableLiveData<List<Clothing>>, Void, Void> {
         private String location;
+        private String owner;
         private MutableLiveData<List<Clothing>> clothingList;
 
-        AgentAsyncTask(String location) {
+        AgentAsyncTask(String location, String owner) {
             this.location = location;
+            this.owner = owner;
         }
 
         @Override
         protected Void doInBackground(MutableLiveData<List<Clothing>> ... lists) {
             ClothingCriteria criteria = new ClothingCriteria();
-            criteria.owner = "General";
+            criteria.owner = owner;
             criteria.washingMachine = washingState;
 
             clothingList = lists[0];

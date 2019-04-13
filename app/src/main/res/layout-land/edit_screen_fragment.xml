@@ -5,7 +5,8 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditScreen.EditScreen" >
+    android:background="@color/common_google_signin_btn_text_dark_default"
+    tools:context=".EditScreen.EditScreen">
 
     <TextView
         android:id="@+id/textView10"
@@ -36,18 +37,12 @@
         android:id="@+id/imageView10"
         android:layout_width="200dp"
         android:layout_height="300dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="20dp"
         android:contentDescription="@string/todo"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.154"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.428"
         app:srcCompat="@drawable/p68946" />
 
     <TextView
@@ -111,8 +106,8 @@
         android:layout_height="23dp"
         android:layout_marginTop="8dp"
         android:background="#00ff0000"
-        android:gravity="center"
         android:dropDownWidth="wrap_content"
+        android:gravity="center"
         android:spinnerMode="dropdown"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="@+id/textView11"
@@ -172,15 +167,24 @@
         app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toTopOf="@+id/imageView10" />
 
+    <ImageButton
+        android:id="@+id/drop_down_butt"
+        android:layout_width="37dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="8dp"
+        android:alpha="0.5"
+        android:src="@android:drawable/stat_sys_download"
+        android:tint="@color/common_google_signin_btn_text_dark_focused"
+        app:layout_constraintStart_toEndOf="@+id/textView11"
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="128dp"
         android:layout_height="71dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:gravity="bottom|center_horizontal"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/seekFormality"
         app:layout_constraintStart_toStartOf="@+id/seekFormality"
         app:layout_constraintTop_toBottomOf="@+id/seekFormality">

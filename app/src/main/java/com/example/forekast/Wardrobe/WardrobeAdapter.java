@@ -129,8 +129,7 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
                 // Clicking on item will navigate to editscreen with the current clothing item
                 Fragment fragment = EditScreen.newInstance(clothing, false);
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                fragmentManager.popBackStack("wardrobe", 0);
-                transaction.replace(R.id.content_area, fragment).addToBackStack("editscreen").commit();
+                transaction.replace(R.id.wardrobe_container, fragment).addToBackStack("edit").commit();
             }
         });
 
