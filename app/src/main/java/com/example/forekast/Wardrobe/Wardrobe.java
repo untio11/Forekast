@@ -79,7 +79,7 @@ public class Wardrobe extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        vm.getLists(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
+        vm.getLists(vm.getWashing(), PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
     }
 
     @Override
@@ -133,24 +133,21 @@ public class Wardrobe extends Fragment {
         vm.getLegsList().observe(this, legsObs);
         vm.getFeetList().observe(this, feetObs);
 
-        vm.getLists(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
+        vm.getLists(vm.getWashing(), PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
 
         // Check if checkbox for showing items in washingMachine is checked off.
         showWashing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 vm.setWashing(isChecked);
-                vm.getLists(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
+                vm.getLists(vm.getWashing(), PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
             }
         });
 
         getFragmentManager().addOnBackStackChangedListener(() -> { // Ensure the wardrobe overview is reloaded upon entry by pressing back
-            FragmentManager fm = getFragmentManager();
-
-            if (fm == null) return;
-            List<Fragment> fragments = fm.getFragments();
+            List<Fragment> fragments = getFragmentManager().getFragments();
             if (fragments.size() > 0 && fragments.get(fragments.size() - 1) instanceof Wardrobe){
-                vm.getLists(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
+                vm.getLists(vm.getWashing(), PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
             }
         });
 

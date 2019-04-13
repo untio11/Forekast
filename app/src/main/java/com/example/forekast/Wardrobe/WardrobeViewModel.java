@@ -22,29 +22,30 @@ public class WardrobeViewModel extends ViewModel {
 
     private static boolean washingState = false;
 
-    void getLists(String owner) {
+    public void getLists(boolean washingMachine, String owner) {
+        washingState = washingMachine;
         new AgentAsyncTask("Torso", owner).execute(torsoList);
         new AgentAsyncTask("Legs", owner).execute(legsList);
         new AgentAsyncTask("Feet", owner).execute(feetList);
     }
 
-    boolean getWashing() {
+    public boolean getWashing() {
         return washingState;
     }
 
-    void setWashing(boolean new_washing) {
+    public void setWashing(boolean new_washing) {
         washingState = new_washing;
     }
 
-    LiveData<List<Clothing>> getTorsoList() {
+    public LiveData<List<Clothing>> getTorsoList() {
         return torsoList;
     }
 
-    LiveData<List<Clothing>> getLegsList() {
+    public LiveData<List<Clothing>> getLegsList() {
         return legsList;
     }
 
-    LiveData<List<Clothing>> getFeetList() {
+    public LiveData<List<Clothing>> getFeetList() {
         return feetList;
     }
 
