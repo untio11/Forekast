@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -75,6 +76,12 @@ public class Wardrobe extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        vm.getLists(vm.getWashing(), PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -93,7 +100,7 @@ public class Wardrobe extends Fragment {
         ImageButton addFeet = (ImageButton)  view.findViewById(R.id.addShoes);
 
         CheckBox showWashing = (CheckBox) view.findViewById(R.id.showWashing);
-        //showWashing.setChecked(vm.getWashing());
+        showWashing.setChecked(vm.getWashing());
 
         // The add torso button will add a new clothing of type torso
         addTorso.setOnClickListener(v -> {
@@ -125,13 +132,21 @@ public class Wardrobe extends Fragment {
         vm.getLegsList().observe(this, legsObs);
         vm.getFeetList().observe(this, feetObs);
 
-        vm.getLists(showWashing.isChecked(), PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
+        vm.getLists(vm.getWashing(), PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
 
         // Check if checkbox for showing items in washingMachine is checked off.
         showWashing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                vm.getLists(isChecked, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
+                vm.setWashing(isChecked);
+                vm.getLists(vm.getWashing(), PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
+            }
+        });
+
+        getFragmentManager().addOnBackStackChangedListener(() -> { // Ensure the wardrobe overview is reloaded upon entry by pressing back
+            List<Fragment> fragments = getFragmentManager().getFragments();
+            if (fragments.size() > 0 && fragments.get(fragments.size() - 1) instanceof Wardrobe){
+                vm.getLists(vm.getWashing(), PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
             }
         });
 
@@ -153,7 +168,7 @@ public class Wardrobe extends Fragment {
                                 // Navigate to the editscreen and pass the clothing objects
                                 Fragment fragment = EditScreen.newInstance(clothing, true);
                                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                                transaction.replace(R.id.wardrobe_container, fragment).commit();
+                                transaction.replace(R.id.wardrobe_container, fragment).addToBackStack("edit").commit();
                             }
                         }).show();
     }
