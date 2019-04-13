@@ -136,9 +136,10 @@ public class HomeScreen extends Fragment {
             }
             System.out.println(outfit.pants);
             System.out.println(outfit.shoes);
+            //newOutfit();
             setOutfit();
             accessories(); //New accessories every time we have a clothing update,
-                            // Since we have leggings right?
+
         }
     }
 
@@ -147,16 +148,18 @@ public class HomeScreen extends Fragment {
         Bitmap bitmapOT;
         Bitmap bitmapP;
         Bitmap bitmapS;
+
         ImageView innerTorso = view.findViewById(R.id.innerTorso);
         ImageView outerTorso = view.findViewById(R.id.outerTorso);
         ImageView bottoms = view.findViewById(R.id.bottoms);
         ImageView shoes = view.findViewById(R.id.shoes);
         LinearLayout bottomsLayout = view.findViewById(R.id.bottomsLayout);
+        bottomsLayout.setVisibility(View.VISIBLE);
 
         if (outfit.torso != null){
-            if (TorsoClothing.torso != null) {
-                if (TorsoClothing.torso.underwearable) {
-                    if (TorsoClothing.torso.picture != null) {
+            if (outfit.torso.torso != null) {
+                if (outfit.torso.torso.underwearable) {
+                    if (outfit.torso.torso.picture != null) {
                         bitmapIT = BitmapFactory.decodeByteArray(outfit.torso.torso.picture, 0, outfit.torso.torso.picture.length);
                         innerTorso.setImageBitmap(bitmapIT);
                     } else {
@@ -165,7 +168,7 @@ public class HomeScreen extends Fragment {
                     outerTorso.setVisibility(View.GONE);
                 }
                 else {
-                    if (outfit.torso.picture != null) {
+                    if (outfit.torso.torso.picture != null) {
                         bitmapOT = BitmapFactory.decodeByteArray(outfit.torso.torso.picture, 0, outfit.torso.torso.picture.length);
                         outerTorso.setImageBitmap(bitmapOT);
                     } else {
@@ -174,7 +177,7 @@ public class HomeScreen extends Fragment {
                     innerTorso.setVisibility(View.GONE);
                 }
             }
-            else { //if (outfit.torso.inner != null && outfit.torso.outer != null) {
+            else if (outfit.torso.inner != null && outfit.torso.outer != null) {
                 if (outfit.torso.inner.picture != null) {
                     bitmapIT = BitmapFactory.decodeByteArray(outfit.torso.inner.picture, 0, outfit.torso.inner.picture.length);
                     innerTorso.setImageBitmap(bitmapIT);
@@ -189,19 +192,17 @@ public class HomeScreen extends Fragment {
                 }
             }
         }
-        /*
-        if (outfit.outer_torso != null){
-            bitmapOT = BitmapFactory.decodeByteArray(outfit.outer_torso.picture, 0, outfit.outer_torso.picture.length);
-            outerTorso.setImageBitmap(bitmapOT);
-        }*/
+
         if (outfit.pants != null){
             if (outfit.torso.torso != null){
                 if(outfit.torso.torso.type.equals("Dress")) {
                     bottomsLayout.setVisibility(View.GONE);
                 }
             }
-            else if (outfit.torso.inner.type.equals("Dress")){
-                bottomsLayout.setVisibility(View.GONE);
+            else if (outfit.torso.inner != null) {
+                if (outfit.torso.inner.type.equals("Dress")) {
+                    bottomsLayout.setVisibility(View.GONE);
+                }
             }
             else {
                 if (outfit.pants.picture != null) {
@@ -341,7 +342,7 @@ public class HomeScreen extends Fragment {
             warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
             formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
             comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
-            criteria = new ClothingCriteria(warmth, formality, comfort, preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
+            criteria = new ClothingCriteria(warmth, formality, comfort, preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "tester"));
 
             vm.sugg.setCurrentCriteria(criteria, weather);
 

@@ -165,7 +165,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
 
     private LocationRequest createLocationRequest() {
         LocationRequest req = LocationRequest.create();
-        req.setInterval(5000); // Five minutes
+        req.setInterval(60000); // One Hour
         req.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         return req;
     }
@@ -196,7 +196,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
                             .getDefaultSharedPreferences(getApplicationContext())
                             .getString("manual_location", "Eindhoven"));
                 }
-            }, 0, 5000);
+            }, 0, 60000);
     }
 
     private boolean usingLiveLocation() {
@@ -241,8 +241,6 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
             }
         };
 
-
-
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -273,7 +271,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
                 case (R.id.nav_settings):
                     fragment = new SettingsFragments();
                     tag = "settings";
-                    setArrowIcon();
+                    //setArrowIcon();
                     break;
             }
 
@@ -286,6 +284,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
             return true;
         });
     }
+
 
     private void setArrowIcon() {
         toggle.setDrawerIndicatorEnabled(false);
