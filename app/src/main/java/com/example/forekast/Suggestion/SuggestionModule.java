@@ -226,8 +226,8 @@ public class SuggestionModule extends SuggestionModuleInterface {
         for (int i = 0; i < outfits.inner_torso.size(); i++){
             for (int j = 0; j < outfits.outer_torso.size(); j++) {
                 if ((outfits.inner_torso.get(i).warmth + outfits.outer_torso.get(j).warmth) / 2 >= criteria.warmth.first &&
-                        (outfits.inner_torso.get(i) != outfits.outer_torso.get(j) &&
-                                !(outfits.inner_torso.get(i).type.equals("Dress") && outfits.outer_torso.get(j).type.equals("Shirt") || outfits.outer_torso.get(j).type.equals("Sweater")))) {
+                        (outfits.inner_torso.get(i) != outfits.outer_torso.get(j)) &&
+                                !(outfits.inner_torso.get(i).type.equals("Dress") && outfits.outer_torso.get(j).type.equals("Shirt") || outfits.outer_torso.get(j).type.equals("Sweater"))) {
 
                     System.out.print("adding both item: ");
                     TorsoClothing newTorso = new TorsoClothing(outfits.inner_torso.get(i), outfits.outer_torso.get(j));
