@@ -127,7 +127,7 @@ public class HomeScreen extends Fragment {
 
         if (newOutfit != null) {
             this.outfit = newOutfit;
-            if (outfit.torso.torso != null) {
+            if (outfit.torso.one && !outfit.torso.two) {
                 System.out.println(outfit.torso.torso);
             }
             else {
@@ -160,8 +160,8 @@ public class HomeScreen extends Fragment {
         outerTorso.setVisibility(View.VISIBLE);
 
         if (outfit.torso != null){
-            if (outfit.torso.torso != null) {
-                if (outfit.torso.torso.underwearable) {
+            if (outfit.torso.one && !outfit.torso.two) {
+                if (outfit.torso.torso != null) {
                     if (outfit.torso.torso.picture != null) {
                         bitmapIT = BitmapFactory.decodeByteArray(outfit.torso.torso.picture, 0, outfit.torso.torso.picture.length);
                         innerTorso.setImageBitmap(bitmapIT);
@@ -170,17 +170,8 @@ public class HomeScreen extends Fragment {
                     }
                     outerTorso.setVisibility(View.GONE);
                 }
-                else {
-                    if (outfit.torso.torso.picture != null) {
-                        bitmapOT = BitmapFactory.decodeByteArray(outfit.torso.torso.picture, 0, outfit.torso.torso.picture.length);
-                        outerTorso.setImageBitmap(bitmapOT);
-                    } else {
-                        outerTorso.setImageResource(R.drawable.sweater);
-                    }
-                    innerTorso.setVisibility(View.GONE);
-                }
             }
-            else if (outfit.torso.inner != null && outfit.torso.outer != null) {
+            else {
                 if (outfit.torso.inner.picture != null) {
                     bitmapIT = BitmapFactory.decodeByteArray(outfit.torso.inner.picture, 0, outfit.torso.inner.picture.length);
                     innerTorso.setImageBitmap(bitmapIT);
@@ -197,6 +188,14 @@ public class HomeScreen extends Fragment {
         }
 
         if (outfit.pants != null){
+            if (outfit.pants.picture != null) {
+                bitmapP = BitmapFactory.decodeByteArray(outfit.pants.picture, 0, outfit.pants.picture.length);
+                bottoms.setImageBitmap(bitmapP);
+            }
+            else {
+                bottoms.setImageResource(R.drawable.pants);
+            }
+
             if (outfit.torso.torso != null){
                 if(outfit.torso.torso.type.equals("Dress")) {
                     bottomsLayout.setVisibility(View.GONE);
@@ -207,16 +206,8 @@ public class HomeScreen extends Fragment {
                     bottomsLayout.setVisibility(View.GONE);
                 }
             }
-            else {
-                if (outfit.pants.picture != null) {
-                    bitmapP = BitmapFactory.decodeByteArray(outfit.pants.picture, 0, outfit.pants.picture.length);
-                    bottoms.setImageBitmap(bitmapP);
-                }
-                else {
-                    bottoms.setImageResource(R.drawable.pants);
-                }
-            }
         }
+
         if (outfit.shoes != null){
             if (outfit.shoes.picture != null) {
                 bitmapS = BitmapFactory.decodeByteArray(outfit.shoes.picture, 0, outfit.shoes.picture.length);
