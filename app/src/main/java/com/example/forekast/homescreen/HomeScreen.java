@@ -127,12 +127,13 @@ public class HomeScreen extends Fragment {
 
         if (newOutfit != null) {
             this.outfit = newOutfit;
-            if (outfit.torso.one && !outfit.torso.two) {
-                System.out.println(outfit.torso.torso);
-            }
-            else {
-                System.out.println(outfit.torso.inner);
-                System.out.println(outfit.torso.outer);
+            if (outfit.torso != null) {
+                if (outfit.torso.one && !outfit.torso.two) {
+                    System.out.println(outfit.torso.torso);
+                } else {
+                    System.out.println(outfit.torso.inner);
+                    System.out.println(outfit.torso.outer);
+                }
             }
             System.out.println(outfit.pants);
             System.out.println(outfit.shoes);
