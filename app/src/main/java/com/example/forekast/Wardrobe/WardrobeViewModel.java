@@ -20,7 +20,10 @@ public class WardrobeViewModel extends ViewModel {
     private MutableLiveData<List<Clothing>> legsList = new MutableLiveData<>();
     private MutableLiveData<List<Clothing>> feetList = new MutableLiveData<>();
 
-    private static boolean washingState = false;
+    private static boolean washingState = true;
+    // Has to be true in initialization, since it will only create more problems in acceptance test
+    // if it is false: Items in washing machine will not be opened and there will not be checked
+    // if the washing-time has been passed.
 
     void getLists(String owner) {
         new AgentAsyncTask("Torso", owner).execute(torsoList);

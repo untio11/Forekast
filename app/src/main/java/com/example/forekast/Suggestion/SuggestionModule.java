@@ -71,7 +71,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
         criteria.warmth = new MutablePair<>((tempRatio + criteria.warmth.first) / 2, (tempRatio + criteria.warmth.second) / 2);
 
         // Produce clothing for the outfit
-        setOutfit();
+        generateOutfit();
     }
 
     // Set the booleans for the accessories based on the critieria assigned
@@ -214,7 +214,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
     // Set clothing from the powerset
     @Override
     public Outfit setOutfit(){
-        generateOutfit(); // Create the outfits
+        //generateOutfit(); // Create the outfits
         setTorso(); // Special suggestion system for inner & outer torso
 
         System.out.println("torsos set: "+torsos);
@@ -384,7 +384,13 @@ public class SuggestionModule extends SuggestionModuleInterface {
             List<Clothing> repo = Repository.getClothing(repoLocation, criteria);
             if (repo.size() > 0) {
                 for (Clothing clothing : repo) {
-                    if (!clothingList.contains(clothing)) {
+                    Boolean add = true;
+                    for (Clothing savedClothing : clothingList) {
+                        if (savedClothing.ID == clothing.ID) {
+                            add = false;
+                        }
+                    }
+                    if (add) {
                         if ((!location.equals("innerTorso") || clothing.underwearable) &&
                                 (!location.equals("outerTorso") || clothing.overwearable)) {
                             clothingList.add(clothing);
@@ -437,7 +443,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
                 System.out.println("outfits outer:" +outfits.outer_torso);
                 System.out.println("outfits bottoms:" + outfits.bottoms);
                 System.out.println("outfits shoes:" +outfits.shoes);
-                //HomeScreen.newOutfit();
+                HomeScreen.newOutfit();
             }
         }
 
