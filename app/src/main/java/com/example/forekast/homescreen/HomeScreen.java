@@ -342,6 +342,7 @@ public class HomeScreen extends Fragment {
             warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
             formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
             comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
+            preference = new MutablePair<>(10, 10);
             criteria = new ClothingCriteria(warmth, formality, comfort, preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "tester"));
 
             vm.sugg.setCurrentCriteria(criteria, weather);
