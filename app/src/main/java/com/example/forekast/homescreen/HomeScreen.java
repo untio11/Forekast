@@ -154,7 +154,10 @@ public class HomeScreen extends Fragment {
         ImageView bottoms = view.findViewById(R.id.bottoms);
         ImageView shoes = view.findViewById(R.id.shoes);
         LinearLayout bottomsLayout = view.findViewById(R.id.bottomsLayout);
+
         bottomsLayout.setVisibility(View.VISIBLE);
+        innerTorso.setVisibility(View.VISIBLE);
+        outerTorso.setVisibility(View.VISIBLE);
 
         if (outfit.torso != null){
             if (outfit.torso.torso != null) {
@@ -267,7 +270,6 @@ public class HomeScreen extends Fragment {
         }
     }
 
-
     public static void newOutfit() {
         vm.newOutfit();
     }
@@ -275,6 +277,16 @@ public class HomeScreen extends Fragment {
     public void refreshClothing(View v) {
         vm.refreshClothing();
         Log.d("Refresh", v.getTag().toString());
+    }
+
+    public void nextClothing(View v) {
+        vm.nextClothing(v.getTag().toString());
+        Log.d("Next", v.getTag().toString());
+    }
+
+    public void prevClothing(View v) {
+        vm.previousClothing(v.getTag().toString());
+        Log.d("Prev", v.getTag().toString());
     }
 
     /**
@@ -299,16 +311,6 @@ public class HomeScreen extends Fragment {
         savedInstanceState.putInt("Warmthsl", vm.getWarmth());
         savedInstanceState.putInt("Comfortsl", vm.getComfort());
         savedInstanceState.putInt("Formalsl", vm.getFormality());
-    }
-
-    public void nextClothing(View v) {
-        vm.nextClothing(v.getTag().toString());
-        Log.d("Next", v.getTag().toString());
-    }
-
-    public void prevClothing(View v) {
-        vm.previousClothing(v.getTag().toString());
-        Log.d("Prev", v.getTag().toString());
     }
 
     private class updateCriteriaSeekBar implements SeekBar.OnSeekBarChangeListener {
