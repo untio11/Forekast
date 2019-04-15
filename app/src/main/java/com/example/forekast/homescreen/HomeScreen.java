@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.widget.ImageButton;
@@ -33,18 +34,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 public class HomeScreen extends Fragment {
-
-
-    private Outfit outfit;
-
-    private MutablePair<Integer, Integer> warmth = new MutablePair<>(5, 5);
-    private MutablePair<Integer, Integer> formality = new MutablePair<>(5, 5);
-    private MutablePair<Integer, Integer> comfort = new MutablePair<>(5, 5);
-    private MutablePair<Integer, Integer> preference = new MutablePair<>(10, 10);
-
-    private ClothingCriteria criteria;
-
-
     private static HomeScreenViewModelInterface vm;
     private View view;
 
@@ -61,11 +50,10 @@ public class HomeScreen extends Fragment {
         vm = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
         Repository.initDB(getActivity().getApplicationContext());
 
-        criteria = new ClothingCriteria(warmth, formality, comfort, preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
-
         // Observe the LiveData for the outfit, passing in this activity as the LifecycleOwner and the observer.
         vm.getLiveOutfit().observe(
                 getActivity(), this::initOutfit);
+
 
         if (savedInstance != null) {
             vm.setComfort(savedInstance.getInt("Comfortsl"));
@@ -100,11 +88,22 @@ public class HomeScreen extends Fragment {
         view.findViewById(R.id.prev_legs).setOnClickListener(this::prevClothing);
         view.findViewById(R.id.prev_torso).setOnClickListener(this::prevClothing);
 
-        warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
-        formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
-        comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
-        preference = new MutablePair<>(10, 10);
-        criteria = new ClothingCriteria(warmth, formality, comfort, preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
+        vm.clothingCriteria = new ClothingCriteria(
+                new MutablePair<>(vm.getWarmth(), vm.getWarmth()),
+                new MutablePair<>(vm.getFormality(), vm.getFormality()),
+                new MutablePair<>(vm.getComfort(), vm.getComfort()),
+                new MutablePair<>(10, 10),
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
+
+
+        vm.getLiveWeather().observe(getActivity(), (new Observer<Weather>() {
+            @Override
+            public void onChanged(Weather weather) {
+                if (weather == null) return;
+                vm.sugg.setCurrentCriteria(vm.getClothingCriteria(), weather);
+                vm.getLiveWeather().removeObserver(this); // Remove after first update
+            }
+        }));
     }
 
 
@@ -113,17 +112,16 @@ public class HomeScreen extends Fragment {
         Log.d("ClothingUpdate", (newOutfit != null ? newOutfit.toString() : "No clothes"));
 
         if (newOutfit != null) {
-            this.outfit = newOutfit;
-            if (outfit.torso != null) {
-                if (outfit.torso.one && !outfit.torso.two) {
-                    System.out.println(outfit.torso.torso);
+            if (newOutfit.torso != null) {
+                if (newOutfit.torso.one && !newOutfit.torso.two) {
+                    System.out.println(newOutfit.torso.torso);
                 } else {
-                    System.out.println(outfit.torso.inner);
-                    System.out.println(outfit.torso.outer);
+                    System.out.println(newOutfit.torso.inner);
+                    System.out.println(newOutfit.torso.outer);
                 }
             }
-            System.out.println(outfit.pants);
-            System.out.println(outfit.shoes);
+            System.out.println(newOutfit.pants);
+            System.out.println(newOutfit.shoes);
             //newOutfit();
             setOutfit();
             accessories(); //New accessories every time we have a clothing update,
@@ -146,6 +144,7 @@ public class HomeScreen extends Fragment {
         bottomsLayout.setVisibility(View.VISIBLE);
         innerTorso.setVisibility(View.VISIBLE);
         outerTorso.setVisibility(View.VISIBLE);
+        Outfit outfit = vm.currentOutfit.getValue();
 
         if (outfit.torso != null){
             if (outfit.torso.one && !outfit.torso.two) {
@@ -318,13 +317,17 @@ public class HomeScreen extends Fragment {
                 default:
                     break;
             }
+            ClothingCriteria criteria = vm.getClothingCriteria();
 
             // Set the new clothing criteria from seekbars
-            warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
-            formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
-            comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
-            preference = new MutablePair<>(10, 10);
-            criteria = new ClothingCriteria(warmth, formality, comfort, preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "tester"));
+            criteria.warmth.first = vm.getWarmth();
+            criteria.warmth.second = vm.getWarmth();
+            criteria.formality.first = vm.getFormality();
+            criteria.formality.second = vm.getFormality();
+            criteria.comfort.first = vm.getComfort();
+            criteria.comfort.second = vm.getComfort();
+            criteria.preference.first = 10;
+            criteria.preference.second = 10;
 
             vm.sugg.setCurrentCriteria(criteria, vm.getWeather());
 
