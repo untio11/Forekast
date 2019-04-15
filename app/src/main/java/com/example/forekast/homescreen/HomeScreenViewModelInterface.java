@@ -21,7 +21,8 @@ public abstract class HomeScreenViewModelInterface extends ViewModel {
     // The criteria that are set with the sliders on the home screen
     ClothingCriteria clothingCriteria = new ClothingCriteria();
     // Local copy of the suggestion module to communicate with. Might be able to make it static
-    protected SuggestionModule sugg = new SuggestionModule();
+    SuggestionModule sugg = new SuggestionModule();
+    Weather current_weather;
 
     /**
      * Used for linking the outfit livedata here with the observer in the homescreen activity.
@@ -33,7 +34,7 @@ public abstract class HomeScreenViewModelInterface extends ViewModel {
      * Used for linking the weather livedata here with the observer in the homescreen activity.
      * @return A reference to the livedata containing the current weather
      */
-    abstract LiveData<Weather> getLiveWeather();
+    abstract public LiveData<Weather> getLiveWeather();
 
     /**
      * Used to get the current clothing criteria when the activity is reset
@@ -96,4 +97,8 @@ public abstract class HomeScreenViewModelInterface extends ViewModel {
     abstract void newOutfit();
 
     abstract boolean[] getAccessories();
+
+    abstract public void setWeather(Weather weather);
+
+    abstract Weather getWeather();
 }

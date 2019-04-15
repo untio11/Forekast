@@ -35,7 +35,6 @@ import java.util.Objects;
 public class HomeScreen extends Fragment {
 
 
-    private Weather weather;
     private Outfit outfit;
 
     private MutablePair<Integer, Integer> warmth = new MutablePair<>(5, 5);
@@ -64,9 +63,7 @@ public class HomeScreen extends Fragment {
 
         criteria = new ClothingCriteria(warmth, formality, comfort, preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
 
-        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        vm.getLiveWeather().observe(
-                getActivity(), this::initWeather);
+        // Observe the LiveData for the outfit, passing in this activity as the LifecycleOwner and the observer.
         vm.getLiveOutfit().observe(
                 getActivity(), this::initOutfit);
 
@@ -110,17 +107,7 @@ public class HomeScreen extends Fragment {
         criteria = new ClothingCriteria(warmth, formality, comfort, preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
     }
 
-    private void initWeather(Weather newWeather) {
-        Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather"));
-        if (newWeather != null) {
-            this.weather = newWeather;
-            ((TextView) getActivity().findViewById(R.id.weatherText)).setText(weather.getWeather_desc() + ", " + Math.round(weather.getTemp()) + "°C ");
-            ((TextView) getActivity().findViewById(R.id.weatherCity)).setText(weather.getCity());
-            if (criteria != null) {
-                vm.sugg.setCurrentCriteria(criteria, weather);
-            }
-        }
-    }
+
 
     private void initOutfit(Outfit newOutfit) {
         Log.d("ClothingUpdate", (newOutfit != null ? newOutfit.toString() : "No clothes"));
@@ -339,10 +326,9 @@ public class HomeScreen extends Fragment {
             preference = new MutablePair<>(10, 10);
             criteria = new ClothingCriteria(warmth, formality, comfort, preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "tester"));
 
-            vm.sugg.setCurrentCriteria(criteria, weather);
+            vm.sugg.setCurrentCriteria(criteria, vm.getWeather());
 
             System.out.println(criteria);
-            System.out.println(weather);
         }
     }
 }

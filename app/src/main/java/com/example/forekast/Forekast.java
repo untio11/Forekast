@@ -12,10 +12,12 @@ import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.forekast.Settings.SettingsFragments;
 import com.example.forekast.Wardrobe.Wardrobe;
 import com.example.forekast.external_data.Repository;
+import com.example.forekast.external_data.Weather;
 import com.example.forekast.homescreen.HomeScreen;
 import com.example.forekast.homescreen.HomeScreenViewModel;
 import com.example.forekast.homescreen.HomeScreenViewModelInterface;
@@ -89,6 +91,15 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
         }
     }
 
+    void initWeather(Weather newWeather) {
+        Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather"));
+        if (newWeather != null) {
+            ((TextView) findViewById(R.id.weatherText)).setText(newWeather.getWeather_desc() + ", " + Math.round(newWeather.getTemp()) + "°C ");
+            ((TextView) findViewById(R.id.weatherCity)).setText(newWeather.getCity());
+            vm.setWeather(newWeather);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedState) {
         super.onCreate(savedState);
@@ -127,6 +138,9 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
         } else {
             startStaticWeather();
         }
+
+        // And make sure the ui is updated accordingly
+        vm.getLiveWeather().observe(this, this::initWeather);
     }
 
     private void locationSetup() {
