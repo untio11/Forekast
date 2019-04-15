@@ -84,7 +84,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
         /** When to suggest sunglasses */
         // If the UV Index is greater than 2 (low-medium risk), then wear sunglasses
-        if (uv_index >= 2){
+        if (uv_index > 2){
             sunglasses = true;
         }
 
