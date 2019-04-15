@@ -58,6 +58,11 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (key.equals("live_location")) {
                 Forekast.this.startWeatherPolling();
+            } else if (key.equals("manual_location")) { // Changed city, so restart timer
+                if (static_weather_timer != null) {
+                    static_weather_timer.cancel();
+                }
+                startStaticWeather();
             } else if (key.equals("user_list")) { // Update the current wardrobe
                 vm.setOwner(sharedPreferences.getString("user_list", "default_user"));
             }
