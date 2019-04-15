@@ -93,11 +93,16 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
 
         init();
 
-        // Initialize the homescreen in the content area on startup
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_area, HomeScreen.newInstance())
-                .addToBackStack("home")
-                .commit();
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) { // We were doing stuff, so return it
+            fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1);
+        } else { // First time starting app
+            // Initialize the homescreen in the content area on startup
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_area, HomeScreen.newInstance())
+                    .addToBackStack("home")
+                    .commit();
+        }
     }
 
     private void init() {
