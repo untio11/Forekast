@@ -55,14 +55,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (key.equals("live_location")) {
-                // When we click the button, the last value was the one it isn't now
-                if (Forekast.this.usingLiveLocation()) { // Turned on -> stop static weather
-                    static_weather_timer.cancel();
-                    Forekast.this.startLiveWeather();
-                } else { // Turned off -> start static weather, stop location weather
-                    fl.removeLocationUpdates(locationCallback);
-                    Forekast.this.startStaticWeather();
-                }
+                Forekast.this.startWeatherPolling();
             } else if (key.equals("user_list")) { // Update the current wardrobe
                 vm.setOwner(sharedPreferences.getString("user_list", "default_user"));
             }
@@ -82,6 +75,19 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
             }
         }
     };
+
+    private void startWeatherPolling() {
+        // When we click the button, the last value was the one it isn't now
+        if (Forekast.this.usingLiveLocation()) { // Turned on -> stop static weather
+            if (static_weather_timer != null) {
+                static_weather_timer.cancel();
+            }
+            Forekast.this.startLiveWeather();
+        } else { // Turned off -> start static weather, stop location weather
+            fl.removeLocationUpdates(locationCallback);
+            Forekast.this.startStaticWeather();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedState) {
@@ -161,6 +167,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
     public void onResume() {
         super.onResume();
         toggle.syncState();
+        startWeatherPolling();
     }
 
     @Override
