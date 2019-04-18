@@ -12,10 +12,12 @@ import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.forekast.Settings.SettingsFragments;
 import com.example.forekast.Wardrobe.Wardrobe;
 import com.example.forekast.external_data.Repository;
+import com.example.forekast.external_data.Weather;
 import com.example.forekast.homescreen.HomeScreen;
 import com.example.forekast.homescreen.HomeScreenViewModel;
 import com.example.forekast.homescreen.HomeScreenViewModelInterface;
@@ -55,14 +57,12 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (key.equals("live_location")) {
-                // When we click the button, the last value was the one it isn't now
-                if (Forekast.this.usingLiveLocation()) { // Turned on -> stop static weather
+                Forekast.this.startWeatherPolling();
+            } else if (key.equals("manual_location")) { // Changed city, so restart timer
+                if (static_weather_timer != null) {
                     static_weather_timer.cancel();
-                    Forekast.this.startLiveWeather();
-                } else { // Turned off -> start static weather, stop location weather
-                    fl.removeLocationUpdates(locationCallback);
-                    Forekast.this.startStaticWeather();
                 }
+                startStaticWeather();
             } else if (key.equals("user_list")) { // Update the current wardrobe
                 vm.setOwner(sharedPreferences.getString("user_list", "default_user"));
             }
@@ -83,6 +83,28 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
         }
     };
 
+    private void startWeatherPolling() {
+        // When we click the button, the last value was the one it isn't now
+        if (Forekast.this.usingLiveLocation()) { // Turned on -> stop static weather
+            if (static_weather_timer != null) {
+                static_weather_timer.cancel();
+            }
+            Forekast.this.startLiveWeather();
+        } else { // Turned off -> start static weather, stop location weather
+            fl.removeLocationUpdates(locationCallback);
+            Forekast.this.startStaticWeather();
+        }
+    }
+
+    void initWeather(Weather newWeather) {
+        Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather"));
+        if (newWeather != null) {
+            ((TextView) findViewById(R.id.weatherText)).setText(newWeather.getWeather_desc() + ", " + Math.round(newWeather.getTemp()) + "°C ");
+            ((TextView) findViewById(R.id.weatherCity)).setText(newWeather.getCity());
+            vm.setWeather(newWeather);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedState) {
         super.onCreate(savedState);
@@ -93,11 +115,16 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
 
         init();
 
-        // Initialize the homescreen in the content area on startup
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_area, HomeScreen.newInstance())
-                .addToBackStack("home")
-                .commit();
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) { // We were doing stuff, so return it
+            fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1);
+        } else { // First time starting app
+            // Initialize the homescreen in the content area on startup
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_area, HomeScreen.newInstance())
+                    .addToBackStack("home")
+                    .commit();
+        }
     }
 
     private void init() {
@@ -116,6 +143,9 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
         } else {
             startStaticWeather();
         }
+
+        // And make sure the ui is updated accordingly
+        vm.getLiveWeather().observe(this, this::initWeather);
     }
 
     private void locationSetup() {
@@ -156,6 +186,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
     public void onResume() {
         super.onResume();
         toggle.syncState();
+        startWeatherPolling();
     }
 
     @Override
@@ -165,7 +196,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
 
     private LocationRequest createLocationRequest() {
         LocationRequest req = LocationRequest.create();
-        req.setInterval(5000); // Five minutes
+        req.setInterval(3600000); // One Hour
         req.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         return req;
     }
@@ -196,7 +227,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
                             .getDefaultSharedPreferences(getApplicationContext())
                             .getString("manual_location", "Eindhoven"));
                 }
-            }, 0, 5000);
+            }, 0, 3600000);
     }
 
     private boolean usingLiveLocation() {
@@ -241,8 +272,6 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
             }
         };
 
-
-
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -273,7 +302,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
                 case (R.id.nav_settings):
                     fragment = new SettingsFragments();
                     tag = "settings";
-                    setArrowIcon();
+                    //setArrowIcon();
                     break;
             }
 
@@ -286,6 +315,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
             return true;
         });
     }
+
 
     private void setArrowIcon() {
         toggle.setDrawerIndicatorEnabled(false);

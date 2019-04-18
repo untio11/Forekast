@@ -16,7 +16,7 @@ public class HomeScreenViewModel extends HomeScreenViewModelInterface {
     }
 
     @Override
-    LiveData<Weather> getLiveWeather() { return currentWeather; }
+    public LiveData<Weather> getLiveWeather() { return currentWeather; }
 
     @Override
     ClothingCriteria getClothingCriteria() {
@@ -84,5 +84,15 @@ public class HomeScreenViewModel extends HomeScreenViewModelInterface {
     @Override
     boolean[] getAccessories() {
         return sugg.getAccessories();
+    }
+
+    @Override
+    public void setWeather(Weather weather) {
+        current_weather = weather;
+    }
+
+    @Override
+    Weather getWeather() {
+        return current_weather;
     }
 }

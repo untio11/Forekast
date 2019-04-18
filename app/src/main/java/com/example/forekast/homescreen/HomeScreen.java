@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.widget.ImageButton;
@@ -68,13 +69,10 @@ public class HomeScreen extends Fragment {
         vm = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
         Repository.initDB(getActivity().getApplicationContext());
 
-        criteria = new ClothingCriteria(warmth, formality, comfort, preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
-
-        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        vm.getLiveWeather().observe(
-                getActivity(), this::initWeather);
+        // Observe the LiveData for the outfit, passing in this activity as the LifecycleOwner and the observer.
         vm.getLiveOutfit().observe(
                 getActivity(), this::initOutfit);
+
 
         if (savedInstance != null) {
             vm.setComfort(savedInstance.getInt("Comfortsl"));
@@ -109,42 +107,44 @@ public class HomeScreen extends Fragment {
         view.findViewById(R.id.prev_legs).setOnClickListener(this::prevClothing);
         view.findViewById(R.id.prev_torso).setOnClickListener(this::prevClothing);
 
-        warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
-        formality = new MutablePair<>(vm.getFormality(), vm.getFormality());
-        comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
-        preference = new MutablePair<>(10, 10);
-        criteria = new ClothingCriteria(warmth, formality, comfort, preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
+        vm.clothingCriteria = new ClothingCriteria(
+                new MutablePair<>(vm.getWarmth(), vm.getWarmth()),
+                new MutablePair<>(vm.getFormality(), vm.getFormality()),
+                new MutablePair<>(vm.getComfort(), vm.getComfort()),
+                new MutablePair<>(10, 10),
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
+
+
+        vm.getLiveWeather().observe(getActivity(), (new Observer<Weather>() {
+            @Override
+            public void onChanged(Weather weather) {
+                if (weather == null) return;
+                vm.sugg.setCurrentCriteria(vm.getClothingCriteria(), weather);
+                vm.getLiveWeather().removeObserver(this); // Remove after first update
+            }
+        }));
     }
 
-    private void initWeather(Weather newWeather) {
-        Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather"));
-        if (newWeather != null) {
-            this.weather = newWeather;
-            ((TextView) getActivity().findViewById(R.id.weatherText)).setText(weather.getWeather_desc() + ", " + Math.round(weather.getTemp()) + "°C ");
-            ((TextView) getActivity().findViewById(R.id.weatherCity)).setText(weather.getCity());
-            if (criteria != null) {
-                vm.sugg.setCurrentCriteria(criteria, weather);
-            }
-        }
-    }
+
 
     private void initOutfit(Outfit newOutfit) {
         Log.d("ClothingUpdate", (newOutfit != null ? newOutfit.toString() : "No clothes"));
 
         if (newOutfit != null) {
-            this.outfit = newOutfit;
-            if (outfit.torso.torso != null) {
-                System.out.println(outfit.torso.torso);
+            if (newOutfit.torso != null) {
+                if (newOutfit.torso.one && !newOutfit.torso.two) {
+                    System.out.println(newOutfit.torso.torso);
+                } else {
+                    System.out.println(newOutfit.torso.inner);
+                    System.out.println(newOutfit.torso.outer);
+                }
             }
-            else {
-                System.out.println(outfit.torso.inner);
-                System.out.println(outfit.torso.outer);
-            }
-            System.out.println(outfit.pants);
-            System.out.println(outfit.shoes);
+            System.out.println(newOutfit.pants);
+            System.out.println(newOutfit.shoes);
+            //newOutfit();
             setOutfit();
             accessories(); //New accessories every time we have a clothing update,
-                            // Since we have leggings right?
+
         }
     }
 
@@ -159,16 +159,22 @@ public class HomeScreen extends Fragment {
         Bitmap bitmapOT;
         Bitmap bitmapP;
         Bitmap bitmapS;
+
         ImageView innerTorso = view.findViewById(R.id.innerTorso);
         ImageView outerTorso = view.findViewById(R.id.outerTorso);
         ImageView bottoms = view.findViewById(R.id.bottoms);
         ImageView shoes = view.findViewById(R.id.shoes);
         LinearLayout bottomsLayout = view.findViewById(R.id.bottomsLayout);
 
+        bottomsLayout.setVisibility(View.VISIBLE);
+        innerTorso.setVisibility(View.VISIBLE);
+        outerTorso.setVisibility(View.VISIBLE);
+        Outfit outfit = vm.currentOutfit.getValue();
+
         if (outfit.torso != null){
-            if (TorsoClothing.torso != null) {
-                if (TorsoClothing.torso.underwearable) {
-                    if (TorsoClothing.torso.picture != null) {
+            if (outfit.torso.one && !outfit.torso.two) {
+                if (outfit.torso.torso != null) {
+                    if (outfit.torso.torso.picture != null) {
                         bitmapIT = BitmapFactory.decodeByteArray(outfit.torso.torso.picture, 0, outfit.torso.torso.picture.length);
                         innerTorso.setImageBitmap(bitmapIT);
                     } else {
@@ -176,17 +182,8 @@ public class HomeScreen extends Fragment {
                     }
                     outerTorso.setVisibility(View.GONE);
                 }
-                else {
-                    if (outfit.torso.picture != null) {
-                        bitmapOT = BitmapFactory.decodeByteArray(outfit.torso.torso.picture, 0, outfit.torso.torso.picture.length);
-                        outerTorso.setImageBitmap(bitmapOT);
-                    } else {
-                        outerTorso.setImageResource(R.drawable.sweater);
-                    }
-                    innerTorso.setVisibility(View.GONE);
-                }
             }
-            else { //if (outfit.torso.inner != null && outfit.torso.outer != null) {
+            else {
                 if (outfit.torso.inner.picture != null) {
                     bitmapIT = BitmapFactory.decodeByteArray(outfit.torso.inner.picture, 0, outfit.torso.inner.picture.length);
                     innerTorso.setImageBitmap(bitmapIT);
@@ -203,21 +200,22 @@ public class HomeScreen extends Fragment {
         }
 
         if (outfit.pants != null){
+            if (outfit.pants.picture != null) {
+                bitmapP = BitmapFactory.decodeByteArray(outfit.pants.picture, 0, outfit.pants.picture.length);
+                bottoms.setImageBitmap(bitmapP);
+            }
+            else {
+                bottoms.setImageResource(R.drawable.pants);
+            }
+
             if (outfit.torso.torso != null){
                 if(outfit.torso.torso.type.equals("Dress")) {
                     bottomsLayout.setVisibility(View.GONE);
                 }
             }
-            else if (outfit.torso.inner.type.equals("Dress")){
-                bottomsLayout.setVisibility(View.GONE);
-            }
-            else {
-                if (outfit.pants.picture != null) {
-                    bitmapP = BitmapFactory.decodeByteArray(outfit.pants.picture, 0, outfit.pants.picture.length);
-                    bottoms.setImageBitmap(bitmapP);
-                }
-                else {
-                    bottoms.setImageResource(R.drawable.pants);
+            else if (outfit.torso.inner != null) {
+                if (outfit.torso.inner.type.equals("Dress")) {
+                    bottomsLayout.setVisibility(View.GONE);
                 }
             }
         }
@@ -274,7 +272,6 @@ public class HomeScreen extends Fragment {
             leggingsView.setColorFilter(Color.LTGRAY);
         }
     }
-
 
     public static void newOutfit() {
         vm.newOutfit();
@@ -346,6 +343,7 @@ public class HomeScreen extends Fragment {
                 default:
                     break;
             }
+            ClothingCriteria criteria = vm.getClothingCriteria();
 
             // Set the new clothing criteria from seekbars
             warmth = new MutablePair<>(vm.getWarmth(), vm.getWarmth());
@@ -353,11 +351,18 @@ public class HomeScreen extends Fragment {
             comfort = new MutablePair<>(vm.getComfort(), vm.getComfort());
             preference = new MutablePair<>(10, 10);
             criteria = new ClothingCriteria(warmth, formality, comfort, preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
+            criteria.warmth.first = vm.getWarmth();
+            criteria.warmth.second = vm.getWarmth();
+            criteria.formality.first = vm.getFormality();
+            criteria.formality.second = vm.getFormality();
+            criteria.comfort.first = vm.getComfort();
+            criteria.comfort.second = vm.getComfort();
+            criteria.preference.first = 10;
+            criteria.preference.second = 10;
 
-            vm.sugg.setCurrentCriteria(criteria, weather);
+            vm.sugg.setCurrentCriteria(criteria, vm.getWeather());
 
             System.out.println(criteria);
-            System.out.println(weather);
         }
     }
 }

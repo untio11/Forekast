@@ -180,8 +180,8 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
                 // Perform the saving to the database
                 new AgentAsyncTask().execute();
 
-                // Navigate to the wardrobe -> We don't want this for the acceptance test!
-                // navigateWardrobe();
+                // Navigate to the wardrobe
+                navigateWardrobe();
 
             }
         });
