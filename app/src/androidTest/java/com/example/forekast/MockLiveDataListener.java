@@ -1,6 +1,6 @@
 package com.example.forekast;
 
-import com.example.forekast.external_data.Weather;
+import com.example.forekast.ExternalData.Weather;
 
 import javax.annotation.Nullable;
 

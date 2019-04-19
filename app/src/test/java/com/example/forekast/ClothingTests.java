@@ -1,9 +1,11 @@
 package com.example.forekast;
 
-import com.example.forekast.clothing.*;
+import com.example.forekast.Clothing.Clothing;
+import com.example.forekast.Clothing.Torso;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class ClothingTests {
     @Test

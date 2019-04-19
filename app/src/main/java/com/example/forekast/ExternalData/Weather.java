@@ -1,4 +1,4 @@
-package com.example.forekast.external_data;
+package com.example.forekast.ExternalData;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -12,24 +12,17 @@ public class Weather {
     private String city;
     private String weather_desc; // Short description of the weather
 
-    /**
-     * Set the city where the weather is polled
-     * @param city As a string
-     */
-    void setCity(String city) {
-        this.city = city;
-    }
-
     public String getCity() {
         return city;
     }
 
     /**
-     * Set the temperature
-     * @param temp In degrees celsius
+     * Set the city where the weather is polled
+     *
+     * @param city As a string
      */
-    void setTemp(float temp) {
-        this.temp = temp;
+    void setCity(String city) {
+        this.city = city;
     }
 
     public float getTemp() {
@@ -37,11 +30,12 @@ public class Weather {
     }
 
     /**
-     * Set the expected rain for that day
-     * @param precipitation In mm
+     * Set the temperature
+     *
+     * @param temp In degrees celsius
      */
-    void setPrecipitation(float precipitation) {
-        this.precipitation = precipitation;
+    void setTemp(float temp) {
+        this.temp = temp;
     }
 
     public float getPrecipitation() {
@@ -49,11 +43,12 @@ public class Weather {
     }
 
     /**
-     * Set the feels like temperature
-     * @param feels_like In degrees celsius
+     * Set the expected rain for that day
+     *
+     * @param precipitation In mm
      */
-    void setFeels_like(float feels_like) {
-        this.feels_like = feels_like;
+    void setPrecipitation(float precipitation) {
+        this.precipitation = precipitation;
     }
 
     public float getFeels_like() {
@@ -61,11 +56,12 @@ public class Weather {
     }
 
     /**
-     * Set the UV-index
-     * @param uv_index In UV standard units (whatever that might be)
+     * Set the feels like temperature
+     *
+     * @param feels_like In degrees celsius
      */
-    void setUv_index(float uv_index) {
-        this.uv_index = uv_index;
+    void setFeels_like(float feels_like) {
+        this.feels_like = feels_like;
     }
 
     public float getUv_index() {
@@ -73,11 +69,12 @@ public class Weather {
     }
 
     /**
-     * Set the wind speed
-     * @param wind In km/h
+     * Set the UV-index
+     *
+     * @param uv_index In UV standard units (whatever that might be)
      */
-    void setWind(float wind) {
-        this.wind = wind;
+    void setUv_index(float uv_index) {
+        this.uv_index = uv_index;
     }
 
     public float getWind() {
@@ -85,15 +82,25 @@ public class Weather {
     }
 
     /**
-     * Set a short description of the current weather conditions.
-     * @param weather_desc description
+     * Set the wind speed
+     *
+     * @param wind In km/h
      */
-    void setWeather_desc(String weather_desc) {
-        this.weather_desc = weather_desc;
+    void setWind(float wind) {
+        this.wind = wind;
     }
 
     public String getWeather_desc() {
         return weather_desc;
+    }
+
+    /**
+     * Set a short description of the current weather conditions.
+     *
+     * @param weather_desc description
+     */
+    void setWeather_desc(String weather_desc) {
+        this.weather_desc = weather_desc;
     }
 
     @NotNull

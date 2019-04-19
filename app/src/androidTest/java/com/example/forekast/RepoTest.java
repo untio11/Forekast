@@ -2,11 +2,10 @@ package com.example.forekast;
 
 import android.content.Context;
 
-import com.example.forekast.clothing.*;
-import com.example.forekast.external_data.AppDatabase;
-import com.example.forekast.external_data.Repository;
-import com.example.forekast.external_data.Weather;
-import com.example.forekast.external_data.WeatherAPI;
+import com.example.forekast.Clothing.*;
+import com.example.forekast.ExternalData.AppDatabase;
+import com.example.forekast.ExternalData.Repository;
+import com.example.forekast.ExternalData.Weather;
 
 import org.junit.After;
 import org.junit.BeforeClass;
@@ -17,7 +16,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 import androidx.test.InstrumentationRegistry;
@@ -26,24 +24,23 @@ import androidx.test.runner.AndroidJUnit4;
 @RunWith(AndroidJUnit4.class)
 public class RepoTest {
     static private AppDatabase db;
-    static private LifecycleOwner lf;
+    private static Context appcontext;
 
     @BeforeClass
     public static void init() {
-        Context appcontext = InstrumentationRegistry.getTargetContext();
+        appcontext = InstrumentationRegistry.getTargetContext();
         db = Room.databaseBuilder(appcontext, AppDatabase.class, "clothing").fallbackToDestructiveMigration().build();
-        Repository.setDB(db);
-        lf = new MockLifeCycleOwner();
+        Repository.initDB(appcontext);
     }
 
     @After // Used te re-establish the link with the database after the nullpointer test
     public void resetDbLink() {
-        Repository.setDB(db);
+        Repository.initDB(appcontext);
     }
 
     @Test(expected = NullPointerException.class)
     public void testException() {
-        Repository.setDB(null);
+        Repository.initDB(null);
         Repository.addClothing();
     }
 
@@ -97,7 +94,7 @@ public class RepoTest {
         tshirt.underwearable = true;
 
         // Dummy criteria: should accept all clothing of the appropriate type, owned by hans
-        ClothingCriteriaInterface criteria = new ClothingCriteria();
+        ClothingCriteria criteria = new ClothingCriteria();
         criteria.owner = "hans";
 
         // To ensure the result will never be empty
@@ -136,7 +133,7 @@ public class RepoTest {
         tshirt2.underwearable = true;
 
         // Dummy criteria: should accept clothing of the appropriate type between warmth bounds, owned by hans
-        ClothingCriteriaInterface criteria = new ClothingCriteria();
+        ClothingCriteria criteria = new ClothingCriteria();
         criteria.owner = "hans";
         criteria.warmth.second = 10;
         criteria.warmth.first = 0;

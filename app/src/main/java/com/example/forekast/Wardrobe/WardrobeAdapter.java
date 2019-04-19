@@ -10,57 +10,60 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
-import com.example.forekast.EditScreen.EditScreen;
-import com.example.forekast.R;
-import com.example.forekast.clothing.Clothing;
-import com.example.forekast.external_data.Repository;
-
-import java.util.List;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-public class WardrobeAdapter extends ArrayAdapter<Clothing> {
+import com.example.forekast.EditScreen.EditScreen;
+import com.example.forekast.R;
+import com.example.forekast.Clothing.Clothing;
+import com.example.forekast.ExternalData.Repository;
 
-    Context context;
-    List<Clothing> myList;
-    FragmentManager fragmentManager;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
+class WardrobeAdapter extends ArrayAdapter<Clothing> {
+
+    private final Context context;
+    private final List<Clothing> myList;
+    private final FragmentManager fragmentManager;
 
     public WardrobeAdapter(Context context, int resource, List<Clothing> objects) {
         super(context, resource, objects);
 
         this.context = context;
         this.myList = objects;
-        fragmentManager = ((FragmentActivity)context).getSupportFragmentManager();
+        fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
     }
 
     @Override
     public int getCount() {
-        if(myList != null)
+        if (myList != null)
             return myList.size();
         return 0;
     }
 
     @Override
     public Clothing getItem(int position) {
-        if(myList != null)
+        if (myList != null)
             return myList.get(position);
         return null;
     }
 
     @Override
     public long getItemId(int position) {
-        if(myList != null)
+        if (myList != null)
             return myList.get(position).hashCode();
         return 0;
 
     }
 
 
+    @NotNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NotNull ViewGroup parent) {
 
         final Holder holder;
         Bitmap bitmap;
@@ -78,7 +81,7 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
             convertView = inflater.inflate(R.layout.wardrobe_entry, null);
 
             //Get xml components into our holder class
-            holder.imageView = (ImageView) convertView.findViewById(R.id.clothingimage);
+            holder.imageView = convertView.findViewById(R.id.clothingimage);
 
             //Attach our holder class to this particular cell
             convertView.setTag(holder);
@@ -96,13 +99,13 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
         Clothing clothing = getItem(position);
 
         //Fill our view components with data
-        if (clothing.picture != null) {
+        if (clothing != null && clothing.picture != null) {
             bitmap = BitmapFactory.decodeByteArray(clothing.picture, 0, clothing.picture.length);
             holder.imageView.setImageBitmap(bitmap);
         }
 
         // Check if the time in washingmachine has passed for this item
-        if (clothing.washing_machine) {
+        if (clothing != null && clothing.washing_machine) {
             if (clothing.washing_time != 0) {
                 if ((System.currentTimeMillis() / 1000) - clothing.washing_time > 10) {
                     // change the above to / (1000*60*60*24) for the amount of days
@@ -119,35 +122,24 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
         }
 
         //Clothing is in washing machine, so set faded out picture
-        if (clothing.washing_machine) {
+        if (clothing != null && clothing.washing_machine) {
             holder.imageView.setAlpha(0.5f);
         }
 
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Clicking on item will navigate to editscreen with the current clothing item
-                Fragment fragment = EditScreen.newInstance(clothing, false);
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.wardrobe_container, fragment).addToBackStack("edit").commit();
-            }
+        holder.imageView.setOnClickListener(v -> {
+            // Clicking on item will navigate to editscreen with the current clothing item
+            Fragment fragment = EditScreen.newInstance(clothing, false);
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.wardrobe_container, fragment).addToBackStack("edit").commit();
         });
 
         return convertView;
     }
 
-    /**
-     * This holder must replicate the components in the wardrobe_entry
-     * We have an imageview for the picture and a progressBar to show progress
-     */
-    private class Holder {
-        ImageView imageView;
-    }
-
     private static class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
-        Clothing clothing;
+        final Clothing clothing;
 
-        public AgentAsyncTask(Clothing clothing) {
+        AgentAsyncTask(Clothing clothing) {
             // Get the clothing object
             this.clothing = clothing;
         }
@@ -158,5 +150,13 @@ public class WardrobeAdapter extends ArrayAdapter<Clothing> {
             Repository.updateClothing(clothing);
             return null;
         }
+    }
+
+    /**
+     * This holder must replicate the components in the wardrobe_entry
+     * We have an imageview for the picture and a progressBar to show progress
+     */
+    private class Holder {
+        ImageView imageView;
     }
 }

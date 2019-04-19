@@ -1,10 +1,14 @@
-
 package com.example.forekast.Wardrobe;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.ImageButton;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -12,20 +16,14 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
-
 import com.example.forekast.EditScreen.EditScreen;
 import com.example.forekast.R;
-import com.example.forekast.clothing.Clothing;
-import com.example.forekast.clothing.Feet;
-import com.example.forekast.clothing.Legs;
-import com.example.forekast.clothing.Torso;
+import com.example.forekast.Clothing.Clothing;
+import com.example.forekast.Clothing.Feet;
+import com.example.forekast.Clothing.Legs;
+import com.example.forekast.Clothing.Torso;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -62,7 +60,7 @@ public class Wardrobe extends Fragment {
         return fragment;
     }
 
-    public static final String[] getTypes(String location) {
+    public static String[] getTypes(String location) {
         switch (location) {
             case "Torso":
                 return new String[]{"T-Shirt", "Dress", "Jacket", "Shirt", "Sweater", "Tanktop"};
@@ -87,7 +85,7 @@ public class Wardrobe extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.wardrobe_overview, container, false);
@@ -95,11 +93,11 @@ public class Wardrobe extends Fragment {
         // Viewmodel stuff
         vm = ViewModelProviders.of(this).get(WardrobeViewModel.class);
 
-        ImageButton addTorso = (ImageButton) view.findViewById(R.id.addTorso);
-        ImageButton addLegs = (ImageButton)  view.findViewById(R.id.addBottom);
-        ImageButton addFeet = (ImageButton)  view.findViewById(R.id.addShoes);
+        ImageButton addTorso = view.findViewById(R.id.addTorso);
+        ImageButton addLegs = view.findViewById(R.id.addBottom);
+        ImageButton addFeet = view.findViewById(R.id.addShoes);
 
-        CheckBox showWashing = (CheckBox) view.findViewById(R.id.showWashing);
+        CheckBox showWashing = view.findViewById(R.id.showWashing);
         showWashing.setChecked(vm.getWashing());
 
         // The add torso button will add a new clothing of type torso
@@ -135,12 +133,9 @@ public class Wardrobe extends Fragment {
         vm.getLists(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
 
         // Check if checkbox for showing items in washingMachine is checked off.
-        showWashing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                vm.setWashing(isChecked);
-                vm.getLists(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
-            }
+        showWashing.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            vm.setWashing(isChecked);
+            vm.getLists(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
         });
 
         getFragmentManager().addOnBackStackChangedListener(() -> { // Ensure the wardrobe overview is reloaded upon entry by pressing back
@@ -148,7 +143,7 @@ public class Wardrobe extends Fragment {
 
             if (fm == null) return;
             List<Fragment> fragments = fm.getFragments();
-            if (fragments.size() > 0 && fragments.get(fragments.size() - 1) instanceof Wardrobe){
+            if (fragments.size() > 0 && fragments.get(fragments.size() - 1) instanceof Wardrobe) {
                 vm.getLists(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
             }
         });
@@ -163,20 +158,18 @@ public class Wardrobe extends Fragment {
         new android.app.AlertDialog.Builder(getContext())
                 .setTitle("What do you want to add?")
                 .setItems(types,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // The 'which' argument contains the index position
-                                // of the selected item
-                                clothing.type = types[which];
-                                // Navigate to the editscreen and pass the clothing objects
-                                Fragment fragment = EditScreen.newInstance(clothing, true);
-                                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                                transaction.replace(R.id.wardrobe_container, fragment).addToBackStack("edit").commit();
-                            }
+                        (dialog, which) -> {
+                            // The 'which' argument contains the index position
+                            // of the selected item
+                            clothing.type = types[which];
+                            // Navigate to the editscreen and pass the clothing objects
+                            Fragment fragment = EditScreen.newInstance(clothing, true);
+                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.replace(R.id.wardrobe_container, fragment).addToBackStack("edit").commit();
                         }).show();
     }
 
-    public void setLists(View view, List<Clothing> list, CustomGridView listView) {
+    private void setLists(View view, List<Clothing> list, CustomGridView listView) {
         list.sort((c1, c2) -> c1.type.compareTo(c2.type));
         WardrobeAdapter adapter = new WardrobeAdapter(view.getContext(), R.layout.wardrobe_entry, list);
         listView.setAdapter(adapter);
@@ -190,7 +183,7 @@ public class Wardrobe extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NotNull Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;

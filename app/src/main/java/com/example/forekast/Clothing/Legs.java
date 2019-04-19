@@ -1,4 +1,4 @@
-package com.example.forekast.clothing;
+package com.example.forekast.Clothing;
 
 public class Legs extends Clothing {
 
@@ -6,7 +6,7 @@ public class Legs extends Clothing {
     public void preSet() {
         // Get presettings when adding Legs clothing
         // Default value is 5
-        switch(type) {
+        switch (type) {
             case "Jeans":
                 comfort = 2;
                 warmth = 7;

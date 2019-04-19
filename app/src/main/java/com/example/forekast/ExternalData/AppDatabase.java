@@ -1,9 +1,9 @@
-package com.example.forekast.external_data;
-
-import com.example.forekast.clothing.Clothing;
+package com.example.forekast.ExternalData;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
+
+import com.example.forekast.Clothing.Clothing;
 
 @Database(entities = {Clothing.class}, version = 9, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {

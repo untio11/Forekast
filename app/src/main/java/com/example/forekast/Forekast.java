@@ -2,25 +2,30 @@ package com.example.forekast;
 
 import android.content.IntentSender;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.example.forekast.Settings.SettingsFragments;
 import com.example.forekast.Wardrobe.Wardrobe;
-import com.example.forekast.external_data.Repository;
-import com.example.forekast.external_data.Weather;
-import com.example.forekast.homescreen.HomeScreen;
-import com.example.forekast.homescreen.HomeScreenViewModel;
-import com.example.forekast.homescreen.HomeScreenViewModelInterface;
+import com.example.forekast.ExternalData.Repository;
+import com.example.forekast.ExternalData.Weather;
+import com.example.forekast.HomeScreen.HomeScreen;
+import com.example.forekast.HomeScreen.HomeScreenViewModel;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -36,40 +41,12 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
-
 public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentInteractionListener {
     private NavigationView navigationView;
     private FusedLocationProviderClient fl;
     private LocationRequest req;
-    private HomeScreenViewModelInterface vm;
-    private ActionBarDrawerToggle toggle;
-    private Timer static_weather_timer;
-    private SharedPreferences.OnSharedPreferenceChangeListener pref_change = new SharedPreferences.OnSharedPreferenceChangeListener() {
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (key.equals("live_location")) {
-                Forekast.this.startWeatherPolling();
-            } else if (key.equals("manual_location")) { // Changed city, so restart timer
-                if (static_weather_timer != null) {
-                    static_weather_timer.cancel();
-                }
-                startStaticWeather();
-            } else if (key.equals("user_list")) { // Update the current wardrobe
-                vm.setOwner(sharedPreferences.getString("user_list", "default_user"));
-            }
-        }
-    };
-
-    private LocationCallback locationCallback = new LocationCallback() {
+    private HomeScreenViewModel vm;
+    private final LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             if (locationResult == null) {
@@ -79,6 +56,27 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
             for (Location location : locationResult.getLocations()) {
                 // Update the weather in the viewmodel
                 vm.updateWeather(location);
+            }
+        }
+    };
+    private ActionBarDrawerToggle toggle;
+    private Timer static_weather_timer;
+    private final SharedPreferences.OnSharedPreferenceChangeListener pref_change = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            switch (key) {
+                case "live_location":
+                    Forekast.this.startWeatherPolling();
+                    break;
+                case "manual_location":  // Changed city, so restart timer
+                    if (static_weather_timer != null) {
+                        static_weather_timer.cancel();
+                    }
+                    startStaticWeather();
+                    break;
+                case "user_list":  // Update the current wardrobe
+                    vm.setOwner(sharedPreferences.getString("user_list", "default_user"));
+                    break;
             }
         }
     };
@@ -96,12 +94,11 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
         }
     }
 
-    void initWeather(Weather newWeather) {
+    private void initWeather(Weather newWeather) {
         Log.d("WeatherUpdate", (newWeather != null ? newWeather.toString() : "No weather"));
         if (newWeather != null) {
             ((TextView) findViewById(R.id.weatherText)).setText(newWeather.getWeather_desc() + ", " + Math.round(newWeather.getTemp()) + "°C ");
             ((TextView) findViewById(R.id.weatherCity)).setText(newWeather.getCity());
-            vm.setWeather(newWeather);
         }
     }
 
@@ -121,7 +118,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
         } else { // First time starting app
             // Initialize the homescreen in the content area on startup
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_area, HomeScreen.newInstance())
+                    .replace(R.id.content_area, new HomeScreen())
                     .addToBackStack("home")
                     .commit();
         }
@@ -189,11 +186,6 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
         startWeatherPolling();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
     private LocationRequest createLocationRequest() {
         LocationRequest req = LocationRequest.create();
         req.setInterval(3600000); // One Hour
@@ -219,15 +211,15 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
     }
 
     private void startStaticWeather() {
-            static_weather_timer = new Timer();
-            static_weather_timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    vm.updateWeather(PreferenceManager
-                            .getDefaultSharedPreferences(getApplicationContext())
-                            .getString("manual_location", "Eindhoven"));
-                }
-            }, 0, 3600000);
+        static_weather_timer = new Timer();
+        static_weather_timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                vm.updateWeather(PreferenceManager
+                        .getDefaultSharedPreferences(getApplicationContext())
+                        .getString("manual_location", "Eindhoven"));
+            }
+        }, 0, 3600000);
     }
 
     private boolean usingLiveLocation() {
@@ -253,7 +245,8 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {}
+    public void onFragmentInteraction(Uri uri) {
+    }
 
     private void initializeNavigation() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -286,7 +279,7 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
             switch (item.getItemId()) {
                 case (R.id.nav_home):
                     // Switch to home screen fragment
-                    fragment = HomeScreen.newInstance();
+                    fragment = new HomeScreen();
                     tag = "home";
                     setNormalIcon();
                     break;
@@ -313,26 +306,6 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
         });
     }
 
-
-    private void setArrowIcon() {
-        toggle.setDrawerIndicatorEnabled(false);
-        Drawable dr = getResources().getDrawable(R.drawable.previous);
-        Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
-        Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 30, 30, true));
-        toggle.setHomeAsUpIndicator(d);
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (drawer.isDrawerVisible(GravityCompat.START)) {
-                    drawer.closeDrawer(GravityCompat.START);
-                } else {
-                    drawer.openDrawer(GravityCompat.START);
-                }
-            }
-        });
-
-    }
 
     private void setNormalIcon() {
         toggle.setDrawerIndicatorEnabled(true);

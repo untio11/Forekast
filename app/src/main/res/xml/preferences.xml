@@ -4,7 +4,6 @@
     android:layout_height="match_parent">
 
     <CheckBoxPreference
-        android:id="@+id/live_location_checkbox"
         android:defaultValue="true"
         android:disableDependentsState="true"
         android:key="live_location"

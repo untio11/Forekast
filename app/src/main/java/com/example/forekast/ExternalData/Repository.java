@@ -1,16 +1,16 @@
-package com.example.forekast.external_data;
+package com.example.forekast.ExternalData;
 
 import android.content.Context;
 
-import com.example.forekast.clothing.Clothing;
-import com.example.forekast.clothing.ClothingCriteriaInterface;
+import androidx.lifecycle.MutableLiveData;
+import androidx.room.Room;
+
+import com.example.forekast.Clothing.Clothing;
+import com.example.forekast.Clothing.ClothingCriteria;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import androidx.lifecycle.MutableLiveData;
-import androidx.room.Room;
 
 /**
  * A static wrapper for all external data access.
@@ -20,6 +20,7 @@ public class Repository {
 
     /**
      * Set the database instance for the repository. Needs to be done externally because of lifecycle awareness
+     *
      * @param appcontext The context of the application where the database will be used
      */
     public static void initDB(final Context appcontext) throws IllegalArgumentException {
@@ -37,8 +38,9 @@ public class Repository {
 
     /**
      * Request the weather at the city parsed and update the parsed livedata object
+     *
      * @param weather A mutable livedata object that will be updated with the most recent weather
-     * @param city The name of the city to be looked up
+     * @param city    The name of the city to be looked up
      */
     public static void getWeather(String city, MutableLiveData<Weather> weather) {
         new WeatherAPI(city).execute(weather);
@@ -46,9 +48,10 @@ public class Repository {
 
     /**
      * Request the weather at the lat, lon parsed and update the parsed livedata object
+     *
      * @param weather A mutable livedata object that will be updated with the most recent weather
-     * @param lat The latitude of the location to be looked up
-     * @param lon The longitude of the location to be looked up
+     * @param lat     The latitude of the location to be looked up
+     * @param lon     The longitude of the location to be looked up
      */
     public static void getWeather(String lat, String lon, MutableLiveData<Weather> weather) {
         new WeatherAPI(lat, lon).execute(weather);
@@ -56,13 +59,14 @@ public class Repository {
 
     /**
      * Get a list of clothing for a specific body location according to the clothingcriteria
+     *
      * @param location Torso, Legs or Feet: the location of the requested clothing
      * @param criteria Upper and lower bounds for the different attributes of the clothing
      * @return A filtered list such that all the pieces of clothing in that list are within the bounds imposed by the criteria
-     * @throws NullPointerException if the database has not been instantiated beforehand
+     * @throws NullPointerException     if the database has not been instantiated beforehand
      * @throws IllegalArgumentException if the clothingcriteria object is null
      */
-    public static List<Clothing> getClothing(final String location, final ClothingCriteriaInterface criteria) throws NullPointerException, IllegalArgumentException {
+    public static List<Clothing> getClothing(final String location, final ClothingCriteria criteria) throws NullPointerException, IllegalArgumentException {
         if (db == null) {
             throw new NullPointerException("The database has not been instantiated yet");
         } else if (criteria == null) {
@@ -81,11 +85,12 @@ public class Repository {
 
     /**
      * Filter the given clothing list based on the parsed criteria
+     *
      * @param clothing The list containing the clothing.
      * @param criteria The criteria to filter the clothing on
      * @return A list of clothing containing just the clothing that conforms to the criteria: criteria.attribute.first < clothing.attribute < criteria.attribute.second. Possibly empty.
      */
-    private static List<Clothing> filter(List<Clothing> clothing, ClothingCriteriaInterface criteria) {
+    private static List<Clothing> filter(List<Clothing> clothing, ClothingCriteria criteria) {
         Stream<Clothing> clothing_stream = clothing.stream();
 
         // Filter the retrieved clothing based on the criteria
@@ -104,10 +109,11 @@ public class Repository {
 
     /**
      * Add the pieces of clothing to the database and set their ID's accordingly
+     *
      * @param clothing Pieces of clothing to be added to the database
      * @throws NullPointerException if the database has not been instantiated yet
      */
-    public static void addClothing(Clothing ... clothing) throws NullPointerException {
+    public static void addClothing(Clothing... clothing) throws NullPointerException {
         if (db == null) {
             throw new NullPointerException("The database has not been instantiated yet");
         }
@@ -120,10 +126,11 @@ public class Repository {
     /**
      * Update the values of a piece of clothing in the database. Used for editing pieces after first
      * insertion.
+     *
      * @param clothing The piece of clothing to be edited.
      * @throws NullPointerException When the database is not instantiated yet.
      */
-    public static void updateClothing(Clothing clothing) throws  NullPointerException {
+    public static void updateClothing(Clothing clothing) throws NullPointerException {
         if (db == null) {
             throw new NullPointerException("The database has not been instantiated yet");
         }
@@ -133,10 +140,11 @@ public class Repository {
 
     /**
      * Remove the parsed pieces of clothing from the database
+     *
      * @param clothing Pieces of clothing to be removed
      * @throws NullPointerException if the database has not been instantiated yet
      */
-    public static void removeClothing(Clothing ... clothing) throws NullPointerException {
+    public static void removeClothing(Clothing... clothing) throws NullPointerException {
         if (db == null) {
             throw new NullPointerException("The database has not been instantiated yet");
         }

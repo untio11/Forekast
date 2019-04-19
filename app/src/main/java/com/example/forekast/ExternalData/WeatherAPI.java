@@ -1,12 +1,12 @@
-package com.example.forekast.external_data;
+package com.example.forekast.ExternalData;
 
 import android.os.AsyncTask;
+
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,9 +14,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import androidx.lifecycle.MutableLiveData;
-
-public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
+class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
     // URL constants
     private static final String apikey = "APPID=0b9abbd80c094690566a12c404593543";
     private static final String baseurl = "http://api.openweathermap.org/data/2.5/";
@@ -36,6 +34,7 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
 
     /**
      * Use this constructor if the weather data should be fetched by city name (no gps)
+     *
      * @param cityname name of the city, as entered by the user
      */
     public WeatherAPI(String cityname) {
@@ -45,7 +44,8 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
 
     /**
      * Use this constructor if the weather data should be fetched by coordinates (yes gps)
-     * @param latitude latitude as string
+     *
+     * @param latitude  latitude as string
      * @param longitude longitude as string
      */
     public WeatherAPI(String latitude, String longitude) {
@@ -56,12 +56,13 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
 
     /**
      * Make a new weatherobject of the current weather
+     *
      * @param weathers Please parse exactly one livedata weather object, any more will be ignored
      * @return the current weather.
      */
     @SafeVarargs
     @Override
-    protected final Weather doInBackground(MutableLiveData<Weather> ... weathers) {
+    protected final Weather doInBackground(MutableLiveData<Weather>... weathers) {
         MutableLiveData<Weather> weather = weathers[0];
         Weather result = new Weather();
 
@@ -84,6 +85,7 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
 
     /**
      * Set the properties of the weather object according to the weather data
+     *
      * @param weather The object to be modified
      * @throws IOException when something goes wrong with the internet connection.
      */
@@ -106,11 +108,11 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
         JsonObject uv_json = readResponse(uv_con);
 
 
-        double temp =       getAvg("main", "temp", weather_data);
-        double wind_speed =  getAvg("wind", "speed", weather_data); // m/s, taken care of later
-        double humidity =   getAvg("main", "humidity", weather_data) / 100.0; // so it's in [0,1]
+        double temp = getAvg("main", "temp", weather_data);
+        double wind_speed = getAvg("wind", "speed", weather_data); // m/s, taken care of later
+        double humidity = getAvg("main", "humidity", weather_data) / 100.0; // so it's in [0,1]
         // Slightly tweaked approximation from https://www.abc.net.au/news/2018-08-10/weather-feels-like-temperatures/10050622
-        double feels_like =  temp + 0.33 * humidity - 0.6 * wind_speed - 3.0;
+        double feels_like = temp + 0.33 * humidity - 0.6 * wind_speed - 3.0;
 
         weather.setCity(citydata.get("name").getAsString());
         weather.setTemp((float) temp);
@@ -123,6 +125,7 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
 
     /**
      * Set up an HttpURLConnection from a string url
+     *
      * @param url the url to set up a connection to
      * @return the connection object
      * @throws IOException when the connection cannot be opened
@@ -136,6 +139,7 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
 
     /**
      * Return the response of the given connection as JSON object
+     *
      * @param con The connection where the request is sent to
      * @return A JSON object containing the response
      * @throws IOException If the connection is invalid: no inputstream can be generated
@@ -157,9 +161,10 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
 
     /**
      * Get the average value of an attribute in the weather data
-     * @param cat the category to use
+     *
+     * @param cat     the category to use
      * @param element the actual element in the category to take the average from
-     * @param data the array containing the data
+     * @param data    the array containing the data
      * @return the average value of the passed element in the category
      */
     private double getAvg(String cat, String element, JsonArray data) {
@@ -179,6 +184,7 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
 
     /**
      * Get the weather description of the current weather (first element in the weather array)
+     *
      * @param data The array containing the 3 hour weather data
      * @return A short description of the weather
      */
@@ -190,6 +196,7 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
     /**
      * Get the url for the forecast for the coming 5 days, every three hours. Units are in metric.
      * When the user chooses not to use the GPS, the given city name is used. The response is as good as the same
+     *
      * @return URL to the api
      */
     private String getForecastURL() {
@@ -203,6 +210,7 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
     /**
      * Get the current UV index API URL. Needs to be called with lat and long, but those might be unavailable when fetching without gps.
      * Luckily the forecast response also gives the lat and lon from a city name, so use those
+     *
      * @param lat latitude
      * @param lon longitude
      * @return A string containing the URL to call the uv-index api.
@@ -213,6 +221,7 @@ public class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weathe
 
     /**
      * update the last valid weather and post it to the livedata listener.
+     *
      * @param result the new weather object.
      */
     @Override

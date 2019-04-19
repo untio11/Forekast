@@ -1,15 +1,14 @@
-package com.example.forekast.clothing;
+package com.example.forekast.Clothing;
 
 public class TorsoClothing {
 
+    public final boolean one;
+    public final boolean two;
     public Clothing torso;
     public Clothing inner;
     public Clothing outer;
 
-    public boolean one;
-    public boolean two;
-
-    public TorsoClothing (Clothing innerOrOuter) {
+    public TorsoClothing(Clothing innerOrOuter) {
 
         this.torso = innerOrOuter;
 
@@ -18,7 +17,7 @@ public class TorsoClothing {
 
     }
 
-    public TorsoClothing (Clothing inner, Clothing outer) {
+    public TorsoClothing(Clothing inner, Clothing outer) {
 
         this.inner = inner;
         this.outer = outer;

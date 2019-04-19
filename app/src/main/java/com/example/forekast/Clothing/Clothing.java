@@ -1,12 +1,11 @@
-package com.example.forekast.clothing;
-
-import android.graphics.Bitmap;
-import org.jetbrains.annotations.NotNull;
+package com.example.forekast.Clothing;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Main data of our app. Never manually set location or type! Just use the proper subclass and it will be set for you!
@@ -15,7 +14,7 @@ import androidx.room.PrimaryKey;
 public class Clothing {
     /**
      * Do not manually change this variable, it will break the system
-     *
+     * <p>
      * The ID number of the clothing
      */
     @PrimaryKey(autoGenerate = true)
@@ -23,7 +22,7 @@ public class Clothing {
 
     /**
      * Do not manually change this variable, it will break the system
-     *
+     * <p>
      * Owner of this piece of clothing (warderobe owner)
      */
     @ColumnInfo(name = "owner")
@@ -43,62 +42,62 @@ public class Clothing {
 
     /**
      * The comfort of this piece
-     * */
+     */
     @ColumnInfo(name = "comfort")
     public int comfort = 5;
 
     /**
      * The warmth of this piece
-     * */
+     */
     @ColumnInfo(name = "warmth")
     public int warmth = 5;
 
     /**
      * The formality of this piece
-     * */
+     */
     @ColumnInfo(name = "Formality")
     public int formality = 5;
 
     /**
      * How much this piece is liked
-     * */
+     */
     @ColumnInfo(name = "preference")
     public int preference = 5;
 
     /**
      * RGB array: [Red, Green, Blue]
-     * */
+     */
     @Ignore
     @ColumnInfo(name = "color")
     public int[] color;
 
     /**
      * Whether the piece is in the laundry machine
-     * */
+     */
     @ColumnInfo(name = "washing_machine")
     public boolean washing_machine = false;
 
     /**
      * How long this piece of clothing is gone for
-     * */
+     */
     @ColumnInfo(name = "washing_time")
     public long washing_time = 0;
 
     /**
      * This item can be worn over other items
-     * */
+     */
     @ColumnInfo(name = "overwearable")
     public boolean overwearable = false;
 
     /**
      * This item can be worn under other items
-     * */
+     */
     @ColumnInfo(name = "underwearable")
     public boolean underwearable = false;
 
     /**
      * Bitmap converted to array of bytes
-     * */
+     */
     @ColumnInfo(name = "picture")
     public byte[] picture;
 
@@ -134,8 +133,10 @@ public class Clothing {
 
     /**
      * It's always a good idea to have a string representation of your class. Basic, quick overview of the piece of clothing
+     *
      * @return [ID] owner::location::type - (warmth,formality,comfort)
      */
+    @NotNull
     @Override
     public String toString() {
         return "[" + ID + "] " + owner + "::" + location + "::" + type + " - " + "(" + warmth + "," + formality + "," + comfort + ")";
@@ -144,8 +145,9 @@ public class Clothing {
     /**
      * Presets the comfort, warmth and formality attributes when adding a piece of clothing,
      * as well as the over- and underwearable values for the Torso clothing
+     *
      * @throws IllegalArgumentException if not the right instance of Torso, Legs or Feet was created
-     * or if the type that was given is not defined in the Torso class.
+     *                                  or if the type that was given is not defined in the Torso class.
      */
     public void preSet() throws IllegalArgumentException {
         throw new IllegalArgumentException("Location was not defined");
@@ -154,11 +156,12 @@ public class Clothing {
     /**
      * Resets the underwearable and overwearable attributes when an torso type was changed
      * Does nothing for Legs or Feet.
+     *
      * @throws IllegalArgumentException if the type that was given is not defined in the Torso class.
      */
     public void setWearable() throws IllegalArgumentException {
         System.out.println("Changing clothing type");
-        switch(type) {
+        switch (type) {
             case "T-Shirt":
                 underwearable = true;
                 overwearable = false;
@@ -187,40 +190,4 @@ public class Clothing {
                 throw new IllegalArgumentException("This type is not defined in Torso class");
         }
     }
-
-
-    /**
-     * No type or location parameter because those are set automatically if you use the correct subclass of clothing!
-     * @param owner Owner of this piece of clothing (warderobe owner)
-     * @param warmth The warmth of this piece
-     * @param formality The formality of this piece
-     * @param comfort The comfort of this piece
-     * @param preference How much this piece is liked
-     * @param color RGB array: [Red, Green, Blue]
-     * @param washing_machine Whether the piece is in the laundry machine
-     * @param washing_time How long this piece of clothing is gone for
-     * @param picture Bitmap converted to array of bytes
-     */
-
-    /*
-    @Ignore
-    public Clothing(String owner, int warmth, int formality, int comfort, int preference, int[] color, boolean washing_machine, int washing_time, byte[] picture) {
-        setLocAndTyp();
-        this.owner = owner;
-        this.warmth = warmth;
-        this.formality = formality;
-        this.comfort = comfort;
-        this.preference = preference;
-        this.color = color;
-        this.washing_machine = washing_machine;
-        this.washing_time = washing_time;
-        this.picture = picture;
-    }
-
-    public Clothing(String location) {
-        setLocAndTyp();
-        this.location = location;
-    }
-    */
-
 }

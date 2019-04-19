@@ -1,7 +1,6 @@
 package com.example.forekast.EditScreen;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -25,23 +24,23 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.forekast.R;
-import com.example.forekast.Wardrobe.Wardrobe;
-import com.example.forekast.clothing.Clothing;
-import com.example.forekast.external_data.Repository;
-
-import java.io.ByteArrayOutputStream;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.forekast.R;
+import com.example.forekast.Wardrobe.Wardrobe;
+import com.example.forekast.Clothing.Clothing;
+import com.example.forekast.ExternalData.Repository;
 
-public class EditScreen extends Fragment implements AdapterView.OnItemSelectedListener{
+import java.io.ByteArrayOutputStream;
+import java.util.Objects;
+
+
+public class EditScreen extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private static Clothing editClothing;
 
@@ -70,7 +69,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
     private void setWashingTime() {
         if (editClothing.washing_machine && !preWashingState) {
             // If not in washingmachine before, but it is now: set time to current time
-            editClothing.washing_time = System.currentTimeMillis()/1000; // seconds,
+            editClothing.washing_time = System.currentTimeMillis() / 1000; // seconds,
             // change the above to / (1000*60*60*24) for the amount of days
         } else if (!editClothing.washing_machine && preWashingState) {
             // If in washingmachine before, but not anymore: set time to 0
@@ -83,30 +82,30 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.edit_screen_fragment, container, false);
 
-        ImageButton returnbutton = (ImageButton) view.findViewById(R.id.returnbutton);
-        ImageButton delete = (ImageButton) view.findViewById(R.id.delete);
-        ImageButton savebutton = (ImageButton) view.findViewById(R.id.save);
+        ImageButton returnbutton = view.findViewById(R.id.returnbutton);
+        ImageButton delete = view.findViewById(R.id.delete);
+        ImageButton savebutton = view.findViewById(R.id.save);
 
         //create the camera button, and take into consideration the clothing image
-        Button redoImage = (Button) view.findViewById(R.id.redoImage);
-        imageView = (ImageView) view.findViewById(R.id.imageView10);
+        Button redoImage = view.findViewById(R.id.redoImage);
+        imageView = view.findViewById(R.id.imageView10);
 
         //create clothing type spinner, along with the choice of type, and the adapter it needs with it
-        Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
+        Spinner spinner = view.findViewById(R.id.spinner);
         spinner.setOnItemSelectedListener(this);
-        ((ImageButton)view.findViewById(R.id.drop_down_butt)).setOnClickListener(v -> spinner.performClick());
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, items);
+        view.findViewById(R.id.drop_down_butt).setOnClickListener(v -> spinner.performClick());
+        ArrayAdapter adapter = new ArrayAdapter(Objects.requireNonNull(getActivity()), android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
         // Get the different seek bars to regulate warmth, comfort, formality and preference
-        SeekBar seekWarmth = (SeekBar) view.findViewById(R.id.seekWarmth);
-        SeekBar seekComfort = (SeekBar) view.findViewById(R.id.seekComfort);
-        SeekBar seekFormality = (SeekBar) view.findViewById(R.id.seekFormality);
-        SeekBar seekPreference = (SeekBar) view.findViewById(R.id.seekPreference);
+        SeekBar seekWarmth = view.findViewById(R.id.seekWarmth);
+        SeekBar seekComfort = view.findViewById(R.id.seekComfort);
+        SeekBar seekFormality = view.findViewById(R.id.seekFormality);
+        SeekBar seekPreference = view.findViewById(R.id.seekPreference);
 
         // Get the checkbox
-        CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox);
+        CheckBox checkBox = view.findViewById(R.id.checkBox);
 
         if (addBool && savedInstanceState == null) {
             selectPicture();
@@ -131,78 +130,63 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
 
         spinner.setSelection(adapter.getPosition(editClothing.type));
 
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Give a prompt to make sure deletion is intended
-                new AlertDialog.Builder(getContext())
-                        .setTitle("Delete")
-                        .setMessage("Are you sure you want to delete this item?")
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                // Show some text that deletion was successful
-                                Toast.makeText(getContext(), "Item was deleted", Toast.LENGTH_SHORT).show();
-                                // Perform the actual deleting in the database
-                                new AgentAsyncTaskDelete().execute();
-                                // Navigate to the wardrobe
-                                navigateWardrobe();
-                            }})
-                        .setNegativeButton(android.R.string.no, null).show();
-            }
+        delete.setOnClickListener(v -> {
+            // Give a prompt to make sure deletion is intended
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Delete")
+                    .setMessage("Are you sure you want to delete this item?")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton("Yes", (dialog, whichButton) -> {
+                        // Show some text that deletion was successful
+                        Toast.makeText(getContext(), "Item was deleted", Toast.LENGTH_SHORT).show();
+                        // Perform the actual deleting in the database
+                        new AgentAsyncTaskDelete().execute();
+                        // Navigate to the wardrobe
+                        navigateWardrobe();
+                    })
+                    .setNegativeButton(android.R.string.no, null).show();
         });
 
-        savebutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Save attributes to the clothing object
-                editClothing.warmth = seekWarmth.getProgress();
-                editClothing.formality = seekFormality.getProgress();
-                editClothing.comfort = seekComfort.getProgress();
-                editClothing.preference = seekPreference.getProgress();
-                editClothing.type = (String) spinner.getSelectedItem();
-                // If the clothing type for Torso was changed, change the wearable attributes:
-                if (editClothing.location.equals("Torso") && !editClothing.type.equals(preType)) {
-                    editClothing.setWearable();
-                }
-                editClothing.owner = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general");
-                editClothing.washing_machine = checkBox.isChecked();
-                setWashingTime();
-                // save the picture if there is one
-                if (bitmap != null) {
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 1, bos);
-                    byte[] img = bos.toByteArray();
-                    editClothing.picture = img;
-                }
-                // Perform the saving to the database
-                new AgentAsyncTask().execute();
-
-                // Navigate to the wardrobe
-                navigateWardrobe();
-
+        savebutton.setOnClickListener(v -> {
+            // Save attributes to the clothing object
+            editClothing.warmth = seekWarmth.getProgress();
+            editClothing.formality = seekFormality.getProgress();
+            editClothing.comfort = seekComfort.getProgress();
+            editClothing.preference = seekPreference.getProgress();
+            editClothing.type = (String) spinner.getSelectedItem();
+            // If the clothing type for Torso was changed, change the wearable attributes:
+            if (editClothing.location.equals("Torso") && !editClothing.type.equals(preType)) {
+                editClothing.setWearable();
             }
+            editClothing.owner = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general");
+            editClothing.washing_machine = checkBox.isChecked();
+            setWashingTime();
+            // save the picture if there is one
+            if (bitmap != null) {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 1, bos);
+                editClothing.picture = bos.toByteArray();
+            }
+            // Perform the saving to the database
+            new AgentAsyncTask().execute();
+
+            // Navigate to the wardrobe
+            navigateWardrobe();
+
         });
 
-        returnbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Navigate to the wardrobe
-                navigateWardrobe();
-            }
+        returnbutton.setOnClickListener(v -> {
+            // Navigate to the wardrobe
+            navigateWardrobe();
         });
 
-        redoImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(getActivity(),
-                        Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, 0);
-                } else {
-                    Toast.makeText(getActivity(),"Please give camera permission in your phone's settings.",Toast.LENGTH_LONG).show();
-                }
+        redoImage.setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(getActivity(),
+                    Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, 0);
+            } else {
+                Toast.makeText(getActivity(), "Please give camera permission in your phone's settings.", Toast.LENGTH_LONG).show();
             }
         });
         return view;
@@ -210,33 +194,29 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
 
     private void selectPicture() {
         // Let the user decide what to access: Gallery or camera?
+        // Open camera
+// Open gallery
         new AlertDialog.Builder(getContext())
                 .setTitle("Add a picture")
                 .setMessage("Do you want to access the gallery or make a new picture?")
                 .setIcon(android.R.drawable.ic_menu_camera)
                 .setNeutralButton(android.R.string.no, null)
-                .setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
-                    // Open gallery
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        if (ContextCompat.checkSelfPermission(getActivity(),
-                                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            startActivityForResult(intent, 1);
-                        } else {
-                            Toast.makeText(getActivity(),"Please give gallery permission in your phone's settings.",Toast.LENGTH_LONG).show();
-                        }
+                .setNegativeButton("Gallery", (dialog, whichButton) -> {
+                    if (ContextCompat.checkSelfPermission(getActivity(),
+                            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(intent, 1);
+                    } else {
+                        Toast.makeText(getActivity(), "Please give gallery permission in your phone's settings.", Toast.LENGTH_LONG).show();
                     }
                 })
-                .setPositiveButton("Camera", new DialogInterface.OnClickListener() {
-                    // Open camera
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        if (ContextCompat.checkSelfPermission(getActivity(),
-                                Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            startActivityForResult(intent, 0);
-                        } else {
-                            Toast.makeText(getActivity(),"Please give camera permission in your phone's settings.",Toast.LENGTH_LONG).show();
-                        }
+                .setPositiveButton("Camera", (dialog, whichButton) -> {
+                    if (ContextCompat.checkSelfPermission(getActivity(),
+                            Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 0);
+                    } else {
+                        Toast.makeText(getActivity(), "Please give camera permission in your phone's settings.", Toast.LENGTH_LONG).show();
                     }
                 }).show();
     }
@@ -303,7 +283,8 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
 
     private static class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
 
-        public AgentAsyncTask() {}
+        AgentAsyncTask() {
+        }
 
         @Override
         protected Integer doInBackground(Void... voids) {
@@ -318,7 +299,8 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
 
     private static class AgentAsyncTaskDelete extends AsyncTask<Void, Void, Integer> {
 
-        public AgentAsyncTaskDelete() {}
+        AgentAsyncTaskDelete() {
+        }
 
         @Override
         protected Integer doInBackground(Void... voids) {

@@ -1,13 +1,9 @@
 package com.example.forekast.Suggestion;
 
-import com.example.forekast.clothing.Clothing;
-import com.example.forekast.clothing.ClothingCriteria;
-import com.example.forekast.external_data.Weather;
+import com.example.forekast.Clothing.ClothingCriteria;
+import com.example.forekast.ExternalData.Weather;
 
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-public abstract class SuggestionModuleInterface {
+abstract class SuggestionModuleInterface {
 
     ClothingCriteria criteria;
 

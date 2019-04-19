@@ -6,20 +6,19 @@ import android.util.Log;
 
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.example.forekast.R;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import androidx.preference.PreferenceFragmentCompat;
-
 public class SettingsFragments extends PreferenceFragmentCompat {
     private static final String NEW_WARDROBE = "add_wardrobe";
     private static final String WARDROBE_LIST = "user_list";
     private static final String WARDROBES = "wardrobes";
 
-    private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+    private final SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         /**
          * Ensures that a new wardrobe is added to the shared preferences when added through the menu.
          * @param sharedPreferences Shared Preferences object of our app

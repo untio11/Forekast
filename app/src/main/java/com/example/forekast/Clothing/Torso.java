@@ -1,4 +1,4 @@
-package com.example.forekast.clothing;
+package com.example.forekast.Clothing;
 
 public class Torso extends Clothing {
 
@@ -6,7 +6,7 @@ public class Torso extends Clothing {
     public void preSet() {
         // Get presettings when adding Torso clothing
         // Default value is 5, over- and underwearable are by default false
-        switch(type) {
+        switch (type) {
             case "T-Shirt":
                 warmth = 2;
                 formality = 2;
