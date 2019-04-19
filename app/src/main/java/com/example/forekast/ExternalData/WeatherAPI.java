@@ -37,7 +37,7 @@ class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
      *
      * @param cityname name of the city, as entered by the user
      */
-    public WeatherAPI(String cityname) {
+    WeatherAPI(String cityname) {
         city_name = cityname;
         using_coordinates = false;
     }
@@ -48,7 +48,7 @@ class WeatherAPI extends AsyncTask<MutableLiveData<Weather>, Void, Weather> {
      * @param latitude  latitude as string
      * @param longitude longitude as string
      */
-    public WeatherAPI(String latitude, String longitude) {
+    WeatherAPI(String latitude, String longitude) {
         current_latitude = latitude;
         current_longitude = longitude;
         using_coordinates = true;

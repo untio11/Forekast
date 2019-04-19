@@ -9,7 +9,7 @@ public class Weather {
     public float precipitation; // in mm
     public float feels_like; // In degrees celsius
     public float wind; // In km/h
-    private String city;
+    private String city; // Name of the current location
     private String weather_desc; // Short description of the weather
 
     public String getCity() {

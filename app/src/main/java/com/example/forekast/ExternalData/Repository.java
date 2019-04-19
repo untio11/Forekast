@@ -73,12 +73,7 @@ public class Repository {
             throw new IllegalArgumentException("Criteria were not set!");
         }
 
-        List<Clothing> result;
-        if (criteria.washingMachine) {
-            result = db.clothingDao().getByLocationWashing(criteria.owner, location);
-        } else {
-            result = db.clothingDao().getByLocation(criteria.owner, location);
-        }
+        List<Clothing> result = db.clothingDao().getByLocation(criteria.owner, location);
 
         return filter(result, criteria);
     }
@@ -102,6 +97,11 @@ public class Repository {
         ));
         clothing_stream = clothing_stream.filter(piece -> (
                 piece.comfort > criteria.comfort.first && piece.comfort < criteria.comfort.second
+        ));
+
+        // Either all clothing or only everything that's not in the washing machine
+        clothing_stream = clothing_stream.filter(piece -> (
+                criteria.washingMachine || !piece.washing_machine
         ));
 
         return clothing_stream.collect(Collectors.toList());
