@@ -178,40 +178,38 @@ public class SuggestionModule extends SuggestionModuleInterface {
         /** Inner Torso Single Items */
         // Create Torso object from inner torso clothing and add to the torso list
         for (Clothing clothing : outfits.inner_torso) {
-            if (!(torsos.contains(clothing))) {
+            TorsoClothing newTorso = new TorsoClothing(clothing);
+            if (!(torsos.contains(newTorso))) {
                 // What did you just add?
                 System.out.print("adding inner item: ");
-                TorsoClothing newTorso = new TorsoClothing(clothing);
                 System.out.println(newTorso.torso);
-
                 torsos.add(newTorso);
             }
         }
 
+        /*
         // List all the individual items inside torsos
         System.out.println("torsos inner set: ");
         for (int i = 0; i < torsos.size(); i++) {
-
             System.out.println(torsos.get(i).torso);
             System.out.print(torsos.get(i).inner);
             System.out.println(torsos.get(i).outer);
-
-        }
+        }*/
 
         /** Outer Torso Single Items */
         // Create Torso object from outer torso clothing and add to the torso list
         for (Clothing clothing : outfits.outer_torso){
-            if (!(torsos.contains(clothing)) && !(clothing.type.equals("Jacket"))) {
+            TorsoClothing newTorso = new TorsoClothing(clothing);
+            if (!(torsos.contains(newTorso)) && !(newTorso.torso.type.equals("Jacket"))) {
 
                 // What did you just add?
                 System.out.print("adding outer item: ");
-                TorsoClothing newTorso = new TorsoClothing(clothing);
                 System.out.println(newTorso.torso);
-
                 torsos.add(newTorso);
             }
         }
 
+        /*
         System.out.println("torsos outer + inner singles set: ");
         for (int i = 0; i < torsos.size(); i++){
             if (torsos.get(i).one && !(torsos.get(i).two)) {
@@ -221,23 +219,24 @@ public class SuggestionModule extends SuggestionModuleInterface {
                 System.out.print(torsos.get(i).inner);
                 System.out.println(torsos.get(i).outer);
             }
-        }
+        }*/
 
         /** Torso Paired Items */
         // Create Torso object from both inner and outer torso clothing and add to the torso list
         for (int i = 0; i < outfits.inner_torso.size(); i++){
             for (int j = 0; j < outfits.outer_torso.size(); j++) {
-                if (((outfits.inner_torso.get(i).warmth + outfits.outer_torso.get(j).warmth) / 2 >= criteria.warmth.first)
-                        && (outfits.inner_torso.get(i) != outfits.outer_torso.get(j))
-                        && !(outfits.inner_torso.get(i).type.equals("Dress") && (outfits.outer_torso.get(j).type.equals("Shirt") || outfits.outer_torso.get(j).type.equals("Sweater")))) {
+                TorsoClothing newTorso = new TorsoClothing(outfits.inner_torso.get(i), outfits.outer_torso.get(j));
+
+                if (((newTorso.inner.warmth + newTorso.outer.warmth) / 2 >= criteria.warmth.first)
+                        && (!newTorso.inner.type.equals(newTorso.outer.type))
+                        && !(newTorso.inner.type.equals("Dress") &&  ( newTorso.outer.type.equals("Shirt") ||  newTorso.outer.type.equals("Sweater")))) {
 
                     System.out.print("adding both item: ");
-                    TorsoClothing newTorso = new TorsoClothing(outfits.inner_torso.get(i), outfits.outer_torso.get(j));
+
                     System.out.print(newTorso.inner);
                     System.out.println(newTorso.outer);
 
-
-                    torsos.add(new TorsoClothing (outfits.inner_torso.get(i), outfits.outer_torso.get(j)));
+                    torsos.add(newTorso);
                     System.out.println("adding both item");
                 }
             }
