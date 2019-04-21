@@ -292,8 +292,6 @@ public class SuggestionModule extends SuggestionModuleInterface {
     public Outfit next(String location) {
         indexCalculator(location, 1); // Increment the index of a clothing item by 1
         updateClothes(location); // Go to the next item of the given clothing location
-
-        outfit = new Outfit(currentTorso, currentBottoms, currentShoes);
         return outfit;
     }
 
@@ -301,8 +299,6 @@ public class SuggestionModule extends SuggestionModuleInterface {
     public Outfit previous(String location) {
         indexCalculator(location, -1); // Decrement the index of a clothing item by 1
         updateClothes(location); // Go to the previous item of the given clothing location
-
-        outfit = new Outfit(currentTorso, currentBottoms, currentShoes);
         return outfit;
     }
 
@@ -321,7 +317,6 @@ public class SuggestionModule extends SuggestionModuleInterface {
         updateClothes("Legs");
         updateClothes("Feet");
 
-        outfit = new Outfit(currentTorso, currentBottoms, currentShoes);
         return outfit;
     }
 
@@ -378,6 +373,8 @@ public class SuggestionModule extends SuggestionModuleInterface {
                 currentShoes = outfits.shoes.get(currentIndS);
             }
         }
+
+        outfit = new Outfit(currentTorso, currentBottoms, currentShoes);
     }
 
     private class AgentAsyncTask extends AsyncTask<Void, Void, Void> {
