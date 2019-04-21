@@ -102,7 +102,8 @@ public class Repository {
                 piece.comfort >= criteria.comfort.first && piece.comfort <= criteria.comfort.second
         ));
 
-        // Either all clothing or only everything that's not in the washing machine
+        // Either all clothing (if checked checkbox in wardrobe, or if availability system is turned off)
+        // or only everything that's not in the washing machine
         clothing_stream = clothing_stream.filter(piece -> (
                 criteria.washingMachine || !piece.washing_machine || !PreferenceManager.getDefaultSharedPreferences(context).getBoolean("availability_system", true)
         ));
