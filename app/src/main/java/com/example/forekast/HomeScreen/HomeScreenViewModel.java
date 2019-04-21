@@ -2,15 +2,15 @@ package com.example.forekast.HomeScreen;
 
 import android.location.Location;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import com.example.forekast.Clothing.ClothingCriteria;
 import com.example.forekast.ExternalData.Repository;
 import com.example.forekast.ExternalData.Weather;
 import com.example.forekast.Suggestion.Outfit;
 import com.example.forekast.Suggestion.SuggestionModule;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 /**
  * This view model keeps track of the current state of the home screen, which includes the weather,

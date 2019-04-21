@@ -48,10 +48,12 @@ public class ClothingCriteria implements Iterable<Pair<String, ClothingCriteria.
     public ClothingCriteria copy() {
         ClothingCriteria result = new ClothingCriteria();
         result.owner = this.owner;
-        result.warmth = new MutablePair<>(this.warmth.first, this.warmth.second);
-        result.comfort = new MutablePair<>(this.comfort.first, this.comfort.second);
-        result.formality = new MutablePair<>(this.formality.first, this.formality.second);
+        result.warmth = new MutablePair<>(5, 5);
+        result.comfort = new MutablePair<>(5, 5);
+        result.formality = new MutablePair<>(5, 5);
+        result.preference = new MutablePair<>(10, 10);
         result.washingMachine = this.washingMachine;
+
         return result;
     }
 

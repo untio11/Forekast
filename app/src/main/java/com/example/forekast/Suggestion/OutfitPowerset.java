@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 class OutfitPowerset implements Iterable<List<Clothing>> {
-    private final List<List<Clothing>> all = new ArrayList<>();
+    private List<List<Clothing>> all = new ArrayList<>();
     public List<Clothing> inner_torso;
     public List<Clothing> outer_torso;
     public List<Clothing> bottoms;

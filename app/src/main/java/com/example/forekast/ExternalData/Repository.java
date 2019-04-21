@@ -2,15 +2,15 @@ package com.example.forekast.ExternalData;
 
 import android.content.Context;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.room.Room;
-
 import com.example.forekast.Clothing.Clothing;
 import com.example.forekast.Clothing.ClothingCriteria;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import androidx.lifecycle.MutableLiveData;
+import androidx.room.Room;
 
 /**
  * A static wrapper for all external data access.
@@ -90,13 +90,13 @@ public class Repository {
 
         // Filter the retrieved clothing based on the criteria
         clothing_stream = clothing_stream.filter(piece -> (
-                piece.warmth > criteria.warmth.first && piece.warmth < criteria.warmth.second
+                piece.warmth >= criteria.warmth.first && piece.warmth <= criteria.warmth.second
         ));
         clothing_stream = clothing_stream.filter(piece -> (
-                piece.formality > criteria.formality.first && piece.formality < criteria.formality.second
+                piece.formality >= criteria.formality.first && piece.formality <= criteria.formality.second
         ));
         clothing_stream = clothing_stream.filter(piece -> (
-                piece.comfort > criteria.comfort.first && piece.comfort < criteria.comfort.second
+                piece.comfort >= criteria.comfort.first && piece.comfort <= criteria.comfort.second
         ));
 
         // Either all clothing or only everything that's not in the washing machine
