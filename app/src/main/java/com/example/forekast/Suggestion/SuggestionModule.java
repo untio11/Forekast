@@ -65,6 +65,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
     @Override
     public void setCurrentCriteria(ClothingCriteria criteria, Weather weather) {
         this.weather = weather;
+        this.criteria = criteria;
 
         /* Weather Criteria */
         float temp = weather.temp;
@@ -73,11 +74,8 @@ public class SuggestionModule extends SuggestionModuleInterface {
         this.feels_like = weather.feels_like;
         this.wind = weather.wind;
 
+        // Temperature ratio - the warmth criteria should be an average between the current temperature and the warmth slider
         int tempRatio = (int) temp / 3;
-        criteria.warmth.second = (tempRatio + criteria.warmth.second) / 2;
-
-        this.criteria = criteria;
-        //ClothingCriteria tempCriteria = criteria;
 
         // Setting warmth to include a subjective ratio of temperature in the suggestion
         criteria.warmth = new ClothingCriteria.MutablePair<>((tempRatio + criteria.warmth.first) / 2, (tempRatio + criteria.warmth.second) / 2);
@@ -238,18 +236,12 @@ public class SuggestionModule extends SuggestionModuleInterface {
                         && (!newTorso.inner.type.equals(newTorso.outer.type))
                         && !(newTorso.inner.type.equals("Dress") &&  ( newTorso.outer.type.equals("Shirt") ||  newTorso.outer.type.equals("Sweater")))) {
 
-                    System.out.print("adding both item: ");
-                    System.out.print(newTorso.inner);
-                    System.out.println(newTorso.outer);
-
+                    System.out.println ("adding both item: " + newTorso.inner + ", " + newTorso.outer);
                     torsos.add(newTorso);
-                    System.out.println("adding both item");
                 }
             }
         }
-        System.out.println(outfits.inner_torso.size());
-        System.out.println(outfits.outer_torso.size());
-        System.out.println(torsos.size());
+        System.out.println("inner torso size: " + outfits.inner_torso.size() + ", outer torso size: " + outfits.outer_torso.size() + ", total torsos size: " + torsos.size());
     }
 
     /**
