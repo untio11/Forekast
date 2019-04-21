@@ -71,6 +71,11 @@ public class ClothingCriteria implements Iterable<Pair<String, ClothingCriteria.
             this.first = first;
             this.second = second;
         }
+
+        public void setBoth(L first, R second) {
+            this.first = first;
+            this.second = second;
+        }
     }
 
     @NotNull

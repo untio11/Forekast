@@ -68,7 +68,7 @@ public class HomeScreenViewModel extends ViewModel {
      * @param new_warmth The new value for the upper bound of warmth
      */
     void setWarmth(int new_warmth) {
-        clothingCriteria.warmth.second = new_warmth;
+        clothingCriteria.warmth.setBoth(new_warmth, new_warmth);
     }
 
     int getComfort() {
@@ -76,7 +76,7 @@ public class HomeScreenViewModel extends ViewModel {
     }
 
     void setComfort(int new_comfort) {
-        clothingCriteria.comfort.second = new_comfort;
+        clothingCriteria.comfort.setBoth(new_comfort, new_comfort);
     }
 
     int getFormality() {
@@ -84,7 +84,7 @@ public class HomeScreenViewModel extends ViewModel {
     }
 
     void setFormality(int new_formality) {
-        clothingCriteria.formality.second = new_formality;
+        clothingCriteria.formality.setBoth(new_formality, new_formality);
     }
 
     public void setOwner(String new_owner) {

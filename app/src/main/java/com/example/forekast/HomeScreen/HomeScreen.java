@@ -44,9 +44,7 @@ public class HomeScreen extends Fragment {
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.home_screen, container, false);
         vm = ViewModelProviders.of(Objects.requireNonNull(this.getActivity())).get(HomeScreenViewModel.class);
-
-        init(savedInstanceState);
-
+        init();
         return view;
     }
 
@@ -60,40 +58,18 @@ public class HomeScreen extends Fragment {
     /**
      * Initialize the homes screen by adding listeners and setting default values and getting a
      * reference to the view model.
-     * @param savedInstance Possibly has small state variables stored.
      */
-    private void init(Bundle savedInstance) {
+    private void init() {
         vm = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
 
         // Observe the LiveData for the outfit, passing in this activity as the LifecycleOwner and the observer.
-        vm.getLiveOutfit().observe(
-                getActivity(), this::updateOutfit);
+        vm.getLiveOutfit().observe(getActivity(), this::updateOutfit);
 
+        vm.clothingCriteria.owner = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general");
 
-        if (savedInstance != null) {
-            vm.setComfort(savedInstance.getInt("Comfortsl"));
-            vm.setFormality(savedInstance.getInt("Formalsl"));
-            vm.setWarmth(savedInstance.getInt("Warmthsl"));
-        } else {
-            vm.setComfort(5);
-            vm.setFormality(5);
-            vm.setWarmth(5);
-        }
-
-        SeekBar comfort_slider = view.findViewById(R.id.slider_comfort);
-        comfort_slider.setMax(10);
-        comfort_slider.setProgress(vm.getComfort());
-        comfort_slider.setOnSeekBarChangeListener(new updateCriteriaSeekBar());
-
-        SeekBar warmth_slider = view.findViewById(R.id.slider_warmth);
-        warmth_slider.setMax(10);
-        warmth_slider.setProgress(vm.getWarmth());
-        warmth_slider.setOnSeekBarChangeListener(new updateCriteriaSeekBar());
-
-        SeekBar formality_slider = view.findViewById(R.id.slider_formality);
-        formality_slider.setMax(10);
-        formality_slider.setProgress(vm.getFormality());
-        formality_slider.setOnSeekBarChangeListener(new updateCriteriaSeekBar());
+        initSlider(view.findViewById(R.id.slider_warmth), vm.getWarmth());
+        initSlider(view.findViewById(R.id.slider_formality), vm.getFormality());
+        initSlider(view.findViewById(R.id.slider_comfort), vm.getComfort());
 
         view.findViewById(R.id.refresh).setOnClickListener(this::refreshClothing);
         view.findViewById(R.id.next_feet).setOnClickListener(this::nextClothing);
@@ -102,13 +78,6 @@ public class HomeScreen extends Fragment {
         view.findViewById(R.id.prev_feet).setOnClickListener(this::prevClothing);
         view.findViewById(R.id.prev_legs).setOnClickListener(this::prevClothing);
         view.findViewById(R.id.prev_torso).setOnClickListener(this::prevClothing);
-
-        vm.clothingCriteria = new ClothingCriteria(
-                new ClothingCriteria.MutablePair<>(vm.getWarmth(), vm.getWarmth()),
-                new ClothingCriteria.MutablePair<>(vm.getFormality(), vm.getFormality()),
-                new ClothingCriteria.MutablePair<>(vm.getComfort(), vm.getComfort()),
-                new ClothingCriteria.MutablePair<>(10, 10),
-                PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
 
         // Ensure that the view model is initially updated after startup.
         // Cannot be a lambda because it needs to reference itself.
@@ -122,6 +91,12 @@ public class HomeScreen extends Fragment {
         }));
     }
 
+    private void initSlider(SeekBar slider, int value) {
+        slider.setMax(10);
+        slider.setProgress(value == Integer.MAX_VALUE ? 5 : value);
+        slider.setOnSeekBarChangeListener(new updateCriteriaSeekBar());
+    }
+
     /**
      * Outfit change listener. Whenever the outfit in the view model changes, this will update the
      * ui accordingly.
@@ -129,7 +104,6 @@ public class HomeScreen extends Fragment {
      */
     private void updateOutfit(Outfit newOutfit) {
         Log.d("ClothingUpdate", (newOutfit != null ? newOutfit.toString() : "No clothes"));
-
 
         if (newOutfit != null && newOutfit.torso != null) {
             if (newOutfit.torso.one && !newOutfit.torso.two) {
@@ -244,11 +218,10 @@ public class HomeScreen extends Fragment {
 
     /**
      * Listener for the 'reset' button in the ui. Refreshes the entire outfit.
-     * @param v
+     * @param v Reference to the button view
      */
     private void refreshClothing(View v) {
         vm.refreshClothing();
-        Log.d("Refresh", v.getTag().toString());
     }
 
     /**
@@ -269,16 +242,6 @@ public class HomeScreen extends Fragment {
     private void prevClothing(View v) {
         vm.previousClothing(v.getTag().toString());
         Log.d("Prev", v.getTag().toString());
-    }
-
-    @Override
-    public void onSaveInstanceState(@NotNull Bundle savedInstanceState) {
-        // Always call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(savedInstanceState);
-
-        savedInstanceState.putInt("Warmthsl", vm.getWarmth());
-        savedInstanceState.putInt("Comfortsl", vm.getComfort());
-        savedInstanceState.putInt("Formalsl", vm.getFormality());
     }
 
     private class updateCriteriaSeekBar implements SeekBar.OnSeekBarChangeListener {
@@ -315,21 +278,7 @@ public class HomeScreen extends Fragment {
                     break;
             }
 
-            ClothingCriteria criteria = vm.getClothingCriteria();
-
-            // Set the new clothing criteria from seekbars
-            criteria.warmth.first = vm.getWarmth();
-            criteria.warmth.second = vm.getWarmth();
-            criteria.formality.first = vm.getFormality();
-            criteria.formality.second = vm.getFormality();
-            criteria.comfort.first = vm.getComfort();
-            criteria.comfort.second = vm.getComfort();
-            criteria.preference.first = 10;
-            criteria.preference.second = 10;
-
-            vm.sugg.setCurrentCriteria(criteria, vm.getWeather());
-
-            System.out.println(criteria);
+            vm.sugg.setCurrentCriteria(vm.getClothingCriteria(), vm.getWeather());
         }
     }
 }

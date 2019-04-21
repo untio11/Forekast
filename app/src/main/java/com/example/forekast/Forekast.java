@@ -281,13 +281,11 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
                     // Switch to home screen fragment
                     fragment = new HomeScreen();
                     tag = "home";
-                    setNormalIcon();
                     break;
                 case (R.id.nav_wardrobe):
                     // Switch to wardrobe fragment
                     fragment = Wardrobe.newInstance();
                     tag = "wardrobe";
-                    setNormalIcon();
                     break;
                 case (R.id.nav_settings):
                     fragment = new SettingsFragments();
@@ -304,11 +302,5 @@ public class Forekast extends AppCompatActivity implements Wardrobe.OnFragmentIn
 
             return true;
         });
-    }
-
-
-    private void setNormalIcon() {
-        toggle.setDrawerIndicatorEnabled(true);
-
     }
 }
