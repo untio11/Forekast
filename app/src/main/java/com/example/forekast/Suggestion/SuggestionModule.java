@@ -68,14 +68,13 @@ public class SuggestionModule extends SuggestionModuleInterface {
         this.criteria = criteria;
 
         /* Weather Criteria */
-        float temp = weather.temp;
         this.uv_index = weather.uv_index;
         this.precipitation = weather.precipitation;
         this.feels_like = weather.feels_like;
         this.wind = weather.wind;
 
         // Temperature ratio - the warmth criteria should be an average between the current temperature and the warmth slider
-        int tempRatio = (int) temp / 3;
+        int tempRatio = (int) weather.temp / 3;
 
         // Setting warmth to include a subjective ratio of temperature in the suggestion
         criteria.warmth = new ClothingCriteria.MutablePair<>((tempRatio + criteria.warmth.first) / 2, (tempRatio + criteria.warmth.second) / 2);
@@ -88,12 +87,6 @@ public class SuggestionModule extends SuggestionModuleInterface {
 
     // Set the booleans for the accessories based on the critieria assigned
     public void setAccessories() {
-        coat = false;
-        gloves = false;
-        umbrella = false;
-        sunglasses = false;
-        leggings = false;
-
         /* When to suggest sunglasses */
         // If the UV Index is greater than 2 (low-medium risk), then wear sunglasses
         if (uv_index > 2) {
@@ -142,11 +135,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
     }
 
     public boolean[] getAccessories() {
-        boolean[] accessories = {false, false, false, false, false};
-        if (criteria != null) {
-            accessories = new boolean[]{sunglasses, coat, gloves, umbrella, leggings};
-        }
-        return accessories;
+        return new boolean[]{sunglasses, coat, gloves, umbrella, leggings};
     }
 
     /**
@@ -159,11 +148,6 @@ public class SuggestionModule extends SuggestionModuleInterface {
         outer_torso = new ArrayList<>();
         bottoms = new ArrayList<>();
         shoes = new ArrayList<>();
-
-        System.out.println("Should be empty: " + inner_torso);
-        System.out.println("Should be empty: " + outer_torso);
-        System.out.println("Should be empty: " + bottoms);
-        System.out.println("Should be empty: " + shoes);
 
         asyncCounter = 0;
 
@@ -186,9 +170,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
         for (Clothing clothing : outfits.inner_torso) {
             TorsoClothing newTorso = new TorsoClothing(clothing);
             if (!(torsos.contains(newTorso)) && newTorso.torso.warmth >= originalWarmth) {
-                // What did you just add?
-                System.out.print("adding inner item: ");
-                System.out.println(newTorso.torso);
+                System.out.print("adding inner item: " + newTorso.torso);
                 torsos.add(newTorso);
             }
         }
@@ -474,6 +456,9 @@ public class SuggestionModule extends SuggestionModuleInterface {
                 System.out.println("outfits outer:" + outfits.outer_torso);
                 System.out.println("outfits bottoms:" + outfits.bottoms);
                 System.out.println("outfits shoes:" + outfits.shoes);
+                System.out.println("criteria:" + criteria.comfort.first + "+" + criteria.comfort.second
+                        + ", " + criteria.warmth.first + "+" + criteria.warmth.second
+                        + ", " + criteria.formality.first + "+" + criteria.formality.second);
                 HomeScreen.newOutfit();
             }
         }

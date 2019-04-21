@@ -13,18 +13,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
+import com.example.forekast.ExternalData.Weather;
 import com.example.forekast.R;
 import com.example.forekast.Suggestion.Outfit;
-import com.example.forekast.Clothing.ClothingCriteria;
-import com.example.forekast.ExternalData.Weather;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 /**
  * This class takes care of handling the interactions with the home screen of our app.
@@ -72,12 +71,12 @@ public class HomeScreen extends Fragment {
         initSlider(view.findViewById(R.id.slider_comfort), vm.getComfort());
 
         view.findViewById(R.id.refresh).setOnClickListener(this::refreshClothing);
-        view.findViewById(R.id.next_feet).setOnClickListener(this::nextClothing);
-        view.findViewById(R.id.next_legs).setOnClickListener(this::nextClothing);
-        view.findViewById(R.id.next_torso).setOnClickListener(this::nextClothing);
         view.findViewById(R.id.prev_feet).setOnClickListener(this::prevClothing);
+        view.findViewById(R.id.next_feet).setOnClickListener(this::nextClothing);
         view.findViewById(R.id.prev_legs).setOnClickListener(this::prevClothing);
+        view.findViewById(R.id.next_legs).setOnClickListener(this::nextClothing);
         view.findViewById(R.id.prev_torso).setOnClickListener(this::prevClothing);
+        view.findViewById(R.id.next_torso).setOnClickListener(this::nextClothing);
 
         // Ensure that the view model is initially updated after startup.
         // Cannot be a lambda because it needs to reference itself.
@@ -105,17 +104,7 @@ public class HomeScreen extends Fragment {
     private void updateOutfit(Outfit newOutfit) {
         Log.d("ClothingUpdate", (newOutfit != null ? newOutfit.toString() : "No clothes"));
 
-        if (newOutfit != null && newOutfit.torso != null) {
-            if (newOutfit.torso.one && !newOutfit.torso.two) {
-                System.out.println(newOutfit.torso.torso);
-            } else {
-                System.out.println(newOutfit.torso.inner);
-                System.out.println(newOutfit.torso.outer);
-            }
-
-            System.out.println(newOutfit.pants);
-            System.out.println(newOutfit.shoes);
-
+        if (newOutfit != null) {
             setOutfitImages();
             accessories(); //New accessories every time we have a clothing update,
         }
@@ -139,6 +128,7 @@ public class HomeScreen extends Fragment {
         bottomsLayout.setVisibility(View.VISIBLE);
         innerTorso.setVisibility(View.VISIBLE);
         outerTorso.setVisibility(View.VISIBLE);
+
         Outfit outfit = vm.currentOutfit.getValue();
 
         if (outfit != null && outfit.torso != null) {
