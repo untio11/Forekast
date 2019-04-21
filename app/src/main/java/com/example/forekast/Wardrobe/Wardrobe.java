@@ -51,7 +51,6 @@ public class Wardrobe extends Fragment {
      *
      * @return A new instance of fragment Wardrobe.
      */
-    // TODO: Rename and change types and number of parameters
     public static Wardrobe newInstance() {
         Wardrobe fragment = new Wardrobe();
         Bundle args = new Bundle();
@@ -60,6 +59,13 @@ public class Wardrobe extends Fragment {
         return fragment;
     }
 
+    /**
+     * Publicly get an array of clothing types of the wanted body type location.
+     * Should correspond with the switch statements in Torso, Legs and Feet classes.
+     *
+     * @param location string that indicates which body type we want clothing types for
+     * @return array of strings with clothing types of the wanted body type
+     */
     public static String[] getTypes(String location) {
         switch (location) {
             case "Torso":
@@ -73,6 +79,9 @@ public class Wardrobe extends Fragment {
         }
     }
 
+    /**
+     * Get lists from viewmodel that belong to the set user in settings
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -93,12 +102,10 @@ public class Wardrobe extends Fragment {
         // Viewmodel stuff
         vm = ViewModelProviders.of(this).get(WardrobeViewModel.class);
 
+        // Set the ImageButtons from layout
         ImageButton addTorso = view.findViewById(R.id.addTorso);
         ImageButton addLegs = view.findViewById(R.id.addBottom);
         ImageButton addFeet = view.findViewById(R.id.addShoes);
-
-        CheckBox showWashing = view.findViewById(R.id.showWashing);
-        showWashing.setChecked(vm.getWashing());
 
         // The add torso button will add a new clothing of type torso
         addTorso.setOnClickListener(v -> {
@@ -121,7 +128,18 @@ public class Wardrobe extends Fragment {
             navigateEditscreen(feet);
         });
 
-        // Execute loading of database in background
+        // Set the checkbox from layout
+        CheckBox showWashing = view.findViewById(R.id.showWashing);
+        // If availability system is checked on
+        if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("availability_system", true)) {
+            // Set the boolean value of checkbox
+            showWashing.setChecked(vm.getWashing());
+        } else {
+            // Else, hide the checkbox if availability system is off
+            showWashing.setVisibility(View.GONE);
+        }
+
+        // Execute loading of database in background, continue with setLists when done
         Observer<List<Clothing>> torsoObs = torsoList -> setLists(view, torsoList, (CustomGridView) view.findViewById(R.id.Torso));
         Observer<List<Clothing>> legsObs = legsList -> setLists(view, legsList, (CustomGridView) view.findViewById(R.id.Bottom));
         Observer<List<Clothing>> feetObs = feetList -> setLists(view, feetList, (CustomGridView) view.findViewById(R.id.Shoes));
@@ -130,6 +148,7 @@ public class Wardrobe extends Fragment {
         vm.getLegsList().observe(this, legsObs);
         vm.getFeetList().observe(this, feetObs);
 
+        // Initially already get the lists from viewmodel that belong to set user in settings (can be deleted?)
         vm.getLists(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general"));
 
         // Check if checkbox for showing items in washingMachine is checked off.
@@ -152,7 +171,12 @@ public class Wardrobe extends Fragment {
         return view;
     }
 
+    /**
+     * Navigate from wardrobe to editscreen, and pass the clothing object we just added
+     * @param clothing a Clothing object we just added (either Torso, Legs or Feet)
+     */
     private void navigateEditscreen(Clothing clothing) {
+        // First get which clothing types can be added (of this body type)
         String[] types = getTypes(clothing.location);
         // Pop up
         new android.app.AlertDialog.Builder(getContext())
@@ -161,21 +185,30 @@ public class Wardrobe extends Fragment {
                         (dialog, which) -> {
                             // The 'which' argument contains the index position
                             // of the selected item
+                            // Set clothing type in the current clothing object
                             clothing.type = types[which];
-                            // Navigate to the editscreen and pass the clothing objects
+                            // Navigate to the editscreen and pass the clothing object
                             Fragment fragment = EditScreen.newInstance(clothing, true);
                             FragmentTransaction transaction = getFragmentManager().beginTransaction();
                             transaction.replace(R.id.wardrobe_container, fragment).addToBackStack("edit").commit();
                         }).show();
     }
 
+    /**
+     * Executed after the observer notices change in the wardrobe lists. Puts the clothing objects
+     * from a list (either Torso, Legs or Feet) into the corresponding gridView.
+     * @param view the view wardrobe_overview
+     * @param list the List of Clothing objects we want to put into a gridView
+     * @param listView the customGridView (customized gridView) we want to put the clothing in
+     */
     private void setLists(View view, List<Clothing> list, CustomGridView listView) {
+        // First sort the list such that all clothing types are grouped together
         list.sort((c1, c2) -> c1.type.compareTo(c2.type));
+        // Create a new WardrobeAdapter, put the clothing objects into the gridView
         WardrobeAdapter adapter = new WardrobeAdapter(view.getContext(), R.layout.wardrobe_entry, list);
         listView.setAdapter(adapter);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);

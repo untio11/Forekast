@@ -1,12 +1,14 @@
 package com.example.forekast.ExternalData;
 
 import android.content.Context;
+import android.preference.PreferenceManager;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
 import com.example.forekast.Clothing.Clothing;
 import com.example.forekast.Clothing.ClothingCriteria;
+import com.example.forekast.Forekast;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +19,7 @@ import java.util.stream.Stream;
  */
 public class Repository {
     private static AppDatabase db;
+    private static Context context;
 
     /**
      * Set the database instance for the repository. Needs to be done externally because of lifecycle awareness
@@ -27,7 +30,7 @@ public class Repository {
         if (appcontext == null) {
             throw new IllegalArgumentException("The given appcontext should not be null");
         }
-
+        context = appcontext;
         if (db == null) {
             db = Room.databaseBuilder(
                     appcontext,
@@ -101,7 +104,7 @@ public class Repository {
 
         // Either all clothing or only everything that's not in the washing machine
         clothing_stream = clothing_stream.filter(piece -> (
-                criteria.washingMachine || !piece.washing_machine
+                criteria.washingMachine || !piece.washing_machine || !PreferenceManager.getDefaultSharedPreferences(context).getBoolean("availability_system", true)
         ));
 
         return clothing_stream.collect(Collectors.toList());
