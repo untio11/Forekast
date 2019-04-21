@@ -54,23 +54,32 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
     private static String preType;
 
     public static EditScreen newInstance(Clothing clothing, Boolean add) {
+        // Retrieve variables from clothing
         addBool = add;
         if (addBool) {
+            // If we add clothing, get all preset values of this clothing
             clothing.preSet();
         }
+        // Save initial states
         preType = clothing.type;
         preWashingState = clothing.washing_machine;
+        // Set editClothing variable
         editClothing = clothing;
+        // Get the clothing types of the requested body location from Wardrobe
         items = Wardrobe.getTypes(editClothing.location);
+        // Set bitmap to null
         bitmap = null;
         return new EditScreen();
     }
 
+    /**
+     * Sets the new washing time if the state was changed after saving
+     */
     private void setWashingTime() {
         if (editClothing.washing_machine && !preWashingState) {
             // If not in washingmachine before, but it is now: set time to current time
-            editClothing.washing_time = System.currentTimeMillis() / 1000; // seconds,
-            // change the above to / (1000*60*60*24) for the amount of days
+            editClothing.washing_time = System.currentTimeMillis() / (1000*60*60*24); // days,
+            // time in ms / (1000*60*60*24) is the amount of days
         } else if (!editClothing.washing_machine && preWashingState) {
             // If in washingmachine before, but not anymore: set time to 0
             editClothing.washing_time = 0;
@@ -82,6 +91,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.edit_screen_fragment, container, false);
 
+        // Set the ImageButtons from layout
         ImageButton returnbutton = view.findViewById(R.id.returnbutton);
         ImageButton delete = view.findViewById(R.id.delete);
         ImageButton savebutton = view.findViewById(R.id.save);
@@ -107,13 +117,17 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         // Get the checkbox
         CheckBox checkBox = view.findViewById(R.id.checkBox);
 
+        // If we add clothing and we enter editscreen just now (no saved instance state)
         if (addBool && savedInstanceState == null) {
+            // Let the user select a picture
             selectPicture();
         } else if (editClothing.picture != null) {
+            // If there was a picture, restore it into the imageView.
             bitmap = BitmapFactory.decodeByteArray(editClothing.picture, 0, editClothing.picture.length);
             imageView.setImageBitmap(bitmap);
         }
 
+        // Set progress of seekbars
         seekWarmth.setMax(10); // Ensure this is 10
         seekWarmth.setProgress(editClothing.warmth);
 
@@ -126,10 +140,13 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         seekPreference.setMax(10); // Ensure this is 10
         seekPreference.setProgress(editClothing.preference);
 
+        // Set the checkbox
         checkBox.setChecked(editClothing.washing_machine);
 
+        // Set the value of the spinner
         spinner.setSelection(adapter.getPosition(editClothing.type));
 
+        // Delete button
         delete.setOnClickListener(v -> {
             // Give a prompt to make sure deletion is intended
             new AlertDialog.Builder(getContext())
@@ -144,9 +161,11 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
                         // Navigate to the wardrobe
                         navigateWardrobe();
                     })
+                    // abort
                     .setNegativeButton(android.R.string.no, null).show();
         });
 
+        // Save Button
         savebutton.setOnClickListener(v -> {
             // Save attributes to the clothing object
             editClothing.warmth = seekWarmth.getProgress();
@@ -158,7 +177,9 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
             if (editClothing.location.equals("Torso") && !editClothing.type.equals(preType)) {
                 editClothing.setWearable();
             }
+            // Get current owner and set it to the clothing object
             editClothing.owner = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user_list", "general");
+            // Save washingmachine attribute to the clothing object and set washing time
             editClothing.washing_machine = checkBox.isChecked();
             setWashingTime();
             // save the picture if there is one
@@ -167,7 +188,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
                 bitmap.compress(Bitmap.CompressFormat.PNG, 1, bos);
                 editClothing.picture = bos.toByteArray();
             }
-            // Perform the saving to the database
+            // Perform the saving to the database in background
             new AgentAsyncTask().execute();
 
             // Navigate to the wardrobe
@@ -175,47 +196,46 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
 
         });
 
+        // Return button
         returnbutton.setOnClickListener(v -> {
             // Navigate to the wardrobe
             navigateWardrobe();
         });
 
+        // Redo Image Button
         redoImage.setOnClickListener(v -> {
-            if (ContextCompat.checkSelfPermission(getActivity(),
-                    Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 0);
-            } else {
-                Toast.makeText(getActivity(), "Please give camera permission in your phone's settings.", Toast.LENGTH_LONG).show();
-            }
+            // select the picture
+            selectPicture();
         });
         return view;
     }
 
     private void selectPicture() {
         // Let the user decide what to access: Gallery or camera?
-        // Open camera
-// Open gallery
         new AlertDialog.Builder(getContext())
                 .setTitle("Add a picture")
                 .setMessage("Do you want to access the gallery or make a new picture?")
                 .setIcon(android.R.drawable.ic_menu_camera)
                 .setNeutralButton(android.R.string.no, null)
+                // Gallery, if permission go to gallery
                 .setNegativeButton("Gallery", (dialog, whichButton) -> {
                     if (ContextCompat.checkSelfPermission(getActivity(),
                             Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         startActivityForResult(intent, 1);
                     } else {
+                        // Ask permission
                         Toast.makeText(getActivity(), "Please give gallery permission in your phone's settings.", Toast.LENGTH_LONG).show();
                     }
                 })
+                // Camera, if permission open camera
                 .setPositiveButton("Camera", (dialog, whichButton) -> {
                     if (ContextCompat.checkSelfPermission(getActivity(),
                             Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         startActivityForResult(intent, 0);
                     } else {
+                        // Ask permission
                         Toast.makeText(getActivity(), "Please give camera permission in your phone's settings.", Toast.LENGTH_LONG).show();
                     }
                 }).show();
@@ -249,6 +269,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // If camera, get image from camera and set it
         if (requestCode == 0) {
             if (data.getExtras() != null) {
                 // Read image from camera into bitmap
@@ -258,6 +279,7 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
                 mViewModel.setBitmap(bitmap);
             }
         } else if (requestCode == 1) {
+            // If gallery, get image from gallery and set it
             if (data != null) {
                 // Query image from images stored on phone
                 Uri selectedImage = data.getData();
@@ -280,7 +302,11 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         }
     }
 
-
+    /**
+     * Execute in background:
+     * Either add clothing to the repository if addBool is true or
+     * update existing clothing if addBool is false.
+     */
     private static class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
 
         AgentAsyncTask() {
@@ -297,6 +323,9 @@ public class EditScreen extends Fragment implements AdapterView.OnItemSelectedLi
         }
     }
 
+    /**
+     * Execute in background: Delete clothing from repository.
+     */
     private static class AgentAsyncTaskDelete extends AsyncTask<Void, Void, Integer> {
 
         AgentAsyncTaskDelete() {

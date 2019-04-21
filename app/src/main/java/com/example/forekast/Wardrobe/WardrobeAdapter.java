@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.forekast.EditScreen.EditScreen;
+import com.example.forekast.Forekast;
 import com.example.forekast.R;
 import com.example.forekast.Clothing.Clothing;
 import com.example.forekast.ExternalData.Repository;
@@ -98,34 +100,39 @@ class WardrobeAdapter extends ArrayAdapter<Clothing> {
         //get our clothing object from the list we passed to the adapter
         Clothing clothing = getItem(position);
 
-        //Fill our view components with data
+        //Fill our view components with data, set the image
         if (clothing != null && clothing.picture != null) {
             bitmap = BitmapFactory.decodeByteArray(clothing.picture, 0, clothing.picture.length);
             holder.imageView.setImageBitmap(bitmap);
         }
 
-        // Check if the time in washingmachine has passed for this item
-        if (clothing != null && clothing.washing_machine) {
-            if (clothing.washing_time != 0) {
-                if ((System.currentTimeMillis() / 1000) - clothing.washing_time > 10) {
-                    // change the above to / (1000*60*60*24) for the amount of days
-                    // 10 seconds have passed since this item was in the washing machine,
-                    // make it available again
-                    clothing.washing_machine = false;
-                    clothing.washing_time = 0;
-                    // update to the database
-                    new AgentAsyncTask(clothing).execute();
+        // If availability system enabled
+        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("availability_system", true)) {
+            // Check if the time in washingmachine has passed (a certain amount of days set in settings) for this item
+            if (clothing != null && clothing.washing_machine) {
+                if (clothing.washing_time != 0) {
+                    if ((System.currentTimeMillis() / (1000 * 60 * 60 * 24) - clothing.washing_time >
+                            Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("unavailability_duration", "14")))) {
+                        // Amount of days is the amount of ms * 1000 * 60 * 60 * 24
+                        // When a certain amount of days (set in settings) have passed since this item was in the washing machine,
+                        // make it available again
+                        clothing.washing_machine = false;
+                        clothing.washing_time = 0;
+                        // update to the database in the background
+                        new AgentAsyncTask(clothing).execute();
+                    }
+                } else {
+                    throw new IllegalArgumentException("Something is wrong with a clothing's washing time");
                 }
-            } else {
-                throw new IllegalArgumentException("Something is wrong with a clothing's washing time");
+            }
+
+            //Clothing is in washing machine, so set faded out picture
+            if (clothing != null && clothing.washing_machine) {
+                holder.imageView.setAlpha(0.5f);
             }
         }
 
-        //Clothing is in washing machine, so set faded out picture
-        if (clothing != null && clothing.washing_machine) {
-            holder.imageView.setAlpha(0.5f);
-        }
-
+        // Clicking on the holder/image will trigger navigation
         holder.imageView.setOnClickListener(v -> {
             // Clicking on item will navigate to editscreen with the current clothing item
             Fragment fragment = EditScreen.newInstance(clothing, false);
@@ -136,7 +143,11 @@ class WardrobeAdapter extends ArrayAdapter<Clothing> {
         return convertView;
     }
 
-    private static class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
+    /**
+     * Update clothing in background into database. Is used when the washingmachine attribute was changed from
+     * true to false (when a certain time has passed), we want it to update in the database as well.
+     */
+    private class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
         final Clothing clothing;
 
         AgentAsyncTask(Clothing clothing) {
@@ -154,7 +165,7 @@ class WardrobeAdapter extends ArrayAdapter<Clothing> {
 
     /**
      * This holder must replicate the components in the wardrobe_entry
-     * We have an imageview for the picture and a progressBar to show progress
+     * We have an imageview for the picture (optionally we could put attributes or ID in here)
      */
     private class Holder {
         ImageView imageView;

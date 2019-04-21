@@ -18,20 +18,29 @@ class WardrobeViewModel extends ViewModel {
     private final MutableLiveData<List<Clothing>> torsoList = new MutableLiveData<>();
     private final MutableLiveData<List<Clothing>> legsList = new MutableLiveData<>();
     private final MutableLiveData<List<Clothing>> feetList = new MutableLiveData<>();
-    // Has to be true in initialization, since it will only create more problems in acceptance test
-    // if it is false: Items in washing machine will not be opened and there will not be checked
-    // if the washing-time has been passed.
 
+    /**
+     * Get all lists from repo belonging to the set owner
+     * @param owner String, set owner
+     */
     void getLists(String owner) {
         new AgentAsyncTask("Torso", owner).execute(torsoList);
         new AgentAsyncTask("Legs", owner).execute(legsList);
         new AgentAsyncTask("Feet", owner).execute(feetList);
     }
 
+    /**
+     * get washingState
+     * @return boolean of whether or not we wanted to show items in washingmachine
+     */
     boolean getWashing() {
         return washingState;
     }
 
+    /**
+     * set washingState
+     * @param new_washing boolean of whether or not we want to show items in washingmachine
+     */
     void setWashing(boolean new_washing) {
         washingState = new_washing;
     }
@@ -48,6 +57,9 @@ class WardrobeViewModel extends ViewModel {
         return feetList;
     }
 
+    /**
+     * Execute in background: collecting all clothing objects in lists from repository.
+     */
     private static class AgentAsyncTask extends AsyncTask<MutableLiveData<List<Clothing>>, Void, Void> {
         private final String location;
         private final String owner;
