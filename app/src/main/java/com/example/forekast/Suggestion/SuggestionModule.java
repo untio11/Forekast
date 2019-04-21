@@ -18,25 +18,19 @@ public class SuggestionModule extends SuggestionModuleInterface {
      * Slider Criteria (Warmth, Comfort & Formality)
      **/
     private ClothingCriteria criteria;
-    /**
-     * Weather Criteria
-     */
-    private float uv_index;
-    // String city; Not relevant
-    private float precipitation;
-    // float weather_icon; Not relevant
-    private float feels_like;
-    private float wind;
+    private Weather weather;
 
     private int originalWarmth;
     /**
      * Accessories
      */
-    private boolean coat = false;
-    private boolean gloves = false;
-    private boolean umbrella = false;
-    private boolean sunglasses = false;
-    private boolean leggings = false;
+    private boolean[] accessories = new boolean[5];
+    private static final int SUNGLASSES = 0;
+    private static final int COAT = 1;
+    private static final int GLOVES = 2;
+    private static final int UMBRELLA = 3;
+    private static final int LEGGINGS= 4;
+
     /**
      * Clothing
      */
@@ -65,20 +59,17 @@ public class SuggestionModule extends SuggestionModuleInterface {
     @Override
     public void setCurrentCriteria(ClothingCriteria criteria, Weather weather) {
         this.weather = weather;
-        this.criteria = criteria;
-
-        /* Weather Criteria */
-        float temp = weather.temp;
-        this.uv_index = weather.uv_index;
-        this.precipitation = weather.precipitation;
-        this.feels_like = weather.feels_like;
-        this.wind = weather.wind;
+        this.criteria = criteria.copy();
 
         // Temperature ratio - the warmth criteria should be an average between the current temperature and the warmth slider
-        int tempRatio = (int) temp / 3;
+        int tempRatio = (int) weather.temp / 3;
 
         // Setting warmth to include a subjective ratio of temperature in the suggestion
-        criteria.warmth = new ClothingCriteria.MutablePair<>((tempRatio + criteria.warmth.first) / 2, (tempRatio + criteria.warmth.second) / 2);
+        this.criteria.warmth.setBoth(
+                tempRatio + criteria.warmth.first / 2,
+                tempRatio + criteria.warmth.second / 2
+        );
+
         originalWarmth = criteria.warmth.first;
 
         // Produce clothing for the outfit
@@ -86,66 +77,44 @@ public class SuggestionModule extends SuggestionModuleInterface {
         generateOutfit();
     }
 
-    // Set the booleans for the accessories based on the critieria assigned
+    // Set the booleans for the accessories based on the criteria assigned
     public void setAccessories() {
-        coat = false;
-        gloves = false;
-        umbrella = false;
-        sunglasses = false;
-        leggings = false;
+        for (int i = 0; i < accessories.length; i++) {
+            accessories[i] = false;
+        }
 
         /* When to suggest sunglasses */
         // If the UV Index is greater than 2 (low-medium risk), then wear sunglasses
-        if (uv_index > 2) {
-            sunglasses = true;
-        }
+        accessories[SUNGLASSES] = weather.uv_index > 2;
 
         /* When to suggest umbrella vs a coat */
         // If there is some amount rain more than just a drizzle, and the wind is calm enough
-        if (precipitation > 1 && wind < 25) {
-            umbrella = true;
-        } else if (wind >= 25) { // If it's too windy for an umbrella
-            coat = true;
-        }
-
-        /* When to suggest coat */
-        // If it's cold outside
-        if (feels_like < 12) {
-            coat = true;
-        }
-        // If it's windy
-        else if (wind > 10 && feels_like < 15) {
-            coat = true;
-        }
+        accessories[UMBRELLA] = weather.precipitation > 1 && weather.wind < 25;
+        // Suggest coat when it is raining and too windy, or when it is too cold and windy.
+        accessories[COAT] =
+                (weather.precipitation > 1 && weather.wind >= 25) ||
+                (weather.feels_like < 12) ||
+                (weather.wind > 10 && weather.feels_like < 15);
 
         /* When to suggest gloves & scarf */
         // if it feels cold
-        if (feels_like <= 0) {
-            gloves = true;
-        }
+        accessories[GLOVES] = weather.feels_like <= 0;
 
         /* When to suggest leggings */
         // If the clothes need to be warmer than 5 and the bottoms are a skirt or a dress
-        if (criteria.warmth.second > 5 && currentBottoms != null) {
-            if (currentBottoms.type.equals("Skirt")) {
-                leggings = true;
+        if (criteria.warmth.second > 5) {
+
+            if (currentBottoms != null) {
+                accessories[LEGGINGS] = currentBottoms.type.equals("Skirt");
             } else if (currentTorso.torso != null) {
-                if (currentTorso.torso.type.equals("Dress")) {
-                    leggings = true;
-                }
+                accessories[LEGGINGS] = currentTorso.torso.type.equals("Dress");
             } else if (currentTorso.inner != null) {
-                if (currentTorso.inner.type.equals("Dress")) {
-                    leggings = true;
-                }
+                accessories[LEGGINGS] = currentTorso.inner.type.equals("Dress");
             }
         }
     }
 
     public boolean[] getAccessories() {
-        boolean[] accessories = {false, false, false, false, false};
-        if (criteria != null) {
-            accessories = new boolean[]{sunglasses, coat, gloves, umbrella, leggings};
-        }
         return accessories;
     }
 

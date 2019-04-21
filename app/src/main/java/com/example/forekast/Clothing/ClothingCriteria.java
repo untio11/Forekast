@@ -41,15 +41,18 @@ public class ClothingCriteria implements Iterable<Pair<String, ClothingCriteria.
         init();
     }
 
-    public ClothingCriteria(MutablePair<Integer, Integer> warmth, MutablePair<Integer, Integer> formality,
-                            MutablePair<Integer, Integer> comfort, MutablePair<Integer, Integer> preference,
-                            String owner) {
-        init();
-        this.warmth = warmth;
-        this.formality = formality;
-        this.comfort = comfort;
-        this.preference = preference;
-        this.owner = owner;
+    /**
+     * Makes a copy of this object without keeping references.
+     * @return A copy of this.
+     */
+    public ClothingCriteria copy() {
+        ClothingCriteria result = new ClothingCriteria();
+        result.owner = this.owner;
+        result.warmth = new MutablePair<>(this.warmth.first, this.warmth.second);
+        result.comfort = new MutablePair<>(this.comfort.first, this.comfort.second);
+        result.formality = new MutablePair<>(this.formality.first, this.formality.second);
+        result.washingMachine = this.washingMachine;
+        return result;
     }
 
     /**
