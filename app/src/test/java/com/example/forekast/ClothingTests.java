@@ -31,7 +31,7 @@ public class ClothingTests {
         Clothing piece = new Torso();
         assertEquals("", piece.type);
     }
-
+    /*
     @Test
     public void testBotlevel1() {
         Clothing piece = new Jeans();
@@ -42,5 +42,5 @@ public class ClothingTests {
     public void testBotlevel2() {
         Clothing piece = new Jeans();
         assertEquals("Jeans", piece.type);
-    }
+    }*/
 }
