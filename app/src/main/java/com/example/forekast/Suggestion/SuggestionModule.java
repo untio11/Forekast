@@ -207,10 +207,12 @@ public class SuggestionModule extends SuggestionModuleInterface {
         // Create Torso object from outer torso clothing and add to the torso list
         for (Clothing clothing : outfits.outer_torso){
             TorsoClothing newTorso = new TorsoClothing(clothing);
+            /* Ensure that the item has not already been added to the list
+            * it is not a jacket,
+            * and it is warm enough on its own
+            */
             if (!(torsos.contains(newTorso)) && !(newTorso.torso.type.equals("Jacket")) && (newTorso.torso.warmth >= originalWarmth)) {
-                // What did you just add?
-                System.out.print("adding outer item: ");
-                System.out.println(newTorso.torso);
+                System.out.println("adding outer item: " + newTorso.torso);
                 torsos.add(newTorso);
             }
         }
@@ -232,9 +234,14 @@ public class SuggestionModule extends SuggestionModuleInterface {
         for (int i = 0; i < outfits.inner_torso.size(); i++){
             for (int j = 0; j < outfits.outer_torso.size(); j++) {
                 TorsoClothing newTorso = new TorsoClothing(outfits.inner_torso.get(i), outfits.outer_torso.get(j));
+                /*
+                * The two items must be warm enough together
+                * The inner item must not be the same type as the outer item (i.e., no Shirt on top of a Shirt)
+                * If the inner item is a dress, don't suggest an outer item that is a Shirt or a Sweater
+                */
                 if (((newTorso.inner.warmth + newTorso.outer.warmth) / 2 >= criteria.warmth.first)
                         && (!newTorso.inner.type.equals(newTorso.outer.type))
-                        && !(newTorso.inner.type.equals("Dress") &&  ( newTorso.outer.type.equals("Shirt") ||  newTorso.outer.type.equals("Sweater")))) {
+                        && !(newTorso.inner.type.equals("Dress") && ( newTorso.outer.type.equals("Shirt") ||  newTorso.outer.type.equals("Sweater")))) {
 
                     System.out.println ("adding both item: " + newTorso.inner + ", " + newTorso.outer);
                     torsos.add(newTorso);
@@ -327,14 +334,16 @@ public class SuggestionModule extends SuggestionModuleInterface {
     }
 
     public void updateClothes(String location){
+        // Torso
         if (location.equals("Torso") && torsos != null) {
             if (torsos.size() > 0) {
-                // Inner Torso
+                // If the index has exceeded the size of the list (gone all the way to the end)
                 if (currentIndT >= torsos.size()) {
-                    currentIndT = 0;
+                    currentIndT = 0; // Then set the index to the beginning of the list
                 }
-                else if (currentIndT < 0) { // If the index has been decremented below 0 (gone all the way to the start)
-                    currentIndT = torsos.size() - 1; // then set the index to the end of the list
+                // If the index has been decremented below 0 (gone all the way to the start)
+                else if (currentIndT < 0) {
+                    currentIndT = torsos.size() - 1; // Then set the index to the end of the list
                 }
                 currentTorso = torsos.get(currentIndT);
             }
@@ -366,6 +375,7 @@ public class SuggestionModule extends SuggestionModuleInterface {
             }
         }
 
+        // Set the new outfit according to whatever changes were made
         outfit = new Outfit(currentTorso, currentBottoms, currentShoes);
     }
 
